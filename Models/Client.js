@@ -1,6 +1,6 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const sequelize = require("../config/db_connection");
-const Freelancer = sequelize.define("Freelancer", {
+const Client = sequelize.define("Client", {
     firstName: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -18,7 +18,7 @@ const Freelancer = sequelize.define("Freelancer", {
         type: DataTypes.STRING,
         allowNull: false,
     },
-
+    
     telephone: {
         type: DataTypes.STRING,
         allowNull: true,
@@ -36,57 +36,26 @@ const Freelancer = sequelize.define("Freelancer", {
         type: DataTypes.STRING,
         allowNull: true,
     },
-    JobTitle: {
+    companyName: {
         type: DataTypes.STRING,
         allowNull: true,
     },
-});
-
-// Define Portfolio model
-const PortfolioItem = sequelize.define("PortfolioItem", {
-    title: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-    startDate: {
-        type: DataTypes.DATE,
-        allowNull: false,
-    },
-    endDate: {
+    creationData: {
         type: DataTypes.DATE,
         allowNull: true,
     },
-    stillWorking: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-        defaultValue: false,
-    },
-    description: {
-        type: DataTypes.TEXT,
-        allowNull: true,
-    },
-    livePreviewLink: {
+    centerAdress: {
         type: DataTypes.STRING,
         allowNull: true,
     },
-    ImageLink: {
+    typeOfWork: {
         type: DataTypes.STRING,
         allowNull: true,
-    },
-});
-const Skills = sequelize.define("SocialMedia", {
-    skill: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-    years_of_experiance: {
-        type: DataTypes.STRING,
-        allowNull: false,
     },
 });
 
 // Define SocialMedia model
-const SocialMedia = sequelize.define("Skills", {
+const SocialMedia = sequelize.define("SocialMedia", {
     type: {
         type: DataTypes.ENUM("insta", "facebook", "linkedin"),
         allowNull: false,
@@ -97,8 +66,5 @@ const SocialMedia = sequelize.define("Skills", {
     },
 });
 
-// Define associations
-Freelancer.hasMany(Skills, { as: "Skills" });
-Freelancer.hasMany(PortfolioItem, { as: "portfolioItems" });
-Freelancer.hasMany(SocialMedia, { as: "socialMediaLinks" });
-module.exports = { Freelancer };
+Client.hasMany(SocialMedia);
+module.exports = { Client };

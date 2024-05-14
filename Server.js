@@ -39,7 +39,7 @@ app.use("/", express.static(path.join(__dirname, "/Public")));
 app.use("/", express.static(path.join(__dirname, "/Public/Freelancers")));
 app.use("/", express.static(path.join(__dirname, "/Public/Clients")));
 app.use("/", express.static(path.join(__dirname, "/Public/Jobs")));
-// app.use("/", express.static(path.join(__dirname, "/Public/Courses")));
+app.use("/", express.static(path.join(__dirname, "/Public/Portfolio")));
 
 app.get("/", (req, res) => {
     res.send("Hello from DzidCom");
