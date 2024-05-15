@@ -15,40 +15,6 @@ const Project = sequelize.define("Project", {
         type: DataTypes.STRING,
         allowNull: true,
     },
-
-    telephone: {
-        type: DataTypes.STRING,
-        allowNull: true,
-    },
-    about: {
-        type: DataTypes.TEXT,
-        allowNull: true,
-    },
-
-    nationalCardNumber: {
-        type: DataTypes.STRING,
-        allowNull: true,
-    },
-    portfolioWebsite: {
-        type: DataTypes.STRING,
-        allowNull: true,
-    },
-    companyName: {
-        type: DataTypes.STRING,
-        allowNull: true,
-    },
-    creationData: {
-        type: DataTypes.DATE,
-        allowNull: true,
-    },
-    center: {
-        type: DataTypes.STRING,
-        allowNull: true,
-    },
-    typeOfWork: {
-        type: DataTypes.STRING,
-        allowNull: true,
-    },
 });
 const Required_Skills = sequelize.define("Required_Skills", {
     skill: {
