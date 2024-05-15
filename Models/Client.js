@@ -67,4 +67,4 @@ const SocialMedia = sequelize.define("SocialMedia", {
 });
 
 Client.hasMany(SocialMedia);
-module.exports = { Client };
+module.exports =  Client ;
