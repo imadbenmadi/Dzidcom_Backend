@@ -12,6 +12,9 @@ const Contact_Messages = sequelize.define("Contact_Messages", {
     email: {
         type: DataTypes.STRING,
         allowNull: false,
+        validate: {
+            isEmail: true,
+        },
     },
     message: {
         type: DataTypes.TEXT,
