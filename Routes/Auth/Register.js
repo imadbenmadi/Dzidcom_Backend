@@ -3,8 +3,7 @@ const router = express.Router();
 const Freelancers = require("../../Models/Freelnacer");
 const Clients = require("../../Models/Client");
 const dns = require("dns");
-const { where } = require("sequelize");
-
+const Project = require("../../Models/Project");
 const isemailValid = (email) => {
     return new Promise((resolve, reject) => {
         const domain = email.split("@")[1];

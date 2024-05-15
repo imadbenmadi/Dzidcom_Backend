@@ -5,11 +5,11 @@ require("dotenv").config();
 const Freelancers = require("../../Models/Freelnacer");
 const Refresh_tokens = require("../../Models/RefreshTokens");
 const Clients = require("../../Models/Client");
-const { where } = require("sequelize");
 router.get("/", async (req, res) => {
     const secretKey = process.env.ACCESS_TOKEN_SECRET;
     const accessToken = req.cookies.accessToken;
     const refreshToken = req.cookies.refreshToken;
+    let userType = "";
     if (req.cookies.admin_accessToken) {
         res.clearCookie("admin_accessToken");
     }
@@ -98,12 +98,21 @@ router.get("/", async (req, res) => {
                                 let user = await Freelancers.findOne({
                                     where: { id: decoded.userId },
                                 });
+                                userType = "freelancer";
                                 if (!user) {
                                     user = await Clients.findOne({
                                         where: { id: decoded.userId },
                                     });
+                                    userType = "client";
                                 }
                                 if (!user) {
+                                    userType = "";
+                                    if (req.cookies.accessToken) {
+                                        res.clearCookie("accessToken");
+                                    }
+                                    if (req.cookies.refreshToken) {
+                                        res.clearCookie("refreshToken");
+                                    }
                                     return res.status(404).json({
                                         message:
                                             "Unauthorized : User not found",
@@ -112,6 +121,7 @@ router.get("/", async (req, res) => {
                                 return res.status(200).json({
                                     message:
                                         "check auth true , Access token refreshed successfully",
+                                    userType: userType,
                                 });
                             }
                         );
@@ -142,10 +152,13 @@ router.get("/", async (req, res) => {
                 let user = await Freelancers.findOne({
                     where: { id: decoded.userId },
                 });
-                if (!user)
+                userType = "freelancer";
+                if (!user) {
                     user = await Clients.findOne({
                         where: { id: decoded.userId },
                     });
+                    userType = "client";
+                }
                 if (!user) {
                     return res.status(404).json({
                         message: "Unauthorized : User not found",
@@ -154,6 +167,7 @@ router.get("/", async (req, res) => {
 
                 return res.status(200).json({
                     message: "check auth : true , Access token is valid",
+                    userType: userType,
                 });
             }
         });
