@@ -44,15 +44,17 @@ app.use("/", express.static(path.join(__dirname, "/Public/Portfolio")));
 app.get("/", (req, res) => {
     res.send("Hello from DzidCom");
 });
-// app.use("/check_Auth", require("./Routes/Auth/check_Auth"));
+app.use("/check_Auth", require("./Routes/Auth/check_Auth"));
 app.use("/Login", require("./Routes/Auth/Login"));
-// app.use("/Register", require("./Routes/Auth/Register"));
-// app.use("/Logout", require("./Routes/Auth/Logout"));
+app.use("/Register", require("./Routes/Auth/Register"));
+app.use("/Logout", require("./Routes/Auth/Logout"));
+
+app.use("/Contact", require("./Routes/Contact"));
+
 
 // app.use("/Freelancers", require("./Routes/Freelancers"));
 // app.use("/Clients", require("./Routes/Clients"));
 
-app.use("/Contact", require("./Routes/Contact"));
 // app.use("/Jobs", require("./Routes/Jobs"));
 
 
@@ -73,6 +75,6 @@ app.use("/Contact", require("./Routes/Contact"));
 // app.use("/Dashboard", require("./Routes/Dashboard/Dashboard"));
 // app.use(verifyJWT);
 
-app.listen(3001);
+app.listen(3000);
 
 module.exports = app;

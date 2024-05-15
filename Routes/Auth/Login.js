@@ -23,19 +23,19 @@ const handleLogin = async (req, res) => {
         }
         if (user && user.password === password) {
             const accessToken = jwt.sign(
-                { userId: user._id },
+                { userId: user.id },
                 process.env.ACCESS_TOKEN_SECRET,
-                { expiresIn: "5m" }
+                { expiresIn: "1h" }
             );
             const refreshToken = jwt.sign(
-                { userId: user._id },
+                { userId: user.id },
                 process.env.REFRESH_TOKEN_SECRET,
                 { expiresIn: "1d" }
             );
 
             try {
                 await Refresh_tokens.create({
-                    userId: user._id,
+                    userId: user.id,
                     token: refreshToken,
                 });
             } catch (err) {

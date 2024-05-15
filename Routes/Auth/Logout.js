@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 require("dotenv").config();
-const Refresh_tokens = require("../../models/RefreshTokens");
+const Refresh_tokens = require("../../Models/RefreshTokens");
 const handleLogout = async (req, res) => {
     const refreshToken = req.cookies.refreshToken;
     const accessToken = req.cookies.accessToken;

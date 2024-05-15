@@ -1,8 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const Freelancers = require("../../models/Freelancer");
-const Clients = require("../../models/Client");
+const Freelancers = require("../../Models/Freelnacer");
+const Clients = require("../../Models/Client");
 const dns = require("dns");
+const { where } = require("sequelize");
 
 const isemailValid = (email) => {
     return new Promise((resolve, reject) => {
@@ -57,11 +58,13 @@ const handleRegister = async (req, res) => {
         // if (!(await isemailValid(email))) {
         //     return res.status(409).json({ message: "Invalid email domain" });
         // }
-        let existingClient = null;
+        let existingUser = null;
         if (userType === "client") {
-            existingClient = await Clients.findOne({ email: email });
+            existingUser = await Clients.findOne({ where: { email: email } });
         } else if (userType === "freelancer") {
-            existingClient = await Freelancers.findOne({ email: email });
+            existingUser = await Freelancers.findOne({
+                where: { email: email },
+            });
         }
         if (existingUser) {
             return res.status(400).json({
