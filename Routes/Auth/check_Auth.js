@@ -122,6 +122,7 @@ router.get("/", async (req, res) => {
                                     message:
                                         "check auth true , Access token refreshed successfully",
                                     userType: userType,
+                                    userId: user.id,
                                 });
                             }
                         );
@@ -168,6 +169,7 @@ router.get("/", async (req, res) => {
                 return res.status(200).json({
                     message: "check auth : true , Access token is valid",
                     userType: userType,
+                    userId: user.id,
                 });
             }
         });

@@ -57,15 +57,13 @@ const handleRegister = async (req, res) => {
         // if (!(await isemailValid(email))) {
         //     return res.status(409).json({ message: "Invalid email domain" });
         // }
-        let existingUser = null;
-        if (userType === "client") {
-            existingUser = await Clients.findOne({ where: { email: email } });
-        } else if (userType === "freelancer") {
-            existingUser = await Freelancers.findOne({
-                where: { email: email },
-            });
-        }
-        if (existingUser) {
+        const exist_freelancer = await Clients.findOne({
+            where: { email: email },
+        });
+        const exist_client = await Freelancers.findOne({
+            where: { email: email },
+        });
+        if (exist_client || exist_freelancer) {
             return res.status(400).json({
                 message: "email already exists , please use another email.",
             });
