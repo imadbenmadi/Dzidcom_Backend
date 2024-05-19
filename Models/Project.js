@@ -1,7 +1,7 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const sequelize = require("../config/db_connection");
-const client = require("./Client");
-const Project = sequelize.define("Project", {
+const { Clients } = require("./Client");
+const Projects = sequelize.define("Projects", {
     Title: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -27,7 +27,7 @@ const Required_Skills = sequelize.define("Required_Skills", {
     },
 });
 
-Project.hasMany(Required_Skills, { as: "Required_Skills" });
-Project.belongsTo(client, { as: "owner", foreignKey: "clientId" });
+Projects.hasMany(Required_Skills, { as: "Required_Skills" });
+Projects.belongsTo(Clients, { as: "owner", foreignKey: "clientId" });
 
-module.exports = { Project, Required_Skills};
+module.exports = { Projects, Required_Skills };

@@ -1,6 +1,6 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const sequelize = require("../config/db_connection");
-const Freelancer = sequelize.define("Freelancer", {
+const Freelancers = sequelize.define("Freelancers", {
     firstName: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -98,11 +98,11 @@ const SocialMedia = sequelize.define("Skills", {
 });
 
 // Define associations
-Freelancer.hasMany(Skills, { as: "Skills" });
-Freelancer.hasMany(PortfolioItem, { as: "portfolioItems" });
-Freelancer.hasMany(SocialMedia, { as: "socialMediaLinks" });
+Freelancers.hasMany(Skills, { as: "Skills" });
+Freelancers.hasMany(PortfolioItem, { as: "portfolioItems" });
+Freelancers.hasMany(SocialMedia, { as: "socialMediaLinks" });
 module.exports = {
-    Freelancer,
+    Freelancers,
     PortfolioItem,
     Skills,
     SocialMedia,

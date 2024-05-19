@@ -1,6 +1,6 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const sequelize = require("../config/db_connection");
-const Client = sequelize.define("Client", {
+const Clients = sequelize.define("Clients", {
     firstName: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -66,5 +66,5 @@ const SocialMedia = sequelize.define("SocialMedia", {
     },
 });
 
-Client.hasMany(SocialMedia);
-module.exports = { Client, SocialMedia };
+Clients.hasMany(SocialMedia);
+module.exports = { Clients, SocialMedia };

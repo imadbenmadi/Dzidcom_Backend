@@ -1,5 +1,7 @@
-const {Freelacers} = require("../../Models/Freelnacer");
-
+const { Freelacers } = require("../../Models/Freelnacer");
+const { PortfolioItem } = require("../../Models/Freelnacer");
+const { Skills } = require("../../Models/Freelnacer");
+const { SocialMedia } = require("../../Models/Freelnacer");
 const getProfile = async (req, res) => {
     const userId = req.body.userId;
     try {

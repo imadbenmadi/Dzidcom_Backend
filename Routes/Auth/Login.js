@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
-const {Freelancers} = require("../../Models/Freelnacer");
-const {Clients} = require("../../Models/Client");
-const {Refresh_tokens} = require("../../Models/RefreshTokens");
+const { Freelancers } = require("../../Models/Freelnacer");
+const { Clients } = require("../../Models/Client");
+const { Refresh_tokens } = require("../../Models/RefreshTokens");
 
 const handleLogin = async (req, res) => {
     try {
@@ -73,6 +73,7 @@ const handleLogin = async (req, res) => {
             });
         }
     } catch (err) {
+        console.log(err);
         return res.status(500).json({ message: err });
     }
 };
