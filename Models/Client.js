@@ -66,5 +66,5 @@ const SocialMedia = sequelize.define("SocialMedia", {
     },
 });
 
-Clients.hasMany(SocialMedia);
+Clients.hasMany(SocialMedia, { foreignKey: "ClientId" });
 module.exports = { Clients, SocialMedia };

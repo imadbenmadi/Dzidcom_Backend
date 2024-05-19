@@ -26,8 +26,9 @@ const Required_Skills = sequelize.define("Required_Skills", {
         allowNull: false,
     },
 });
-
-Projects.hasMany(Required_Skills, { as: "Required_Skills" });
-Projects.belongsTo(Clients, { as: "owner", foreignKey: "clientId" });
-
+Projects.hasMany(Required_Skills, {
+    as: "Required_Skills",
+    foreignKey: "ProjectId",
+});
+Projects.belongsTo(Clients, { as: "owner", foreignKey: "ClientId" });
 module.exports = { Projects, Required_Skills };

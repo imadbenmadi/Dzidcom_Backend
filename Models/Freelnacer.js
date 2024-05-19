@@ -43,7 +43,7 @@ const Freelancers = sequelize.define("Freelancers", {
 });
 
 // Define Portfolio model
-const PortfolioItem = sequelize.define("PortfolioItem", {
+const PortfolioItems = sequelize.define("PortfolioItems", {
     title: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -85,10 +85,10 @@ const Skills = sequelize.define("Skills", {
     },
 });
 
-// Define SocialMedia model
-const SocialMedia = sequelize.define("SocialMedia", {
+// Define SocialMediaLinks model
+const SocialMediaLinks = sequelize.define("SocialMediaLinks", {
     type: {
-        type: DataTypes.ENUM("insta", "facebook", "linkedin"),
+        type: DataTypes.STRING,
         allowNull: false,
     },
     link: {
@@ -97,13 +97,19 @@ const SocialMedia = sequelize.define("SocialMedia", {
     },
 });
 
-// Define associations
-Freelancers.hasMany(Skills, { as: "Skills" });
-Freelancers.hasMany(PortfolioItem, { as: "portfolioItems" });
-Freelancers.hasMany(SocialMedia, { as: "socialMediaLinks" });
+Freelancers.hasMany(Skills, { as: "Skills", foreignKey: "FreelancerId" });
+Freelancers.hasMany(PortfolioItems, {
+    as: "PortfolioItems",
+    foreignKey: "FreelancerId",
+});
+Freelancers.hasMany(SocialMediaLinks, {
+    as: "SocialMediaLinks",
+    foreignKey: "FreelancerId",
+});
+
 module.exports = {
     Freelancers,
-    PortfolioItem,
+    PortfolioItems,
     Skills,
-    SocialMedia,
+    SocialMediaLinks,
 };
