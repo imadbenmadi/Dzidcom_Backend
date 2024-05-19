@@ -18,7 +18,7 @@ const Client = sequelize.define("Client", {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    
+
     telephone: {
         type: DataTypes.STRING,
         allowNull: true,
@@ -67,4 +67,4 @@ const SocialMedia = sequelize.define("SocialMedia", {
 });
 
 Client.hasMany(SocialMedia);
-module.exports =  Client ;
+module.exports = { Client, SocialMedia };

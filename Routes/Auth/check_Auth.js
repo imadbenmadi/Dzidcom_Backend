@@ -2,9 +2,9 @@ const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
-const Freelancers = require("../../Models/Freelnacer");
-const Refresh_tokens = require("../../Models/RefreshTokens");
-const Clients = require("../../Models/Client");
+const { Freelancers } = require("../../Models/Freelnacer");
+const { Refresh_tokens } = require("../../Models/RefreshTokens");
+const { Clients } = require("../../Models/Client");
 router.get("/", async (req, res) => {
     const secretKey = process.env.ACCESS_TOKEN_SECRET;
     const accessToken = req.cookies.accessToken;

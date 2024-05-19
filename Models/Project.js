@@ -30,4 +30,4 @@ const Required_Skills = sequelize.define("Required_Skills", {
 Project.hasMany(Required_Skills, { as: "Required_Skills" });
 Project.belongsTo(client, { as: "owner", foreignKey: "clientId" });
 
-module.exports = Project;
+module.exports = { Project, Required_Skills};

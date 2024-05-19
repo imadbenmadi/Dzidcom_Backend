@@ -101,4 +101,9 @@ const SocialMedia = sequelize.define("Skills", {
 Freelancer.hasMany(Skills, { as: "Skills" });
 Freelancer.hasMany(PortfolioItem, { as: "portfolioItems" });
 Freelancer.hasMany(SocialMedia, { as: "socialMediaLinks" });
-module.exports =  Freelancer ;
+module.exports = {
+    Freelancer,
+    PortfolioItem,
+    Skills,
+    SocialMedia,
+};

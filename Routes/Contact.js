@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const Contact_Messages = require("../Models/Contact_Messages");
+const {Contact_Messages} = require("../Models/Contact_Messages");
 const handle_send_contact_message = async (req, res) => {
     try {
         const { email, message, lastName, firstName } = req.body;
