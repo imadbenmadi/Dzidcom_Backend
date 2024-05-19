@@ -53,7 +53,7 @@ app.use("/Contact", require("./Routes/Contact"));
 
 
 app.use("/Freelancers", require("./Routes/Freelancers"));
-// app.use("/Clients", require("./Routes/Clients"));
+app.use("/Clients", require("./Routes/Clients"));
 
 // app.use("/Jobs", require("./Routes/Jobs"));
 

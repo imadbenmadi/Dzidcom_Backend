@@ -1,19 +1,14 @@
-const { Freelancers } = require("../../Models/Freelnacer");
-const { PortfolioItems } = require("../../Models/Freelnacer");
-const { Skills } = require("../../Models/Freelnacer");
-const { SocialMediaLinks } = require("../../Models/Freelnacer");
+const { Clients } = require("../../Models/Client");
+const { SocialMediaLinks } = require("../../Models/Client");
 const getProfile = async (req, res) => {
     const userId = req.params.userId;
     try {
-        const user_in_db = await Freelancers.findByPk(userId, {
+        const user_in_db = await Clients.findByPk(userId, {
             attributes: { exclude: ["password"] },
             include: [
-                { model: PortfolioItems, as: "PortfolioItems" },
-                { model: Skills, as: "Skills" },
                 {
                     model: SocialMediaLinks,
                     as: "SocialMediaLinks",
-                    foreignKey: "FreelancerId",
                 },
             ],
         });

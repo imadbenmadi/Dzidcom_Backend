@@ -54,10 +54,10 @@ const Clients = sequelize.define("Clients", {
     },
 });
 
-// Define SocialMedia model
-const SocialMedia = sequelize.define("SocialMedia", {
+// Define SocialMediaLinks model
+const SocialMediaLinks = sequelize.define("SocialMediaLinks", {
     type: {
-        type: DataTypes.ENUM("insta", "facebook", "linkedin"),
+        type: DataTypes.STRING,
         allowNull: false,
     },
     link: {
@@ -66,5 +66,8 @@ const SocialMedia = sequelize.define("SocialMedia", {
     },
 });
 
-Clients.hasMany(SocialMedia, { foreignKey: "ClientId" });
-module.exports = { Clients, SocialMedia };
+Clients.hasMany(SocialMediaLinks, {
+    as: "SocialMediaLinks",
+    foreignKey: "ClientId",
+});
+module.exports = { Clients, SocialMediaLinks };
