@@ -1,26 +1,38 @@
-const { Clients } = require("../../Models/Client");
-const { SocialMediaLinks } = require("../../Models/Client");
-const getProfile = async (req, res) => {
-    const userId = req.params.userId;
-    try {
-        const user_in_db = await Clients.findByPk(userId, {
-            attributes: { exclude: ["password"] },
-            include: [
-                {
-                    model: SocialMediaLinks,
-                    as: "SocialMediaLinks",
-                },
-            ],
-        });
+const { Clients, SocialMediaLinks } = require("../../Models/Client");
 
-        if (!user_in_db) {
-            return res.status(404).json({ error: "user not found." });
+const updateProfile = async (req, res) => {
+    const userId = req.params.userId;
+    const newData = req.body;
+
+    try {
+        // Find the Client by their ID
+        const Client = await Clients.findByPk(userId);
+
+        if (!Client) {
+            return res.status(404).json({ error: "Client not found." });
         }
-        return res.status(200).json({ User: user_in_db });
+
+        await Client.update(newData);
+
+        if (newData.SocialMediaLinks) {
+            await SocialMediaLinks.destroy({
+                where: { ClientId: Client.id },
+            });
+            await SocialMediaLinks.bulkCreate(
+                newData.SocialMediaLinks.map((link) => ({
+                    ...link,
+                    ClientId: Client.id,
+                }))
+            );
+        }
+
+        return res
+            .status(200)
+            .json({ message: "Profile updated successfully." });
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({ error: error });
+        console.error(error);
+        return res.status(500).json({ error: "Internal server error." });
     }
 };
 
-module.exports = { getProfile };
+module.exports = { updateProfile };
