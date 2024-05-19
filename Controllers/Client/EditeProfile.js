@@ -1,6 +1,6 @@
 const { Clients, SocialMediaLinks } = require("../../Models/Client");
 
-const updateProfile = async (req, res) => {
+const EditeProfile = async (req, res) => {
     const userId = req.params.userId;
     const newData = req.body;
 
@@ -35,4 +35,4 @@ const updateProfile = async (req, res) => {
     }
 };
 
-module.exports = { updateProfile };
+module.exports = { EditeProfile };
