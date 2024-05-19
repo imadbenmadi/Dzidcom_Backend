@@ -14,9 +14,12 @@ const handleLogin = async (req, res) => {
             return res.status(409).json({ message: "Invalid email" });
         }
         let user = null;
+        let userType = null;
         user = await Clients.findOne({ where: { email: email } });
+        userType = "client";
         if (!user) {
             user = await Freelancers.findOne({ where: { email: email } });
+            userType = "freelancer";
         }
         if (!user) {
             return res.status(401).json({
@@ -66,7 +69,7 @@ const handleLogin = async (req, res) => {
             return res.status(200).json({
                 message: "Logged In Successfully",
                 userId: user.id,
-                userType: user.userType,
+                userType: userType,
             });
         } else {
             return res.status(401).json({
