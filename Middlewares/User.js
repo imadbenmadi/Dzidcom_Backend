@@ -6,11 +6,9 @@ const { Refresh_tokens } = require("../Models/RefreshTokens");
 const verifyUser = async (req, res, next) => {
     const accessToken = req.cookies.accessToken;
     const refreshToken = req.cookies.refreshToken;
-
     // if (!accessToken) {
     //     return res.status(401).json({ message: "Access token required" });
     // }
-
     try {
         const decoded = jwt.verify(
             accessToken,
