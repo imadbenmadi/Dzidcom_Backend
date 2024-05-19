@@ -2,7 +2,7 @@ const {
     Freelancers,
     Skills,
     PortfolioItems,
-    SocialMediaLinks,
+    Freelancer_SocialMediaLinks,
 } = require("../../Models/Freelnacer");
 
 const EditeProfile = async (req, res) => {
@@ -41,12 +41,12 @@ const EditeProfile = async (req, res) => {
             );
         }
 
-        if (newData.SocialMediaLinks) {
-            await SocialMediaLinks.destroy({
+        if (newData.Freelancer_SocialMediaLinks) {
+            await Freelancer_SocialMediaLinks.destroy({
                 where: { FreelancerId: freelancer.id },
             });
-            await SocialMediaLinks.bulkCreate(
-                newData.SocialMediaLinks.map((link) => ({
+            await Freelancer_SocialMediaLinks.bulkCreate(
+                newData.Freelancer_SocialMediaLinks.map((link) => ({
                     ...link,
                     FreelancerId: freelancer.id,
                 }))

@@ -1,5 +1,5 @@
 const { Clients } = require("../../Models/Client");
-const { SocialMediaLinks } = require("../../Models/Client");
+const { Client_SocialMediaLinks } = require("../../Models/Client");
 const getProfile = async (req, res) => {
     const userId = req.params.userId;
     try {
@@ -7,8 +7,8 @@ const getProfile = async (req, res) => {
             attributes: { exclude: ["password"] },
             include: [
                 {
-                    model: SocialMediaLinks,
-                    as: "SocialMediaLinks",
+                    model: Client_SocialMediaLinks,
+                    as: "Client_SocialMediaLinks",
                 },
             ],
         });

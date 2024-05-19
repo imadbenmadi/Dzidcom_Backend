@@ -85,8 +85,8 @@ const Skills = sequelize.define("Skills", {
     },
 });
 
-// Define SocialMediaLinks model
-const SocialMediaLinks = sequelize.define("SocialMediaLinks", {
+// Define Freelancer_SocialMediaLinks model
+const Freelancer_SocialMediaLinks = sequelize.define("Freelancer_SocialMediaLinks", {
     type: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -102,8 +102,8 @@ Freelancers.hasMany(PortfolioItems, {
     as: "PortfolioItems",
     foreignKey: "FreelancerId",
 });
-Freelancers.hasMany(SocialMediaLinks, {
-    as: "SocialMediaLinks",
+Freelancers.hasMany(Freelancer_SocialMediaLinks, {
+    as: "Freelancer_SocialMediaLinks",
     foreignKey: "FreelancerId",
 });
 
@@ -111,5 +111,5 @@ module.exports = {
     Freelancers,
     PortfolioItems,
     Skills,
-    SocialMediaLinks,
+    Freelancer_SocialMediaLinks,
 };

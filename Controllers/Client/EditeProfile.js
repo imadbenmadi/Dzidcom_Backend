@@ -1,4 +1,4 @@
-const { Clients, SocialMediaLinks } = require("../../Models/Client");
+const { Clients, Client_SocialMediaLinks } = require("../../Models/Client");
 
 const EditeProfile = async (req, res) => {
     const userId = req.params.userId;
@@ -14,12 +14,12 @@ const EditeProfile = async (req, res) => {
 
         await Client.update(newData);
 
-        if (newData.SocialMediaLinks) {
-            await SocialMediaLinks.destroy({
+        if (newData.Client_SocialMediaLinks) {
+            await Client_SocialMediaLinks.destroy({
                 where: { ClientId: Client.id },
             });
-            await SocialMediaLinks.bulkCreate(
-                newData.SocialMediaLinks.map((link) => ({
+            await Client_SocialMediaLinks.bulkCreate(
+                newData.Client_SocialMediaLinks.map((link) => ({
                     ...link,
                     ClientId: Client.id,
                 }))
