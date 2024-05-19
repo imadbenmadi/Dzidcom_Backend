@@ -12,7 +12,7 @@ const getProfile = async (req, res) => {
                 },
             ],
         });
-        console.log(user_in_db);
+
         if (!user_in_db) {
             return res.status(404).json({ error: "user not found." });
         }
