@@ -1,17 +1,17 @@
-const { Freelacers } = require("../../Models/Freelnacer");
+const { Freelancers } = require("../../Models/Freelnacer");
 const { PortfolioItem } = require("../../Models/Freelnacer");
 const { Skills } = require("../../Models/Freelnacer");
 const { SocialMedia } = require("../../Models/Freelnacer");
 const getProfile = async (req, res) => {
-    const userId = req.body.userId;
+    const userId = req.params.userId;
     try {
-        const user_in_db = await Freelacers.findByPk(userId, {
+        const user_in_db = await Freelancers.findByPk(userId, {
             attributes: { exclude: ["password"] },
-            include: [
-                { model: PortfolioItem, as: "portfolioItems" },
-                { model: Skills, as: "Skills" },
-                { model: SocialMedia, as: "socialMediaLinks" },
-            ],
+            // include: [
+            //     { model: PortfolioItem, as: "portfolioItems" },
+            //     { model: Skills, as: "Skills" },
+            //     { model: SocialMedia, as: "socialMediaLinks" },
+            // ],
         });
         console.log(user_in_db);
         if (!user_in_db) {
@@ -19,6 +19,7 @@ const getProfile = async (req, res) => {
         }
         return res.status(200).json(user_in_db);
     } catch (error) {
+        console.log(error);
         return res.status(500).json({ error: error });
     }
 };

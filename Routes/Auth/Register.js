@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const {Freelancers} = require("../../Models/Freelnacer");
-const {Clients} = require("../../Models/Client");
+const { Freelancers } = require("../../Models/Freelnacer");
+const { Clients } = require("../../Models/Client");
 const dns = require("dns");
 // const {Project} = require("../../Models/Project");
 const isemailValid = (email) => {

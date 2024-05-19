@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const {Contact_Messages} = require("../Models/Contact_Messages");
+const { Contact_Messages } = require("../Models/Contact_Messages");
 const handle_send_contact_message = async (req, res) => {
     try {
         const { email, message, lastName, firstName } = req.body;
@@ -12,20 +12,17 @@ const handle_send_contact_message = async (req, res) => {
         ) {
             return res.status(409).json({ message: "Invalid email" });
         }
-        try {
-            await Contact_Messages.create({
-                email,
-                message,
-                lastName,
-                firstName,
-            });
-            return res.status(200).json({
-                message: "Message Sent Successfully via email",
-            });
-        } catch (err) {
-            return res.status(500).json({ err });
-        }
+        await Contact_Messages.create({
+            email,
+            message,
+            lastName,
+            firstName,
+        });
+        return res.status(200).json({
+            message: "Message Sent Successfully via email",
+        });
     } catch (err) {
+        console.log(err);
         return res.status(500).json({ message: err });
     }
 };

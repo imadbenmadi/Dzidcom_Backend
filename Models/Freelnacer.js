@@ -74,7 +74,7 @@ const PortfolioItem = sequelize.define("PortfolioItem", {
         allowNull: true,
     },
 });
-const Skills = sequelize.define("SocialMedia", {
+const Skills = sequelize.define("Skills", {
     skill: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -86,7 +86,7 @@ const Skills = sequelize.define("SocialMedia", {
 });
 
 // Define SocialMedia model
-const SocialMedia = sequelize.define("Skills", {
+const SocialMedia = sequelize.define("SocialMedia", {
     type: {
         type: DataTypes.ENUM("insta", "facebook", "linkedin"),
         allowNull: false,

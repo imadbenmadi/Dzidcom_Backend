@@ -7,7 +7,7 @@ const { Refresh_tokens } = require("../../Models/RefreshTokens");
 
 const handleLogin = async (req, res) => {
     try {
-        const { email, password, userType } = req.body;
+        const { email, password } = req.body;
         if (!email || !password) {
             return res.status(409).json({ message: "Missing Data" });
         } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email)) {
@@ -40,6 +40,7 @@ const handleLogin = async (req, res) => {
                     token: refreshToken,
                 });
             } catch (err) {
+                console.log(err);
                 return res.status(500).json({
                     message: err,
                 });
