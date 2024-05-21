@@ -1,6 +1,7 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const sequelize = require("../config/db_connection");
 const { Clients } = require("./Client");
+import { Applications } from "./Freelnacer";
 const Projects = sequelize.define("Projects", {
     Title: {
         type: DataTypes.STRING,
@@ -9,11 +10,6 @@ const Projects = sequelize.define("Projects", {
     Description: {
         type: DataTypes.STRING,
         allowNull: false,
-    },
-
-    projectField: {
-        type: DataTypes.STRING,
-        allowNull: true,
     },
 });
 const Required_Skills = sequelize.define("Required_Skills", {
@@ -31,4 +27,7 @@ Projects.hasMany(Required_Skills, {
     foreignKey: "ProjectId",
 });
 Projects.belongsTo(Clients, { as: "owner", foreignKey: "ClientId" });
+Clients.hasMany(Projects, { as: "Projects", foreignKey: "ClientId" });
+
+
 module.exports = { Projects, Required_Skills };

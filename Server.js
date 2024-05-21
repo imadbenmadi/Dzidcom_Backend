@@ -36,9 +36,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use("/", express.static(path.join(__dirname, "/Public")));
-app.use("/", express.static(path.join(__dirname, "/Public/Freelancers")));
-app.use("/", express.static(path.join(__dirname, "/Public/Clients")));
-app.use("/", express.static(path.join(__dirname, "/Public/Jobs")));
+app.use("/", express.static(path.join(__dirname, "/Public/ProfilePics")));
+app.use("/", express.static(path.join(__dirname, "/Public/Work")));
 app.use("/", express.static(path.join(__dirname, "/Public/Portfolio")));
 
 app.get("/", (req, res) => {
@@ -51,14 +50,10 @@ app.use("/Logout", require("./Routes/Auth/Logout"));
 
 app.use("/Contact", require("./Routes/Contact"));
 
-
 app.use("/Freelancers", require("./Routes/Freelancers"));
 app.use("/Clients", require("./Routes/Clients"));
 
 // app.use("/Jobs", require("./Routes/Jobs"));
-
-
-
 
 // app.use("/Dashboard/Login", require("./Routes/Dashboard/Admin_Login"));
 // app.use(

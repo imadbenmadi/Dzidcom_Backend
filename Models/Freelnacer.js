@@ -52,6 +52,10 @@ const Freelancers = sequelize.define("Freelancers", {
         type: DataTypes.STRING,
         allowNull: true,
     },
+    profile_pic_link: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
 });
 
 // Define Portfolio model
@@ -85,7 +89,10 @@ const PortfolioItems = sequelize.define("PortfolioItems", {
         allowNull: true,
         // defaultValue: "",
     },
-    
+    Rate: {
+        type: DataTypes.REAL,
+        allowNull: true,
+    },
 });
 const Skills = sequelize.define("Skills", {
     skill: {
@@ -95,16 +102,24 @@ const Skills = sequelize.define("Skills", {
     },
 });
 
-
 Freelancers.hasMany(Skills, { as: "Skills", foreignKey: "FreelancerId" });
+Skills.belongsTo(Freelancers, {
+    as: "freelancer",
+    foreignKey: "freelancerId",
+});
+
 Freelancers.hasMany(PortfolioItems, {
     as: "PortfolioItems",
     foreignKey: "FreelancerId",
 });
-
+PortfolioItems.belongsTo(Freelancers, {
+    as: "freelancer",
+    foreignKey: "freelancerId",
+});
 
 module.exports = {
     Freelancers,
     PortfolioItems,
     Skills,
+    Applications,
 };

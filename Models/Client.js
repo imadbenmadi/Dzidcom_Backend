@@ -52,22 +52,27 @@ const Clients = sequelize.define("Clients", {
         type: DataTypes.STRING,
         allowNull: true,
     },
+    Rate: {
+        type: DataTypes.REAL,
+        allowNull: true,
+    },
+    nstgram_Link: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    linkedIn_Link: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    facebook_Link: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    profile_pic_link: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
 });
 
-// Define Client_SocialMediaLinks model
-const Client_SocialMediaLinks = sequelize.define("Client_SocialMediaLinks", {
-    type: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-    link: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-});
 
-Clients.hasMany(Client_SocialMediaLinks, {
-    as: "Client_SocialMediaLinks",
-    foreignKey: "ClientId",
-});
-module.exports = { Clients, Client_SocialMediaLinks };
+module.exports = { Clients };
