@@ -2,7 +2,6 @@ const {
     Freelancers,
     Skills,
     PortfolioItems,
-    Freelancer_SocialMediaLinks,
 } = require("../../Models/Freelnacer");
 
 const EditeProfile = async (req, res) => {
@@ -19,43 +18,49 @@ const EditeProfile = async (req, res) => {
 
         await freelancer.update(newData);
 
-        if (newData.Skills) {
-            await Skills.destroy({ where: { FreelancerId: freelancer.id } });
-            await Skills.bulkCreate(
-                newData.Skills.map((skill) => ({
-                    ...skill,
-                    FreelancerId: freelancer.id,
-                }))
-            );
-        }
+        if (newData.Skills && newData.Skills.length > 0) {
+            // Ensure newData.Skills is an array of strings
+            const skills = newData.Skills.map((skill) => ({
+                skill: skill, // Use the skill name directly
+                FreelancerId: freelancer.id,
+            }));
 
-        if (newData.PortfolioItems) {
+            // Destroy existing skills
+            await Skills.destroy({ where: { FreelancerId: freelancer.id } });
+
+            // Create new skills
+            await Skills.bulkCreate(skills);
+        } else if (newData.Skills && newData.Skills.length == 0) {
+            await Skills.destroy({ where: { FreelancerId: freelancer.id } });
+        }
+        if (newData.PortfolioItems && newData.PortfolioItems.length > 0) {
+            const portfolioItems = newData.PortfolioItems.map((item) => ({
+                ...item,
+                FreelancerId: freelancer.id,
+            }));
+
+            // Destroy existing portfolio items
             await PortfolioItems.destroy({
                 where: { FreelancerId: freelancer.id },
             });
-            await PortfolioItems.bulkCreate(
-                newData.PortfolioItems.map((item) => ({
-                    ...item,
-                    FreelancerId: freelancer.id,
-                }))
-            );
-        }
 
-        if (newData.Freelancer_SocialMediaLinks) {
-            await Freelancer_SocialMediaLinks.destroy({
+            // Create new portfolio items
+            await PortfolioItems.bulkCreate(portfolioItems);
+        } else if (
+            newData.PortfolioItems &&
+            newData.PortfolioItems.length == 0
+        ) {
+            await PortfolioItems.destroy({
                 where: { FreelancerId: freelancer.id },
             });
-            await Freelancer_SocialMediaLinks.bulkCreate(
-                newData.Freelancer_SocialMediaLinks.map((link) => ({
-                    ...link,
-                    FreelancerId: freelancer.id,
-                }))
-            );
         }
 
-        return res
-            .status(200)
-            .json({ message: "Profile updated successfully." });
+       
+
+        return res.status(200).json({
+            message: "Profile updated successfully.",
+            user: freelancer,
+        });
     } catch (error) {
         console.error(error);
         return res.status(500).json({ error: "Internal server error." });

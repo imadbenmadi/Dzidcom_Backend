@@ -1,7 +1,6 @@
 const { Freelancers } = require("../../Models/Freelnacer");
 const { PortfolioItems } = require("../../Models/Freelnacer");
 const { Skills } = require("../../Models/Freelnacer");
-const { Freelancer_SocialMediaLinks } = require("../../Models/Freelnacer");
 const getProfile = async (req, res) => {
     const userId = req.params.userId;
     try {
@@ -10,11 +9,7 @@ const getProfile = async (req, res) => {
             include: [
                 { model: PortfolioItems, as: "PortfolioItems" },
                 { model: Skills, as: "Skills" },
-                {
-                    model: Freelancer_SocialMediaLinks,
-                    as: "Freelancer_SocialMediaLinks",
-                    foreignKey: "FreelancerId",
-                },
+                
             ],
         });
 

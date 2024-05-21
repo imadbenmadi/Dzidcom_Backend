@@ -40,6 +40,18 @@ const Freelancers = sequelize.define("Freelancers", {
         type: DataTypes.STRING,
         allowNull: true,
     },
+    instgram_Link: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    linkedIn_Link: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    facebook_Link: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
 });
 
 // Define Portfolio model
@@ -47,14 +59,17 @@ const PortfolioItems = sequelize.define("PortfolioItems", {
     title: {
         type: DataTypes.STRING,
         allowNull: false,
+        // defaultValue: "",
     },
     startDate: {
         type: DataTypes.DATE,
         allowNull: false,
+        // defaultValue: "",
     },
     endDate: {
         type: DataTypes.DATE,
         allowNull: true,
+        // defaultValue: "",
     },
     stillWorking: {
         type: DataTypes.BOOLEAN,
@@ -68,48 +83,28 @@ const PortfolioItems = sequelize.define("PortfolioItems", {
     livePreviewLink: {
         type: DataTypes.STRING,
         allowNull: true,
+        // defaultValue: "",
     },
-    ImageLink: {
-        type: DataTypes.STRING,
-        allowNull: true,
-    },
+    
 });
 const Skills = sequelize.define("Skills", {
     skill: {
         type: DataTypes.STRING,
         allowNull: false,
-    },
-    years_of_experiance: {
-        type: DataTypes.STRING,
-        allowNull: false,
+        defaultValue: "",
     },
 });
 
-// Define Freelancer_SocialMediaLinks model
-const Freelancer_SocialMediaLinks = sequelize.define("Freelancer_SocialMediaLinks", {
-    type: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-    link: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-});
 
 Freelancers.hasMany(Skills, { as: "Skills", foreignKey: "FreelancerId" });
 Freelancers.hasMany(PortfolioItems, {
     as: "PortfolioItems",
     foreignKey: "FreelancerId",
 });
-Freelancers.hasMany(Freelancer_SocialMediaLinks, {
-    as: "Freelancer_SocialMediaLinks",
-    foreignKey: "FreelancerId",
-});
+
 
 module.exports = {
     Freelancers,
     PortfolioItems,
     Skills,
-    Freelancer_SocialMediaLinks,
 };
