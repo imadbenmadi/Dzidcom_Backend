@@ -104,8 +104,8 @@ const Skills = sequelize.define("Skills", {
 
 Freelancers.hasMany(Skills, { as: "Skills", foreignKey: "FreelancerId" });
 Skills.belongsTo(Freelancers, {
-    as: "freelancer",
-    foreignKey: "freelancerId",
+    as: "Freelancer",
+    foreignKey: "FreelancerId",
 });
 
 Freelancers.hasMany(PortfolioItems, {
@@ -113,13 +113,12 @@ Freelancers.hasMany(PortfolioItems, {
     foreignKey: "FreelancerId",
 });
 PortfolioItems.belongsTo(Freelancers, {
-    as: "freelancer",
-    foreignKey: "freelancerId",
+    as: "Freelancer",
+    foreignKey: "FreelancerId",
 });
 
 module.exports = {
     Freelancers,
     PortfolioItems,
     Skills,
-    Applications,
 };

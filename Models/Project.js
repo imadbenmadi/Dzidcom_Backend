@@ -1,7 +1,6 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const sequelize = require("../config/db_connection");
 const { Clients } = require("./Client");
-import { Applications } from "./Freelnacer";
 const Projects = sequelize.define("Projects", {
     Title: {
         type: DataTypes.STRING,

@@ -53,6 +53,15 @@ app.use("/Contact", require("./Routes/Contact"));
 app.use("/Freelancers", require("./Routes/Freelancers"));
 app.use("/Clients", require("./Routes/Clients"));
 
+const { Freelancers } = require("./Models/Freelnacer");
+const { Clients } = require("./Models/Client");
+const { Applications } = require("./Models/Applications");
+const { Messages } = require("./Models/Messages");
+const { Skills } = require("./Models/Freelnacer");
+const { PortfolioItems } = require("./Models/Freelnacer");
+const { Contact_Messages } = require("./Models/Contact_Messages");
+const { Notifications } = require("./Models/Notifications");
+const { Projects } = require("./Models/Project");
 // app.use("/Jobs", require("./Routes/Jobs"));
 
 // app.use("/Dashboard/Login", require("./Routes/Dashboard/Admin_Login"));
