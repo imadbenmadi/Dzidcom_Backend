@@ -53,8 +53,9 @@ const Clients = sequelize.define("Clients", {
         allowNull: true,
     },
     Rate: {
-        type: DataTypes.REAL,
+        type: DataTypes.FLOAT,
         allowNull: true,
+        defaultValue: 0.0,
     },
     nstgram_Link: {
         type: DataTypes.STRING,
@@ -73,6 +74,5 @@ const Clients = sequelize.define("Clients", {
         allowNull: true,
     },
 });
-
 
 module.exports = { Clients };

@@ -9,7 +9,6 @@ const getProfile = async (req, res) => {
             include: [
                 { model: PortfolioItems, as: "PortfolioItems" },
                 { model: Skills, as: "Skills" },
-                
             ],
         });
 

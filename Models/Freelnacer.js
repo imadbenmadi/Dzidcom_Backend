@@ -90,8 +90,9 @@ const PortfolioItems = sequelize.define("PortfolioItems", {
         // defaultValue: "",
     },
     Rate: {
-        type: DataTypes.REAL,
+        type: DataTypes.FLOAT,
         allowNull: true,
+        defaultValue: 0.0,
     },
 });
 const Skills = sequelize.define("Skills", {
