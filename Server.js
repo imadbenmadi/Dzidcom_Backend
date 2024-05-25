@@ -33,11 +33,16 @@ app.use(cookieParser());
 app.use(credentials);
 app.use(cors(corsOptions));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
+// app.use(express.multipart());
+// const upload = multer();
+// app.use(upload.array());
+// app.use(express.static("public"));
 
-app.use("/", express.static(path.join(__dirname, "/Public")));
-app.use("/", express.static(path.join(__dirname, "/Public/ProfilePics")));
-app.use("/", express.static(path.join(__dirname, "/Public/Work")));
+
+app.use("/", express.static(path.join(__dirname, "/public")));
+app.use("/", express.static(path.join(__dirname, "/public/ProfilePics")));
+app.use("/", express.static(path.join(__dirname, "/public/Work")));
 app.use("/", express.static(path.join(__dirname, "/Public/Portfolio")));
 
 app.get("/", (req, res) => {
@@ -52,7 +57,7 @@ app.use("/Contact", require("./Routes/Contact"));
 
 app.use("/Freelancers", require("./Routes/Freelancers"));
 app.use("/Clients", require("./Routes/Clients"));
-
+app.use("/upload", require("./Routes/Uploads/Upload"));
 const { Freelancers } = require("./Models/Freelnacer");
 const { Clients } = require("./Models/Client");
 const { Applications } = require("./Models/Applications");

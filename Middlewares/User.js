@@ -15,13 +15,22 @@ const verifyUser = async (req, res, next) => {
             process.env.ACCESS_TOKEN_SECRET
         );
         // const userId = req.body.userId || req.params.userId || req.query.userId;
-        let userId = req.body.userId;
-        if (!userId) userId = req.params.userId;
-        else if (!userId) userId = req.query.userId;
-        else if (!userId)
+        let userId = null;
+        // console.log(req);
+        if (req.body.userId) userId = req.body.userId;
+        else if (req.params.userId && !userId) userId = req.params.userId;
+        else if (reqlog.query.userId && !userId) userId = req.query.userId;
+        else if (req.userId && !userId) userId = req.userId;
+        if (!userId)
+            // if (!userId) userId = req.params.userId;
+            // else if (!userId) userId = req.query.userId;
+            // else
             return res
                 .status(401)
                 .json({ message: "unauthorized : User Id is required" });
+        // console.log("userId", userId);
+        // console.log("decoded user id", decoded.userId);
+        // console.log("decoded.userId == userId", decoded.userId == userId);
         if (!decoded)
             return res
                 .status(401)

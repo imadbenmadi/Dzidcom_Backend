@@ -1,16 +1,16 @@
 const multer = require("multer");
 const path = require("path");
-const { Freelancers } = require("../../../Models/Freelnacer");
+const { Clients } = require("../../../Models/Client");
 
-// Configure storage for freelancer profile pics
+// Configure storage for Client profile pics
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, "public/ProfilePics/");
     },
     filename: (req, file, cb) => {
-        const freelancerId = req.body.freelancerId;
+        const ClientId = req.body.ClientId;
         const fileExtension = path.extname(file.originalname);
-        const uniqueSuffix = `freelancer-${freelancerId}-${Date.now()}${fileExtension}`;
+        const uniqueSuffix = `Client-${ClientId}-${Date.now()}${fileExtension}`;
         req.uploadedFilename = uniqueSuffix;
         cb(null, uniqueSuffix);
     },
@@ -36,27 +36,32 @@ const upload = multer({
 }).single("ProfilePic");
 
 // Upload handler
-const Upload_Freelancer_ProfilePic = (req, res) => {
-    const Freelancer = Freelancers.findOne({
-        where: { id: req.body.userId },
+const Upload_Client_ProfilePic = (req, res) => {
+    const Client = Clients.findOne({
+        where: { id: req.userId },
     });
-    console.log(req.body);
-    if (!Freelancer) {
-        return res.status(404).send({ message: "Freelancer not found" });
+    console.log("req.body", req.body);
+    console.log("-------------------------");
+    if (!Client) {
+        return res.status(404).send({ message: "Client not found" });
     }
-     if (Freelancer.profile_pic_link) {
-         // Extract the filename from the profile picture link
-         const previousFilename = Freelancer.profile_pic_link.split("/").pop();
 
-         // Delete the previous image from the server
-         const previousImagePath = `public/ProfilePics/${previousFilename}`;
-         fs.unlink(previousImagePath, (err) => {
-             if (err) {
-                 console.error("Error deleting previous image:", err);
-             }
-         });
-     }
+    if (Client.profile_pic_link) {
+        // Extract the filename from the profile picture link
+        const previousFilename = Client.profile_pic_link.split("/").pop();
+
+        // Delete the previous image from the server
+        const previousImagePath = `public/ProfilePics/${previousFilename}`;
+        fs.unlink(previousImagePath, (err) => {
+            if (err) {
+                console.error("Error deleting previous image:", err);
+            }
+        });
+    }
     upload(req, res, async (err) => {
+        // console.log("req", req);
+        console.log("req files : ", req.file, res.files);
+        console.log("req userId : ", req.body.userId);
         if (err) {
             return res
                 .status(400)
@@ -64,12 +69,12 @@ const Upload_Freelancer_ProfilePic = (req, res) => {
         }
         try {
             const fileLink = `/ProfilePics/${req.uploadedFilename}`;
-            await Freelancers.update(
+            await Clients.update(
                 { profile_pic_link: fileLink },
-                { where: { id: req.body.freelancerId } }
+                { where: { id: req.body.ClientId } }
             );
             res.send({
-                message: "Freelancer profile picture uploaded successfully!",
+                message: "Client profile picture uploaded successfully!",
                 fileLink,
             });
         } catch (dbError) {
@@ -81,4 +86,4 @@ const Upload_Freelancer_ProfilePic = (req, res) => {
     });
 };
 
-module.exports = Upload_Freelancer_ProfilePic;
+module.exports = Upload_Client_ProfilePic;
