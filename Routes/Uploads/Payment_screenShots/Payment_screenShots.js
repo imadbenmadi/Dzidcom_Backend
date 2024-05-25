@@ -39,7 +39,7 @@ const Upload_Payment_ScreenShot = async (req, res) => {
         if (![".jpeg", ".jpg", ".png", ".heic"].includes(fileExtension)) {
             throw new Error("Invalid file extension");
         }
-        const uniqueSuffix = `Payment-${userId}-${Date.now()}${fileExtension}`;
+        const uniqueSuffix = `Payment-${userId}-${projectId}-${Date.now()}${fileExtension}`;
 
         const fileLink = `/Payment/${uniqueSuffix}`;
         const project = await Projects.findOne({
@@ -73,7 +73,7 @@ const Upload_Payment_ScreenShot = async (req, res) => {
 
         // Example response
         res.status(200).send({
-            message: "Client profile picture uploaded successfully!",
+            message: "Payment ScreenShot uploaded successfully!",
             fileLink,
         });
     } catch (error) {

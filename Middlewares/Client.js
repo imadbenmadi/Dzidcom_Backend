@@ -11,6 +11,11 @@ const verifyUser = async (req, res, next) => {
             accessToken,
             process.env.Client_ACCESS_TOKEN_SECRET
         );
+        if (decoded.userType != "client") {
+            return res.status(401).json({
+                message: "unauthorized : Invalid access token ",
+            });
+        }
         let userId = null;
         // let userType = null;
         // console.log(req);
@@ -26,17 +31,17 @@ const verifyUser = async (req, res, next) => {
         if (!decoded)
             return res.status(401).json({
                 message:
-                    "unauthorized : Invalid access token , decoded not found",
+                    "unauthorized : Invalid access token ",
             });
         else if (!decoded.userId || !decoded.userType)
             return res.status(401).json({
                 message:
-                    "unauthorized : Invalid access token , decoded.userId || decoded.userType not found",
+                    "unauthorized : Invalid access token ",
             });
         else if (decoded.userId != userId)
             return res.status(401).json({
                 message:
-                    "unauthorized : Invalid access token , decoded.userId != userId",
+                    "unauthorized : Invalid access token",
             });
         else if (decoded.userType == "client") {
             let client = await Clients.findOne({
@@ -44,7 +49,7 @@ const verifyUser = async (req, res, next) => {
             });
             if (!client) {
                 return res.status(401).json({
-                    message: "unauthorized : Invalid access token , !client",
+                    message: "unauthorized : Invalid access token ",
                 });
             }
             req.user = client;
@@ -61,7 +66,10 @@ const verifyUser = async (req, res, next) => {
         return next();
     } catch (err) {
         console.log(err);
-        if (err.name === "TokenExpiredError") {
+        if (err.name !== "invalid signature") {
+            return res.status(401).json({ message: "Invalid access token" });
+        }
+        else if (err.name === "TokenExpiredError") {
             if (!refreshToken) {
                 return res
                     .status(401)
@@ -100,15 +108,19 @@ const verifyUser = async (req, res, next) => {
                                 process.env.Client_ACCESS_TOKEN_SECRET,
                                 { expiresIn: "1h" }
                             );
-                        }
-                        res.cookie("accessToken", newAccessToken, {
-                            httpOnly: true,
-                            sameSite: "None",
-                            secure: true,
-                            maxAge: 60 * 60 * 1000,
-                        });
+                            res.cookie("accessToken", newAccessToken, {
+                                httpOnly: true,
+                                sameSite: "None",
+                                secure: true,
+                                maxAge: 60 * 60 * 1000,
+                            });
 
-                        req.decoded = decoded;
+                            req.decoded = decoded;
+                        } else
+                            res.status(401).json({
+                                message: "unauthorized  : Invalid access token",
+                            });
+
                         return next();
                     }
                 );

@@ -25,19 +25,34 @@ const handleLogin = async (req, res) => {
             return res.status(401).json({
                 message: "Username or password isn't correct",
             });
-        } else if (user && user.password === password) {
-            const accessToken = jwt.sign(
-                { userId: user.id, userType: userType },
+        } else if (user && userType && user.password === password) {
+            const Access_Secrute =
                 userType == "client"
                     ? process.env.Client_ACCESS_TOKEN_SECRET
-                    : process.env.Freelancer_ACCESS_TOKEN_SECRET,
+                    : userType == "freelancer"
+                    ? process.env.Freelancer_ACCESS_TOKEN_SECRET
+                    : null;
+            const Refresh_Secrute =
+                userType == "client"
+                    ? process.env.Client_REFRESH_TOKEN_SECRET
+                    : userType == "freelancer"
+                    ? process.env.Freelancer_REFRESH_TOKEN_SECRET
+                    : null;
+
+            const accessToken = jwt.sign(
+                { userId: user.id, userType: userType },
+                // userType == "client"
+                //     ? process.env.Client_ACCESS_TOKEN_SECRET
+                //     : process.env.Freelancer_ACCESS_TOKEN_SECRET,
+                Access_Secrute,
                 { expiresIn: "1h" }
             );
             const refreshToken = jwt.sign(
                 { userId: user.id, userType: userType },
-                userType == "client"
-                    ? process.env.Client_REFRESH_TOKEN_SECRET
-                    : process.env.Freelancer_REFRESH_TOKEN_SECRET,
+                // userType == "client"
+                // ? process.env.Client_REFRESH_TOKEN_SECRET
+                // : process.env.Freelancer_REFRESH_TOKEN_SECRET,
+                Refresh_Secrute,
                 { expiresIn: "1d" }
             );
 

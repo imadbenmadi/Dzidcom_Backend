@@ -46,7 +46,7 @@ const deleteProjectProfilePic = async (req, res) => {
                 console.error("Error deleting previous image:", error);
                 return res.status(400).send({
                     message:
-                        "Could not delete profile picture: " + error.message,
+                        "Could not delete Payment ScreenShot: " + error.message,
                 });
             }
 
@@ -56,11 +56,11 @@ const deleteProjectProfilePic = async (req, res) => {
             );
 
             return res.status(200).send({
-                message: "Project profile picture deleted successfully!",
+                message: "Payment ScreenShot deleted successfully!",
             });
         } else {
             return res.status(200).send({
-                message: "Profile picture not found",
+                message: "Payment ScreenShot not found",
             });
         }
     } catch (error) {
