@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
-
+const { Freelancers } = require("../Models/Freelnacer");
+const { Clients } = require("../Models/Client");
 const { Refresh_tokens } = require("../Models/RefreshTokens");
 
 const verifyUser = async (req, res, next) => {
@@ -22,15 +23,13 @@ const verifyUser = async (req, res, next) => {
         else if (reqlog.query.userId && !userId) userId = req.query.userId;
         else if (req.userId && !userId) userId = req.userId;
         if (!userId)
-            // if (!userId) userId = req.params.userId;
-            // else if (!userId) userId = req.query.userId;
-            // else
             return res
                 .status(401)
                 .json({ message: "unauthorized : User Id is required" });
         // console.log("userId", userId);
         // console.log("decoded user id", decoded.userId);
         // console.log("decoded.userId == userId", decoded.userId == userId);
+
         if (!decoded)
             return res
                 .status(401)
@@ -39,6 +38,36 @@ const verifyUser = async (req, res, next) => {
             return res
                 .status(401)
                 .json({ message: "unauthorized : Invalid access token" });
+        else if (decoded.userType != userType) {
+            return res
+                .status(401)
+                .json({ message: "unauthorized : Invalid access token" });
+        } else if (decoded.userType == "client") {
+            let client = await Clients.findOne({ where: { id: userId } });
+            if (!client) {
+                return res
+                    .status(401)
+                    .json({ message: "unauthorized : Invalid access token" });
+            }
+            req.user = client;
+        } else if (decoded.userType == "freelancer") {
+            let freelancer = await Freelancers.findOne({
+                where: { id: userId },
+            });
+            if (!freelancer) {
+                return res
+                    .status(401)
+                    .json({ message: "unauthorized : Invalid access token" });
+            }
+            req.user = freelancer;
+        } else if (
+            decoded.userType != "freelancer" &&
+            decoded.userType != "client"
+        ) {
+            return res
+                .send(401)
+                .json({ message: "unauthorized : Invalid User Type" });
+        }
         req.decoded = decoded;
         return next();
     } catch (err) {
@@ -73,7 +102,10 @@ const verifyUser = async (req, res, next) => {
                         }
 
                         const newAccessToken = jwt.sign(
-                            { userId: decoded.userId },
+                            {
+                                userId: decoded.userId,
+                                userType: decoded.userType,
+                            },
                             process.env.ACCESS_TOKEN_SECRET,
                             { expiresIn: "1h" }
                         );

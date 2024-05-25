@@ -27,12 +27,12 @@ const handleLogin = async (req, res) => {
             });
         } else if (user && user.password === password) {
             const accessToken = jwt.sign(
-                { userId: user.id },
+                { userId: user.id, userType: userType },
                 process.env.ACCESS_TOKEN_SECRET,
                 { expiresIn: "1h" }
             );
             const refreshToken = jwt.sign(
-                { userId: user.id },
+                { userId: user.id, userType: userType },
                 process.env.REFRESH_TOKEN_SECRET,
                 { expiresIn: "1d" }
             );

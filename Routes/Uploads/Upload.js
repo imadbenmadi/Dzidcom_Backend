@@ -16,7 +16,11 @@ router.post(
 );
 router.post(
     "/Freelancer/ProfilePic",
-    // User_Middlware,
+    (req, res, next) => {
+        req.body = req.fields;
+        next();
+    },
+    User_Middlware,
     Upload_Freelancer_ProfilePic
 );
 module.exports = router;

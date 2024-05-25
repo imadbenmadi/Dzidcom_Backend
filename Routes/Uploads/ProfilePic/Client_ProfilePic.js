@@ -15,22 +15,29 @@ const uploadClientProfilePic = async (req, res) => {
     try {
         const { ProfilePic } = req.files;
         const { userId } = req.body;
-        // Handle file processing logic here
-        const allowedTypes = ["image/jpeg", "image/png", "image/jpg"]; // Define allowed image types
+        const allowedTypes = [
+            "image/jpeg",
+            "image/png",
+            "image/jpg",
+            "image/heic",
+        ];
         if (!allowedTypes.includes(ProfilePic.type)) {
             throw new Error("Only JPEG and PNG and JPG images are allowed!");
         }
-        // Handle file processing logic here
+
         const fileExtension = path.extname(ProfilePic.name);
         const uniqueSuffix = `Client-${userId}-${Date.now()}${fileExtension}`;
-        // const uniqueSuffix = `Client-${userId}-${Date.now()}${fileExtension}`;
-        console.log("uniqueSuffix : ", uniqueSuffix);
+
         const fileLink = `/ProfilePics/${uniqueSuffix}`;
         const client = await Clients.findOne({ where: { id: userId } });
         if (client.profile_pic_link) {
             const previousFilename = client.profile_pic_link.split("/").pop();
             const previousImagePath = `public/ProfilePics/${previousFilename}`;
-            fs.unlinkSync(previousImagePath);
+            try {
+                fs.unlinkSync(previousImagePath);
+            } catch (error) {
+                console.error("Error deleting previous image:", error);
+            }
         }
         // Move the file to the desired location
         fs.renameSync(
