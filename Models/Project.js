@@ -2,6 +2,10 @@ const { Sequelize, DataTypes } = require("sequelize");
 const sequelize = require("../config/db_connection");
 const { Clients } = require("./Client");
 const Projects = sequelize.define("Projects", {
+    ClientId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    },
     Title: {
         type: DataTypes.STRING,
         allowNull: false,

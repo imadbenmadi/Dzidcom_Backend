@@ -15,13 +15,20 @@ const uploadFreelancerProfilePic = async (req, res) => {
     try {
         const { userId } = req.body;
         const Freelancer = await Freelancers.findOne({ where: { id: userId } });
+        if (!Freelancer) {
+            return res.status(404).send({
+                message: "Freelancer not found for the given userId",
+            });
+        }
         if (Freelancer.profile_pic_link) {
             const previousFilename = Freelancer.profile_pic_link
                 .split("/")
                 .pop();
             const previousImagePath = `public/ProfilePics/${previousFilename}`;
             try {
-                fs.unlinkSync(previousImagePath);
+                if (fs.existsSync(previousImagePath)) {
+                    fs.unlinkSync(previousImagePath);
+                }
             } catch (error) {
                 return res.status(400).send({
                     message:

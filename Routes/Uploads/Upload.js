@@ -4,6 +4,8 @@ const Upload_Client_ProfilePic = require("./ProfilePic/Client_ProfilePic");
 const Delete_Client_ProfilePic = require("./ProfilePic/Client_ProfilePic_Delete");
 const Upload_Freelancer_ProfilePic = require("./ProfilePic/Freelancer_ProfilePic");
 const Delete_Freelancer_ProfilePic = require("./ProfilePic/Freelancer_ProfilePic_Delete");
+const Upload_Payment_ScreenShot = require("./Payment_screenShots/Payment_screenShots");
+const Delete_Payment_ScreenShot = require("./Payment_screenShots/Payment_screenShots_Delete");
 const Freelancer_Middlware = require("../../Middlewares/Freelanccer");
 const Client_Middlware = require("../../Middlewares/Client");
 
@@ -44,5 +46,24 @@ router.delete(
     },
     Freelancer_Middlware,
     Delete_Freelancer_ProfilePic
+);
+
+router.post(
+    "/Payment",
+    (req, res, next) => {
+        req.body = req.fields;
+        next();
+    },
+    Client_Middlware,
+    Upload_Payment_ScreenShot
+);
+router.delete(
+    "/Payment",
+    (req, res, next) => {
+        req.body = req.fields;
+        next();
+    },
+    Client_Middlware,
+    Delete_Payment_ScreenShot
 );
 module.exports = router;

@@ -14,7 +14,17 @@ const uploadMiddleware = formidableMiddleware({
 const uploadClientProfilePic = async (req, res) => {
     try {
         const { ProfilePic } = req.files;
+        if (!ProfilePic) {
+            return res.status(400).send({
+                message: "No file uploaded",
+            });
+        }
         const { userId } = req.body;
+        if (!userId) {
+            return res.status(400).send({
+                message: "User ID is required",
+            });
+        }
         const allowedTypes = [
             "image/jpeg",
             "image/png",
@@ -25,16 +35,26 @@ const uploadClientProfilePic = async (req, res) => {
             throw new Error("Only JPEG and PNG and JPG images are allowed!");
         }
 
-        const fileExtension = path.extname(ProfilePic.name);
+        const fileExtension = path.extname(ProfilePic.name).toLocaleLowerCase();
+        if (![".jpeg", ".jpg", ".png", ".heic"].includes(fileExtension)) {
+            throw new Error("Invalid file extension");
+        }
         const uniqueSuffix = `Client-${userId}-${Date.now()}${fileExtension}`;
 
         const fileLink = `/ProfilePics/${uniqueSuffix}`;
         const client = await Clients.findOne({ where: { id: userId } });
+        if (!client) {
+            return res.status(404).send({
+                message: "Client not found for the given userId",
+            });
+        }
         if (client.profile_pic_link) {
             const previousFilename = client.profile_pic_link.split("/").pop();
             const previousImagePath = `public/ProfilePics/${previousFilename}`;
             try {
-                fs.unlinkSync(previousImagePath);
+                if (fs.existsSync(previousImagePath)) {
+                    fs.unlinkSync(previousImagePath);
+                }
             } catch (error) {
                 console.error("Error deleting previous image:", error);
             }
