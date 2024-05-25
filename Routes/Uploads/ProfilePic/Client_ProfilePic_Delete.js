@@ -13,7 +13,7 @@ const uploadMiddleware = formidableMiddleware({
 // Upload handler
 const uploadClientProfilePic = async (req, res) => {
     try {
-        const { userId } = req.body;
+        const { userId } = req.decoded.userId;
         const client = await Clients.findOne({ where: { id: userId } });
         if (!client) {
             return res.status(404).send({

@@ -1,7 +1,7 @@
 const { Clients, Client_SocialMediaLinks } = require("../../Models/Client");
 
 const EditeProfile = async (req, res) => {
-    const userId = req.params.userId;
+    const userId = req.decoded.userId;
     const newData = req.body;
 
     try {

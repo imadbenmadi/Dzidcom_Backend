@@ -30,18 +30,15 @@ const verifyUser = async (req, res, next) => {
 
         if (!decoded)
             return res.status(401).json({
-                message:
-                    "unauthorized : Invalid access token ",
+                message: "unauthorized : Invalid access token ",
             });
         else if (!decoded.userId || !decoded.userType)
             return res.status(401).json({
-                message:
-                    "unauthorized : Invalid access token ",
+                message: "unauthorized : Invalid access token ",
             });
         else if (decoded.userId != userId)
             return res.status(401).json({
-                message:
-                    "unauthorized : Invalid access token",
+                message: "unauthorized : Invalid access token",
             });
         else if (decoded.userType == "client") {
             let client = await Clients.findOne({
@@ -68,8 +65,7 @@ const verifyUser = async (req, res, next) => {
         console.log(err);
         if (err.name !== "invalid signature") {
             return res.status(401).json({ message: "Invalid access token" });
-        }
-        else if (err.name === "TokenExpiredError") {
+        } else if (err.name === "TokenExpiredError") {
             if (!refreshToken) {
                 return res
                     .status(401)

@@ -19,7 +19,8 @@ const Upload_Payment_ScreenShot = async (req, res) => {
                 message: "No file uploaded",
             });
         }
-        const { userId, projectId } = req.body;
+        const { userId } = req.decoded.userId;
+        const { projectId } = req.body;
         if (!userId) {
             return res.status(400).send({
                 message: "User ID is required",

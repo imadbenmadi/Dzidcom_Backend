@@ -19,7 +19,9 @@ const Upload_Freelancer_PortfolioItem = async (req, res) => {
                 message: "No file uploaded",
             });
         }
-        const { userId, itemId } = req.body;
+        const { userId } = req.decoded.userId;
+
+        const { itemId } = req.body;
         if (!userId) {
             return res.status(400).send({
                 message: "User ID is required",
@@ -51,8 +53,7 @@ const Upload_Freelancer_PortfolioItem = async (req, res) => {
             });
         }
         if (portfolio_item.image_Link) {
-            const previousFilename =
-                portfolio_item.image_Link.split("/").pop();
+            const previousFilename = portfolio_item.image_Link.split("/").pop();
             const previousImagePath = `public/Portfolio/${previousFilename}`;
             try {
                 if (fs.existsSync(previousImagePath)) {

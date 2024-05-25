@@ -13,7 +13,9 @@ const uploadMiddleware = formidableMiddleware({
 // Delete handler
 const deleteProjectProfilePic = async (req, res) => {
     try {
-        const { userId, projectId } = req.body;
+        const { userId } = req.decoded.userId;
+        console.log("User ID:", userId);
+        const { projectId } = req.body;
         if (!userId || !projectId) {
             return res.status(400).send({
                 message: "User ID and Project ID are required",
@@ -28,6 +30,10 @@ const deleteProjectProfilePic = async (req, res) => {
                 message: "Project not found for the given userId",
             });
         }
+        if (project.ClientId != userId)
+            return res.status(401).send({
+                message: "Unauthorized: Project does not belong to the user",
+            });
 
         if (project.Pyament_ScreenShot_Link) {
             const previousFilename = path.basename(

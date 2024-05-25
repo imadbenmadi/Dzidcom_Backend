@@ -1,7 +1,7 @@
 const { Clients } = require("../../Models/Client");
 const { Client_SocialMediaLinks } = require("../../Models/Client");
 const getProfile = async (req, res) => {
-    const userId = req.params.userId;
+    const userId = req.decoded.userId;
     try {
         const user_in_db = await Clients.findByPk(userId, {
             attributes: { exclude: ["password"] },

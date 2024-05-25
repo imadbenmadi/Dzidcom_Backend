@@ -5,7 +5,7 @@ const {
 } = require("../../Models/Freelnacer");
 
 const EditeProfile = async (req, res) => {
-    const userId = req.params.userId;
+    const userId = req.decoded.userId;
     const newData = req.body;
 
     try {
