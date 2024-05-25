@@ -10,6 +10,10 @@ const Projects = sequelize.define("Projects", {
         type: DataTypes.STRING,
         allowNull: false,
     },
+    Pyament_ScreenShot_Link: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
 });
 const Required_Skills = sequelize.define("Required_Skills", {
     skill: {
@@ -27,6 +31,5 @@ Projects.hasMany(Required_Skills, {
 });
 Projects.belongsTo(Clients, { as: "owner", foreignKey: "ClientId" });
 Clients.hasMany(Projects, { as: "Projects", foreignKey: "ClientId" });
-
 
 module.exports = { Projects, Required_Skills };

@@ -56,6 +56,11 @@ const Freelancers = sequelize.define("Freelancers", {
         type: DataTypes.STRING,
         allowNull: true,
     },
+    Rate: {
+        type: DataTypes.FLOAT,
+        allowNull: true,
+        defaultValue: 0.0,
+    },
 });
 
 // Define Portfolio model
@@ -89,10 +94,10 @@ const PortfolioItems = sequelize.define("PortfolioItems", {
         allowNull: true,
         // defaultValue: "",
     },
-    Rate: {
-        type: DataTypes.FLOAT,
+    image_Link: {
+        type: DataTypes.STRING,
         allowNull: true,
-        defaultValue: 0.0,
+        // defaultValue: "",
     },
 });
 const Skills = sequelize.define("Skills", {
