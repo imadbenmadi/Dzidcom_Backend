@@ -16,7 +16,7 @@ const verifyUser = async (req, res, next) => {
             process.env.ACCESS_TOKEN_SECRET
         );
         let userId = null;
-        let userType = null;
+        // let userType = null;
         // console.log(req);
         if (req.body.userId) userId = req.body.userId;
         else if (req.params.userId && !userId) userId = req.params.userId;
@@ -30,15 +30,15 @@ const verifyUser = async (req, res, next) => {
         // console.log("decoded user id", decoded.userId);
         // console.log("decoded.userId == userId", decoded.userId == userId);
 
-        if (req.body.userType) userType = req.body.userType;
-        else if (req.params.userType && !userType)
-            userType = req.params.userType;
-        else if (req.userType && !userType) userType = req.userType;
-        if (!userType)
-            return res
-                .status(401)
-                .json({ message: "unauthorized : User Type is required" });
-        console.log("decoded.userType", decoded.userType);
+        // if (req.body.userType) userType = req.body.userType;
+        // else if (req.params.userType && !userType)
+        //     userType = req.params.userType;
+        // else if (req.userType && !userType) userType = req.userType;
+        // if (!userType)
+        //     return res
+        //         .status(401)
+        //         .json({ message: "unauthorized : User Type is required" });
+        // console.log("decoded.userType", decoded.userType);
 
         if (!decoded)
             return res.status(401).json({
@@ -55,12 +55,13 @@ const verifyUser = async (req, res, next) => {
                 message:
                     "unauthorized : Invalid access token , decoded.userId != userId",
             });
-        else if (decoded.userType != userType) {
-            return res.status(401).json({
-                message:
-                    "unauthorized : Invalid access token , decoded.userType != userType",
-            });
-        } else if (decoded.userType == "client") {
+        // else if (decoded.userType != userType) {
+        //     return res.status(401).json({
+        //         message:
+        //             "unauthorized : Invalid access token , decoded.userType != userType",
+        //     });
+        // }
+        else if (decoded.userType == "client") {
             let client = await Clients.findOne({
                 where: { id: decoded.userId },
             });
