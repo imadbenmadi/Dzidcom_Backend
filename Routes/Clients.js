@@ -1,8 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const User_Middlware = require("../Middlewares/User");
+
+const Client_Middlware = require("../Middlewares/Client");
 const ClientController = require("../Controllers/Client");
-router.get("/:userId/Profile", User_Middlware, ClientController.getProfile);
-router.put("/:userId/Profile", User_Middlware, ClientController.EditeProfile);
+router.get("/:userId/Profile", Client_Middlware, ClientController.getProfile);
+router.put("/:userId/Profile", Client_Middlware, ClientController.EditeProfile);
 
 module.exports = router;

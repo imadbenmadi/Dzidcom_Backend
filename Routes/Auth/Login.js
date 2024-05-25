@@ -28,12 +28,16 @@ const handleLogin = async (req, res) => {
         } else if (user && user.password === password) {
             const accessToken = jwt.sign(
                 { userId: user.id, userType: userType },
-                process.env.ACCESS_TOKEN_SECRET,
+                userType == "client"
+                    ? process.env.Client_ACCESS_TOKEN_SECRET
+                    : process.env.Freelancer_ACCESS_TOKEN_SECRET,
                 { expiresIn: "1h" }
             );
             const refreshToken = jwt.sign(
                 { userId: user.id, userType: userType },
-                process.env.REFRESH_TOKEN_SECRET,
+                userType == "client"
+                    ? process.env.Client_REFRESH_TOKEN_SECRET
+                    : process.env.Freelancer_REFRESH_TOKEN_SECRET,
                 { expiresIn: "1d" }
             );
 

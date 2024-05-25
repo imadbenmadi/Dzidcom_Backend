@@ -1,21 +1,18 @@
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
-
+const { Clients } = require("../Models/Client");
 const { Refresh_tokens } = require("../Models/RefreshTokens");
 
 const verifyUser = async (req, res, next) => {
     const accessToken = req.cookies.accessToken;
     const refreshToken = req.cookies.refreshToken;
-    // if (!accessToken) {
-    //     return res.status(401).json({ message: "Access token required" });
-    // }
     try {
         const decoded = jwt.verify(
             accessToken,
-            process.env.ACCESS_TOKEN_SECRET
+            process.env.Client_ACCESS_TOKEN_SECRET
         );
-        // const userId = req.body.userId || req.params.userId || req.query.userId;
         let userId = null;
+        // let userType = null;
         // console.log(req);
         if (req.body.userId) userId = req.body.userId;
         else if (req.params.userId && !userId) userId = req.params.userId;
@@ -25,21 +22,45 @@ const verifyUser = async (req, res, next) => {
             return res
                 .status(401)
                 .json({ message: "unauthorized : User Id is required" });
-        // console.log("userId", userId);
-        // console.log("decoded user id", decoded.userId);
-        // console.log("decoded.userId == userId", decoded.userId == userId);
 
         if (!decoded)
-            return res
-                .status(401)
-                .json({ message: "unauthorized : Invalid access token" });
+            return res.status(401).json({
+                message:
+                    "unauthorized : Invalid access token , decoded not found",
+            });
+        else if (!decoded.userId || !decoded.userType)
+            return res.status(401).json({
+                message:
+                    "unauthorized : Invalid access token , decoded.userId || decoded.userType not found",
+            });
         else if (decoded.userId != userId)
-            return res
-                .status(401)
-                .json({ message: "unauthorized : Invalid access token" });
+            return res.status(401).json({
+                message:
+                    "unauthorized : Invalid access token , decoded.userId != userId",
+            });
+        else if (decoded.userType == "client") {
+            let client = await Clients.findOne({
+                where: { id: decoded.userId },
+            });
+            if (!client) {
+                return res.status(401).json({
+                    message: "unauthorized : Invalid access token , !client",
+                });
+            }
+            req.user = client;
+        } else if (decoded.userType != "client") {
+            return res.status(401).json({
+                message: "unauthorized : Invalid access token ",
+            });
+        } else
+            return res.status(401).json({
+                message: "unauthorized : Invalid access token ",
+            });
+
         req.decoded = decoded;
         return next();
     } catch (err) {
+        console.log(err);
         if (err.name === "TokenExpiredError") {
             if (!refreshToken) {
                 return res
@@ -62,23 +83,24 @@ const verifyUser = async (req, res, next) => {
 
                 jwt.verify(
                     refreshToken,
-                    process.env.REFRESH_TOKEN_SECRET,
+                    process.env.Client_REFRESH_TOKEN_SECRET,
                     async (err, decoded) => {
                         if (err || foundInDB.userId !== decoded.userId) {
                             return res.status(403).json({
                                 message: "unauthorized : Invalid refresh token",
                             });
                         }
-
-                        const newAccessToken = jwt.sign(
-                            {
-                                userId: decoded.userId,
-                                userType: decoded.userType,
-                            },
-                            process.env.ACCESS_TOKEN_SECRET,
-                            { expiresIn: "1h" }
-                        );
-
+                        let newAccessToken = null;
+                        if (decoded.userType == "client") {
+                            newAccessToken = jwt.sign(
+                                {
+                                    userId: decoded.userId,
+                                    userType: decoded.userType,
+                                },
+                                process.env.Client_ACCESS_TOKEN_SECRET,
+                                { expiresIn: "1h" }
+                            );
+                        }
                         res.cookie("accessToken", newAccessToken, {
                             httpOnly: true,
                             sameSite: "None",
