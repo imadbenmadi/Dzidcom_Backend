@@ -1,7 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const Upload_Client_ProfilePic = require("./ProfilePic/Client_ProfilePic");
+const Delete_Client_ProfilePic = require("./ProfilePic/Client_ProfilePic_Delete");
 const Upload_Freelancer_ProfilePic = require("./ProfilePic/Freelancer_ProfilePic");
+const Delete_Freelancer_ProfilePic = require("./ProfilePic/Freelancer_ProfilePic_Delete");
 const Freelancer_Middlware = require("../../Middlewares/Freelanccer");
 const Client_Middlware = require("../../Middlewares/Client");
 
@@ -24,5 +26,23 @@ router.post(
     },
     Freelancer_Middlware,
     Upload_Freelancer_ProfilePic
+);
+router.delete(
+    "/Client/ProfilePic",
+    (req, res, next) => {
+        req.body = req.fields;
+        next();
+    },
+    Client_Middlware,
+    Delete_Client_ProfilePic
+);
+router.delete(
+    "/Freelancer/ProfilePic",
+    (req, res, next) => {
+        req.body = req.fields;
+        next();
+    },
+    Freelancer_Middlware,
+    Delete_Freelancer_ProfilePic
 );
 module.exports = router;
