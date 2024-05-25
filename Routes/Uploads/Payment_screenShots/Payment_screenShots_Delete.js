@@ -13,8 +13,15 @@ const uploadMiddleware = formidableMiddleware({
 // Delete handler
 const deleteProjectProfilePic = async (req, res) => {
     try {
-        const { userId } = req.body;
-        const project = await Projects.findOne({ where: { ClientId: userId } });
+        const { userId, projectId } = req.body;
+        if (!userId || !projectId) {
+            return res.status(400).send({
+                message: "User ID and Project ID are required",
+            });
+        }
+        const project = await Projects.findOne({
+            where: { id: projectId },
+        });
 
         if (!project) {
             return res.status(404).send({
@@ -45,7 +52,7 @@ const deleteProjectProfilePic = async (req, res) => {
 
             await Projects.update(
                 { Pyament_ScreenShot_Link: null },
-                { where: { ClientId: userId } }
+                { where: { id: projectId } }
             );
 
             return res.status(200).send({

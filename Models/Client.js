@@ -73,6 +73,11 @@ const Clients = sequelize.define("Clients", {
         type: DataTypes.STRING,
         allowNull: true,
     },
+    Rate: {
+        type: DataTypes.FLOAT,
+        allowNull: true,
+        defaultValue: 0.0,
+    },
 });
 
 module.exports = { Clients };

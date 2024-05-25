@@ -19,7 +19,7 @@ const Upload_Payment_ScreenShot = async (req, res) => {
                 message: "No file uploaded",
             });
         }
-        const { userId } = req.body;
+        const { userId, projectId } = req.body;
         if (!userId) {
             return res.status(400).send({
                 message: "User ID is required",
@@ -42,7 +42,9 @@ const Upload_Payment_ScreenShot = async (req, res) => {
         const uniqueSuffix = `Payment-${userId}-${Date.now()}${fileExtension}`;
 
         const fileLink = `/Payment/${uniqueSuffix}`;
-        const project = await Projects.findOne({ where: { ClientId: userId } });
+        const project = await Projects.findOne({
+            where: { id: projectId },
+        });
         if (!project) {
             return res.status(404).send({
                 message: "Project not found for the given userId",
@@ -66,7 +68,7 @@ const Upload_Payment_ScreenShot = async (req, res) => {
         // Update database with file link
         await Projects.update(
             { Pyament_ScreenShot_Link: fileLink },
-            { where: { id: userId } }
+            { where: { id: projectId } }
         );
 
         // Example response
