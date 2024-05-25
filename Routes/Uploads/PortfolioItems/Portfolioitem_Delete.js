@@ -13,8 +13,9 @@ const uploadMiddleware = formidableMiddleware({
 // Delete handler
 const Delete_Freelancer_PortfolioItem = async (req, res) => {
     try {
-        const { userId } = req.decoded.userId;
-        const {  itemsId } = req.body;
+        const userId = req.decoded.userId;
+        const itemsId = req.body.itemId;
+        
         if (!userId || !itemsId) {
             return res.status(400).send({
                 message: "User ID and items ID are required",
@@ -31,9 +32,7 @@ const Delete_Freelancer_PortfolioItem = async (req, res) => {
         }
 
         if (items.image_Link) {
-            const previousFilename = path.basename(
-                items.image_Link
-            );
+            const previousFilename = path.basename(items.image_Link);
             const previousImagePath = path.join(
                 "public/Portfolio/",
                 previousFilename

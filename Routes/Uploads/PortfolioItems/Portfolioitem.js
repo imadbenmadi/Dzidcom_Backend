@@ -19,7 +19,7 @@ const Upload_Freelancer_PortfolioItem = async (req, res) => {
                 message: "No file uploaded",
             });
         }
-        const { userId } = req.decoded.userId;
+        const userId = req.decoded.userId;
 
         const { itemId } = req.body;
         if (!userId) {

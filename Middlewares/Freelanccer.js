@@ -28,7 +28,6 @@ const verifyUser = async (req, res, next) => {
             return res
                 .status(401)
                 .json({ message: "unauthorized : User Id is required" });
-        console.log("freelancer : ", decoded.userId, userId);
         if (!decoded)
             return res.status(401).json({
                 message: "unauthorized : Invalid access token ",
