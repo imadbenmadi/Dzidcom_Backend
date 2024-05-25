@@ -5,12 +5,6 @@ const getProfile = async (req, res) => {
     try {
         const user_in_db = await Clients.findByPk(userId, {
             attributes: { exclude: ["password"] },
-            include: [
-                {
-                    model: Client_SocialMediaLinks,
-                    as: "Client_SocialMediaLinks",
-                },
-            ],
         });
 
         if (!user_in_db) {
