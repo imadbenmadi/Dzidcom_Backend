@@ -6,28 +6,18 @@ const { Refresh_tokens } = require("../Models/RefreshTokens");
 const verifyUser = async (req, res, next) => {
     const accessToken = req.cookies.accessToken;
     const refreshToken = req.cookies.refreshToken;
-    console.log(process.env.Freelancer_ACCESS_TOKEN_SECRET);
-    console.log(process.env.Freelancer_REFRESH_TOKEN_SECRET);
-    console.log("accessToken", accessToken);
+
+    console.log("daata from freelancer : ", req.cookies);
+    // console.log("daata from freelancer : ", accessToken, refreshToken);
+    // console.log("daata from freelancer : ", req);
     try {
-        const decoded = jwt.verify(
-            accessToken,
-            process.env.Freelancer_ACCESS_TOKEN_SECRET
-        );
-        if (decoded.userType != "freelancer") {
-            return res.status(401).json({
-                message: "unauthorized : Invalid access token ",
-            });
-        }
-        let userId = null;
-        if (req.body.userId) userId = req.body.userId;
-        else if (req.params.userId && !userId) userId = req.params.userId;
-        else if (reqlog.query.userId && !userId) userId = req.query.userId;
-        else if (req.userId && !userId) userId = req.userId;
-        if (!userId)
-            return res
-                .status(401)
-                .json({ message: "unauthorized : User Id is required" });
+        let decoded = null;
+        if (accessToken)
+            decoded = jwt.verify(
+                accessToken,
+                process.env.Freelancer_ACCESS_TOKEN_SECRET
+            );
+
         if (!decoded)
             return res.status(401).json({
                 message: "unauthorized : Invalid access token ",
@@ -36,11 +26,11 @@ const verifyUser = async (req, res, next) => {
             return res.status(401).json({
                 message: "unauthorized : Invalid access token",
             });
-        else if (decoded.userId != userId)
+        else if (decoded.userType != "freelancer") {
             return res.status(401).json({
-                message: "unauthorized : Invalid access token",
+                message: "unauthorized : Invalid access token ",
             });
-        else if (decoded.userType == "freelancer") {
+        } else if (decoded.userType == "freelancer") {
             let freelancer = await Freelancers.findOne({
                 where: { id: decoded.userId },
             });

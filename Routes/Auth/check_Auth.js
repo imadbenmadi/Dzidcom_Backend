@@ -16,6 +16,7 @@ router.get("/", async (req, res) => {
     const accessToken = req.cookies.accessToken;
     const refreshToken = req.cookies.refreshToken;
     let userType = "";
+    console.log("daata from checkAuth : ", accessToken, refreshToken);
 
     const verifyToken = (token, secret) => {
         return new Promise((resolve, reject) => {

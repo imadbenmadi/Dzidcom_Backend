@@ -6,27 +6,14 @@ const { Refresh_tokens } = require("../Models/RefreshTokens");
 const verifyUser = async (req, res, next) => {
     const accessToken = req.cookies.accessToken;
     const refreshToken = req.cookies.refreshToken;
+
     try {
-        const decoded = jwt.verify(
-            accessToken,
-            process.env.Client_ACCESS_TOKEN_SECRET
-        );
-        if (decoded.userType != "client") {
-            return res.status(401).json({
-                message: "unauthorized : Invalid access token ",
-            });
-        }
-        let userId = null;
-        // let userType = null;
-        // console.log(req);
-        if (req.body.userId) userId = req.body.userId;
-        else if (req.params.userId && !userId) userId = req.params.userId;
-        else if (reqlog.query.userId && !userId) userId = req.query.userId;
-        else if (req.userId && !userId) userId = req.userId;
-        if (!userId)
-            return res
-                .status(401)
-                .json({ message: "unauthorized : User Id is required" });
+        let decoded = null;
+        if (accessToken)
+            decoded = jwt.verify(
+                accessToken,
+                process.env.Client_ACCESS_TOKEN_SECRET
+            );
 
         if (!decoded)
             return res.status(401).json({
@@ -36,11 +23,11 @@ const verifyUser = async (req, res, next) => {
             return res.status(401).json({
                 message: "unauthorized : Invalid access token ",
             });
-        else if (decoded.userId != userId)
+        else if (decoded.userType != "client") {
             return res.status(401).json({
-                message: "unauthorized : Invalid access token",
+                message: "unauthorized : Invalid access token ",
             });
-        else if (decoded.userType == "client") {
+        } else if (decoded.userType == "client") {
             let client = await Clients.findOne({
                 where: { id: decoded.userId },
             });

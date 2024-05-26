@@ -1,6 +1,5 @@
 const express = require("express");
 const app = express();
-const multer = require("multer");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
@@ -34,11 +33,9 @@ app.use(credentials);
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-// app.use(express.multipart());
-// const upload = multer();
-// app.use(upload.array());
-// app.use(express.static("public"));
 
+// const multer = require("multer");
+// app.use(multer().none());
 
 app.use("/", express.static(path.join(__dirname, "/public")));
 app.use("/", express.static(path.join(__dirname, "/public/ProfilePics")));

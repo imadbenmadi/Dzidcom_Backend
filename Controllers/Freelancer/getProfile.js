@@ -3,6 +3,12 @@ const { PortfolioItems } = require("../../Models/Freelnacer");
 const { Skills } = require("../../Models/Freelnacer");
 const getProfile = async (req, res) => {
     const userId = req.decoded.userId;
+    console.log(
+        "daata from profile : ",
+        req.cookies.accessToken,
+        req.cookies.refreshToken
+    );
+
     try {
         const user_in_db = await Freelancers.findByPk(req.decoded.userId, {
             attributes: { exclude: ["password"] },
