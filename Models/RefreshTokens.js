@@ -5,6 +5,10 @@ const Refresh_tokens = sequelize.define("Refresh_tokens", {
         type: DataTypes.INTEGER,
         allowNull: false,
     },
+    userType: {
+        type: DataTypes.ENUM("freelancer", "client"),
+        allowNull: true,
+    },
     token: {
         type: DataTypes.STRING,
         allowNull: false,
