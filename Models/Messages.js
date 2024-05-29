@@ -5,7 +5,7 @@ const { Clients } = require("./Client");
 
 const Messages = sequelize.define("Messages", {
     message: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: false,
     },
     sentAt: {

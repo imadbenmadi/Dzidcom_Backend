@@ -11,6 +11,10 @@ const Client_Reveiws = sequelize.define("Client_Reveiws", {
         type: DataTypes.REAL,
         allowNull: false,
     },
+    comment: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+    },
     FreelacerId: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -24,6 +28,10 @@ const Freelancer_Reviews = sequelize.define("Freelancer_Reviews", {
     rate: {
         type: DataTypes.REAL,
         allowNull: false,
+    },
+    comment: {
+        type: DataTypes.TEXT,
+        allowNull: true,
     },
     ClientId: {
         type: DataTypes.INTEGER,

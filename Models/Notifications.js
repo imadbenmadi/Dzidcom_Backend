@@ -11,8 +11,8 @@ const Notifications = sequelize.define("Notifications", {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    Notification: {
-        type: DataTypes.STRING,
+    text: {
+        type: DataTypes.TEXT,
         allowNull: false,
     },
     status: {

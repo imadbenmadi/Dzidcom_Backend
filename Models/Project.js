@@ -11,7 +11,7 @@ const Projects = sequelize.define("Projects", {
         allowNull: false,
     },
     Description: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: false,
     },
     Pyament_ScreenShot_Link: {
