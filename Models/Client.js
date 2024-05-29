@@ -32,7 +32,7 @@ const Clients = sequelize.define("Clients", {
         type: DataTypes.STRING,
         allowNull: true,
     },
-    portfolioWebsite: {
+    CompanyWebsite: {
         type: DataTypes.STRING,
         allowNull: true,
     },
@@ -52,12 +52,7 @@ const Clients = sequelize.define("Clients", {
         type: DataTypes.STRING,
         allowNull: true,
     },
-    Rate: {
-        type: DataTypes.FLOAT,
-        allowNull: true,
-        defaultValue: 0.0,
-    },
-    nstgram_Link: {
+    instgram_Link: {
         type: DataTypes.STRING,
         allowNull: true,
     },

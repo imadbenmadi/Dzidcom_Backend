@@ -55,6 +55,11 @@ app.use("/Contact", require("./Routes/Contact"));
 app.use("/Freelancers", require("./Routes/Freelancers"));
 app.use("/Clients", require("./Routes/Clients"));
 app.use("/upload", require("./Routes/Uploads/Upload"));
+
+app.use("/Admin_Login", require("./Routes/Auth/Admin/Admin_Login"));
+app.use("/Add_Admin", require("./Routes/Auth/Admin/Admin_Add"));
+app.use("/Admin", require("./Routes/Admin/Admin"));
+
 const { Freelancers } = require("./Models/Freelnacer");
 const { Clients } = require("./Models/Client");
 const { Applications } = require("./Models/Applications");

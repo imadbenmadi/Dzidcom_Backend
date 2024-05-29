@@ -1,9 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
-const { Freelancers } = require("../../Models/Freelnacer");
-const { Clients } = require("../../Models/Client");
-const { Refresh_tokens } = require("../../Models/RefreshTokens");
+const { Admins } = require("../../../Models/Admin/Admin");
+const { Refresh_tokens } = require("../../../Models/RefreshTokens");
 
 const handleLogin = async (req, res) => {
     try {
@@ -13,52 +12,31 @@ const handleLogin = async (req, res) => {
         } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email)) {
             return res.status(409).json({ message: "Invalid email" });
         }
-        let user = null;
-        let userType = null;
-        user = await Clients.findOne({ where: { email: email } });
-        userType = "client";
-        if (!user) {
-            user = await Freelancers.findOne({ where: { email: email } });
-            userType = "freelancer";
-        }
-        if (!user) {
+        let userType = "admin";
+        const Admin = await Admins.findOne({ where: { email: email } });
+
+        if (!Admin) {
             return res.status(401).json({
-                message: "Username or password isn't correct",
+                message: "Admin email or password isn't correct",
             });
-        } else if (user && userType && user.password === password) {
-            const Access_Secrute =
-                userType == "client"
-                    ? process.env.Client_ACCESS_TOKEN_SECRET
-                    : userType == "freelancer"
-                    ? process.env.Freelancer_ACCESS_TOKEN_SECRET
-                    : null;
-            const Refresh_Secrute =
-                userType == "client"
-                    ? process.env.Client_REFRESH_TOKEN_SECRET
-                    : userType == "freelancer"
-                    ? process.env.Freelancer_REFRESH_TOKEN_SECRET
-                    : null;
+        } else if (Admin && Admin.password === password) {
+            const Access_Secrute = process.env.ADMIN_ACCESS_TOKEN_SECRET;
+            const Refresh_Secrute = process.env.ADMIN_REFRESH_TOKEN_SECRET;
 
             const accessToken = jwt.sign(
-                { userId: user.id, userType: userType },
-                // userType == "client"
-                //     ? process.env.Client_ACCESS_TOKEN_SECRET
-                //     : process.env.Freelancer_ACCESS_TOKEN_SECRET,
+                { AdminId: Admin.id, userType: userType },
                 Access_Secrute,
                 { expiresIn: "1h" }
             );
             const refreshToken = jwt.sign(
-                { userId: user.id, userType: userType },
-                // userType == "client"
-                // ? process.env.Client_REFRESH_TOKEN_SECRET
-                // : process.env.Freelancer_REFRESH_TOKEN_SECRET,
+                { AdminId: Admin.id, userType: userType },
                 Refresh_Secrute,
                 { expiresIn: "1d" }
             );
 
             try {
                 await Refresh_tokens.create({
-                    userId: user.id,
+                    userId: Admin.id,
                     token: refreshToken,
                 });
             } catch (err) {
@@ -82,12 +60,12 @@ const handleLogin = async (req, res) => {
 
             return res.status(200).json({
                 message: "Logged In Successfully",
-                userId: user.id,
+                AdminId: Admin.id,
                 userType: userType,
             });
         } else {
             return res.status(401).json({
-                message: "Username or password isn't correct",
+                message: "Admin email or password isn't correct",
             });
         }
     } catch (err) {
