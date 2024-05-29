@@ -17,18 +17,17 @@ const verifyUser = async (req, res, next) => {
                 accessToken,
                 process.env.Freelancer_ACCESS_TOKEN_SECRET
             );
-
-        if (!decoded)
-            return res.status(401).json({
-                message: "unauthorized : Invalid access token ",
-            });
+        // if (!decoded)
+        //     return res.status(401).json({
+        //         message: "unauthorized : Invalid tokens ",
+        //     });
         else if (!decoded.userId || !decoded.userType)
             return res.status(401).json({
-                message: "unauthorized : Invalid access token",
+                message: "unauthorized : Invalid tokens",
             });
         else if (decoded.userType != "freelancer") {
             return res.status(401).json({
-                message: "unauthorized : Invalid access token ",
+                message: "unauthorized : Invalid tokens ",
             });
         } else if (decoded.userType == "freelancer") {
             let freelancer = await Freelancers.findOne({
@@ -36,17 +35,17 @@ const verifyUser = async (req, res, next) => {
             });
             if (!freelancer) {
                 return res.status(401).json({
-                    message: "unauthorized : Invalid access token ",
+                    message: "unauthorized : Invalid tokens ",
                 });
             }
             req.user = freelancer;
         } else if (decoded.userType != "freelancer") {
             return res.status(401).json({
-                message: "unauthorized : Invalid access token ",
+                message: "unauthorized : Invalid tokens ",
             });
         } else
             return res.status(401).json({
-                message: "unauthorized : Invalid access token ",
+                message: "unauthorized : Invalid tokens ",
             });
 
         req.decoded = decoded;
@@ -54,7 +53,7 @@ const verifyUser = async (req, res, next) => {
     } catch (err) {
         console.log(err);
         if (err.name !== "invalid signature") {
-            return res.status(401).json({ message: "Invalid access token" });
+            return res.status(401).json({ message: "Invalid tokens" });
         } else if (err.name === "TokenExpiredError") {
             if (!refreshToken) {
                 return res
@@ -70,8 +69,8 @@ const verifyUser = async (req, res, next) => {
                 });
 
                 if (!foundInDB) {
-                    return res.status(403).json({
-                        message: "unauthorized : Invalid refresh token",
+                    return res.status(401).json({
+                        message: "unauthorized : Invalid tokens",
                     });
                 }
 
@@ -80,8 +79,8 @@ const verifyUser = async (req, res, next) => {
                     process.env.Freelancer_REFRESH_TOKEN_SECRET,
                     async (err, decoded) => {
                         if (err || foundInDB.userId !== decoded.userId) {
-                            return res.status(403).json({
-                                message: "unauthorized : Invalid refresh token",
+                            return res.status(401).json({
+                                message: "unauthorized : Invalid tokens",
                             });
                         }
                         if (decoded.userType == "freelancer") {
@@ -103,19 +102,17 @@ const verifyUser = async (req, res, next) => {
                             req.decoded = decoded;
                         } else
                             res.status(401).json({
-                                message: "unauthorized  : Invalid access token",
+                                message: "unauthorized  : Invalid tokens",
                             });
 
                         return next();
                     }
                 );
             } catch (refreshErr) {
-                return res
-                    .status(403)
-                    .json({ message: "Invalid refresh token" });
+                return res.status(401).json({ message: "Invalid tokens" });
             }
         } else {
-            return res.status(401).json({ message: "Invalid access token" });
+            return res.status(401).json({ message: "Invalid tokens" });
         }
     }
 };

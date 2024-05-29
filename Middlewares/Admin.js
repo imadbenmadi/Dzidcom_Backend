@@ -1,18 +1,21 @@
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
-const { Clients } = require("../Models/Client");
 const { Refresh_tokens } = require("../Models/RefreshTokens");
+const { Admins } = require("../Models/Admin/Admin");
 
-const verifyUser = async (req, res, next) => {
+const verifyAdmin = async (req, res, next) => {
     const accessToken = req.cookies.accessToken;
     const refreshToken = req.cookies.refreshToken;
 
+    console.log("data from admin middlware : ", req.cookies);
+    // console.log("daata from admin : ", accessToken, refreshToken);
+    // console.log("daata from admin : ", req);
     try {
         let decoded = null;
         if (accessToken)
             decoded = jwt.verify(
                 accessToken,
-                process.env.Client_ACCESS_TOKEN_SECRET
+                process.env.ADMIN_ACCESS_TOKEN_SECRET
             );
         // if (!decoded)
         //     return res.status(401).json({
@@ -20,23 +23,23 @@ const verifyUser = async (req, res, next) => {
         //     });
         else if (!decoded.userId || !decoded.userType)
             return res.status(401).json({
-                message: "unauthorized : Invalid tokens ",
+                message: "unauthorized : Invalid tokens",
             });
-        else if (decoded.userType != "client") {
+        else if (decoded.userType != "admin") {
             return res.status(401).json({
                 message: "unauthorized : Invalid tokens ",
             });
-        } else if (decoded.userType == "client") {
-            let client = await Clients.findOne({
+        } else if (decoded.userType == "admin") {
+            let admin = await Admins.findOne({
                 where: { id: decoded.userId },
             });
-            if (!client) {
+            if (!admin) {
                 return res.status(401).json({
                     message: "unauthorized : Invalid tokens ",
                 });
             }
-            req.user = client;
-        } else if (decoded.userType != "client") {
+            req.user = admin;
+        } else if (decoded.userType != "admin") {
             return res.status(401).json({
                 message: "unauthorized : Invalid tokens ",
             });
@@ -73,30 +76,29 @@ const verifyUser = async (req, res, next) => {
 
                 jwt.verify(
                     refreshToken,
-                    process.env.Client_REFRESH_TOKEN_SECRET,
+                    process.env.ADMIN_REFRESH_TOKEN_SECRET,
                     async (err, decoded) => {
                         if (err || foundInDB.userId !== decoded.userId) {
                             return res.status(401).json({
                                 message: "unauthorized : Invalid tokens",
                             });
                         }
-                        let newAccessToken = null;
-                        if (decoded.userType == "client") {
-                            newAccessToken = jwt.sign(
+                        if (decoded.userType == "admin") {
+                            let newAccessToken = jwt.sign(
                                 {
                                     userId: decoded.userId,
                                     userType: decoded.userType,
                                 },
-                                process.env.Client_ACCESS_TOKEN_SECRET,
+                                process.env.ADMIN_ACCESS_TOKEN_SECRET,
                                 { expiresIn: "1h" }
                             );
+
                             res.cookie("accessToken", newAccessToken, {
                                 httpOnly: true,
                                 sameSite: "None",
                                 secure: true,
                                 maxAge: 60 * 60 * 1000,
                             });
-
                             req.decoded = decoded;
                         } else
                             res.status(401).json({
@@ -115,4 +117,4 @@ const verifyUser = async (req, res, next) => {
     }
 };
 
-module.exports = verifyUser;
+module.exports = verifyAdmin;

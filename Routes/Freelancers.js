@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const Freelancer_Middlware = require("../Middlewares/Freelanccer");
+const Freelancer_Middlware = require("../Middlewares/Freelancer");
 const FreelancerController = require("../Controllers/Freelancer");
 router.get(
     "/:userId/Profile",
