@@ -23,35 +23,36 @@ const Clients = sequelize.define("Clients", {
         type: DataTypes.STRING,
         allowNull: true,
     },
-    about: {
-        type: DataTypes.TEXT,
-        allowNull: true,
-    },
 
     nationalCardNumber: {
         type: DataTypes.STRING,
         allowNull: true,
     },
-    CompanyWebsite: {
+    JobTitle: {
         type: DataTypes.STRING,
         allowNull: true,
     },
-    companyName: {
+    company_Name: {
         type: DataTypes.STRING,
         allowNull: true,
     },
-    creationData: {
+    company_about: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+    },
+    company_Website: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    company_creationData: {
         type: DataTypes.DATE,
         allowNull: true,
     },
-    centerAdress: {
+    company_Adress: {
         type: DataTypes.STRING,
         allowNull: true,
     },
-    typeOfWork: {
-        type: DataTypes.STRING,
-        allowNull: true,
-    },
+
     instgram_Link: {
         type: DataTypes.STRING,
         allowNull: true,
