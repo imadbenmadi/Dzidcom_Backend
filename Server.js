@@ -56,9 +56,11 @@ app.use("/Freelancers", require("./Routes/Freelancers"));
 app.use("/Clients", require("./Routes/Clients"));
 app.use("/upload", require("./Routes/Uploads/Upload"));
 
+app.use("/Admin", require("./Routes/Admin/Admin"));
 app.use("/Admin_Login", require("./Routes/Auth/Admin/Admin_Login"));
 app.use("/Add_Admin", require("./Routes/Auth/Admin/Admin_Add"));
-app.use("/Admin", require("./Routes/Admin/Admin"));
+// app.use("/Admin_Logout", require("./Routes/Auth/Admin/Admin_Logout"));
+app.use("/Admin_CheckAuth", require("./Routes/Auth/Admin/Admin_CheckAuth"));
 
 const { Freelancers } = require("./Models/Freelnacer");
 const { Clients } = require("./Models/Client");
