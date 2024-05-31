@@ -28,11 +28,12 @@ const Clients = sequelize.define("Clients", {
         type: DataTypes.STRING,
         allowNull: true,
     },
-    JobTitle: {
+
+    company_Name: {
         type: DataTypes.STRING,
         allowNull: true,
     },
-    company_Name: {
+    company_WorkField: {
         type: DataTypes.STRING,
         allowNull: true,
     },
@@ -44,7 +45,7 @@ const Clients = sequelize.define("Clients", {
         type: DataTypes.STRING,
         allowNull: true,
     },
-    company_creationData: {
+    company_creationDate: {
         type: DataTypes.DATE,
         allowNull: true,
     },
@@ -61,7 +62,7 @@ const Clients = sequelize.define("Clients", {
         type: DataTypes.STRING,
         allowNull: true,
     },
-    facebook_Link: {
+    facebook_Link0: {
         type: DataTypes.STRING,
         allowNull: true,
     },

@@ -13,19 +13,6 @@ const EditeProfile = async (req, res) => {
         }
 
         await Client.update(newData);
-
-        if (newData.Client_SocialMediaLinks) {
-            await Client_SocialMediaLinks.destroy({
-                where: { ClientId: Client.id },
-            });
-            await Client_SocialMediaLinks.bulkCreate(
-                newData.Client_SocialMediaLinks.map((link) => ({
-                    ...link,
-                    ClientId: Client.id,
-                }))
-            );
-        }
-
         return res
             .status(200)
             .json({ message: "Profile updated successfully." });

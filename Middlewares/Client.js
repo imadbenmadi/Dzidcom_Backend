@@ -6,14 +6,18 @@ const { Refresh_tokens } = require("../Models/RefreshTokens");
 const verifyUser = async (req, res, next) => {
     const accessToken = req.cookies.accessToken;
     const refreshToken = req.cookies.refreshToken;
+    console.log("daata from client : ", req.cookies);
 
     try {
         let decoded = null;
-        if (accessToken)
+
+        if (accessToken) {
             decoded = jwt.verify(
                 accessToken,
                 process.env.Client_ACCESS_TOKEN_SECRET
             );
+            
+        }
         // if (!decoded)
         //     return res.status(401).json({
         //         message: "unauthorized : Invalid tokens ",
@@ -36,10 +40,6 @@ const verifyUser = async (req, res, next) => {
                 });
             }
             req.user = client;
-        } else if (decoded.userType != "client") {
-            return res.status(401).json({
-                message: "unauthorized : Invalid tokens ",
-            });
         } else
             return res.status(401).json({
                 message: "unauthorized : Invalid tokens ",
