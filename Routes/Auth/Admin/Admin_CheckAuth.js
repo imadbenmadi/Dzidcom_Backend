@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
-const { Admins } = require("../../../Middlewares/Admin");
+const { Admins } = require("../../../Models/Admin/Admin");
 const { Refresh_tokens } = require("../../../Models/RefreshTokens");
 
 router.get("/", async (req, res) => {
@@ -10,9 +10,11 @@ router.get("/", async (req, res) => {
     const AdminRefreshTokenSecret = process.env.ADMIN_REFRESH_TOKEN_SECRET;
     const accessToken = req.cookies.accessToken;
     const refreshToken = req.cookies.refreshToken;
-    let userType = "admin";
-    console.log("daata from checkAuth : ", accessToken, refreshToken);
-
+    if (!refreshToken) {
+        return res.status(401).json({
+            message: "Unauthorized",
+        });
+    }
     const verifyToken = (token, secret) => {
         return new Promise((resolve, reject) => {
             jwt.verify(token, secret, (err, decoded) => {
@@ -74,7 +76,7 @@ router.get("/", async (req, res) => {
             const newAccessToken = jwt.sign(
                 {
                     userId: decoded.userId,
-                    userType: decoded.userType,
+                    userType: "admin",
                 },
                 accessTokenSecret,
                 { expiresIn: "1h" }
@@ -87,17 +89,11 @@ router.get("/", async (req, res) => {
                 maxAge: 60 * 60 * 1000, // 1 hour in milliseconds
             });
 
-            let user = await Admins.findOne({
+            const user = await Admins.findOne({
                 where: { id: decoded.userId },
             });
-            userType = "Admin";
-            if (!user) {
-                user = await Clients.findOne({ where: { id: decoded.userId } });
-                userType = "client";
-            }
 
             if (!user) {
-                userType = "";
                 if (req.cookies.accessToken) {
                     res.clearCookie("accessToken");
                 }
@@ -111,8 +107,6 @@ router.get("/", async (req, res) => {
 
             return res.status(200).json({
                 message: "check auth true, Access token refreshed successfully",
-                userType: userType,
-                userId: user.id,
             });
         });
     };
@@ -124,23 +118,20 @@ router.get("/", async (req, res) => {
                 accessToken,
                 AdminAccessTokenSecret
             );
-            let user = await Admins.findOne({
-                where: { id: decoded.userId },
-            });
-            userType = "Admin";
+            let user = await Admins.findOne({ where: { id: decoded.userId } });
             if (!user) {
-                user = await Clients.findOne({ where: { id: decoded.userId } });
-                userType = "client";
-            }
-            if (!user) {
+                if (req.cookies.accessToken) {
+                    res.clearCookie("accessToken");
+                }
+                if (req.cookies.refreshToken) {
+                    res.clearCookie("refreshToken");
+                }
                 return res
                     .status(404)
                     .json({ message: "Unauthorized: User not found" });
             }
             return res.status(200).json({
                 message: "check auth: true, Access token is valid",
-                userType: userType,
-                userId: user.id,
             });
         } catch (err) {
             if (err.name === "TokenExpiredError") {
@@ -159,6 +150,7 @@ router.get("/", async (req, res) => {
         if (req.cookies.refreshToken) {
             res.clearCookie("refreshToken");
         }
+        console.log("Error in Admin checkAuth: ", err);
         return res.status(500).json({ message: err.message });
     }
 });

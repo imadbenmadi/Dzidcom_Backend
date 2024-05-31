@@ -24,12 +24,12 @@ const handleLogin = async (req, res) => {
             const Refresh_Secrute = process.env.ADMIN_REFRESH_TOKEN_SECRET;
 
             const accessToken = jwt.sign(
-                { AdminId: Admin.id, userType: userType },
+                { userId: Admin.id, userType: userType },
                 Access_Secrute,
                 { expiresIn: "1h" }
             );
             const refreshToken = jwt.sign(
-                { AdminId: Admin.id, userType: userType },
+                { userId: Admin.id, userType: userType },
                 Refresh_Secrute,
                 { expiresIn: "1d" }
             );
@@ -60,7 +60,7 @@ const handleLogin = async (req, res) => {
 
             return res.status(200).json({
                 message: "Logged In Successfully",
-                AdminId: Admin.id,
+                userId: Admin.id,
                 userType: userType,
             });
         } else {
