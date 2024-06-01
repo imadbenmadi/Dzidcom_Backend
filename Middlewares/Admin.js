@@ -12,16 +12,11 @@ const verifyAdmin = async (req, res, next) => {
     // console.log("daata from admin : ", req);
     try {
         let decoded = null;
-        if (accessToken)
-            decoded = jwt.verify(
-                accessToken,
-                process.env.ADMIN_ACCESS_TOKEN_SECRET
-            );
-        // if (!decoded)
-        //     return res.status(401).json({
-        //         message: "unauthorized : Invalid tokens ",
-        //     });
-        else if (!decoded.userId || !decoded.userType)
+        decoded = jwt.verify(
+            accessToken,
+            process.env.ADMIN_ACCESS_TOKEN_SECRET
+        );
+        if (!decoded.userId || !decoded.userType)
             return res.status(401).json({
                 message: "unauthorized : Invalid tokens",
             });
@@ -52,9 +47,9 @@ const verifyAdmin = async (req, res, next) => {
         return next();
     } catch (err) {
         console.log(err);
-        if (err.name !== "invalid signature") {
+        if (err.name !== "TokenExpiredError" || !refreshToken) {
             return res.status(401).json({ message: "Invalid tokens" });
-        } else if (err.name === "TokenExpiredError") {
+        } else if (err.name === "TokenExpiredError" || !accessToken) {
             if (!refreshToken) {
                 return res
                     .status(401)
