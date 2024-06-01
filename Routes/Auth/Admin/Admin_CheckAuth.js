@@ -96,8 +96,8 @@ router.get("/", async (req, res) => {
                 adminAccessTokenSecret
             );
         }
-        res.clearCookie("accessToken");
-        res.clearCookie("refreshToken");
+        // res.clearCookie("accessToken");
+        // res.clearCookie("refreshToken");
         return res
             .status(401)
             .json({ message: "Unauthorized: Access token is invalid" });

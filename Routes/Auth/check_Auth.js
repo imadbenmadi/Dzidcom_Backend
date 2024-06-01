@@ -184,8 +184,8 @@ router.get("/", async (req, res) => {
         });
     } catch (err) {
         console.log(err);
-        res.clearCookie("accessToken");
-        res.clearCookie("refreshToken");
+        // res.clearCookie("accessToken");
+        // res.clearCookie("refreshToken");
         return res.status(500).json({ message: err.message });
     }
 });
