@@ -1,0 +1,32 @@
+// const { Clients } = require("../../Models/Client");
+const { Projects } = require("../../../Models/Project");
+const AddProject = async (req, res) => {
+    const userId = req.decoded.userId;
+    if (!userId)
+        return res.status(401).json({ error: "Unauthorized , missing userId" });
+    try {
+        // Find the Client by their ID
+        // const Client = await Clients.findByPk(userId);
+        // if (!Client) {
+        //     return res.status(404).json({ error: "Client not found." });
+        // }
+        const { Title, Description } = req.body;
+        if (!Title || !Description) {
+            return res
+                .status(400)
+                .json({ error: "Please provide all required fields." });
+        }
+
+        await Projects.create({
+            ClientId: userId,
+            Title,
+            Description,
+        });
+        return res.status(200).json({ message: "Projcet added successfully." });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: "Internal server error." });
+    }
+};
+
+module.exports = { AddProject };

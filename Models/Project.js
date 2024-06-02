@@ -18,6 +18,11 @@ const Projects = sequelize.define("Projects", {
         type: DataTypes.STRING,
         allowNull: true,
     },
+    Status: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        defaultValue: "Pending",
+    },
 });
 const Required_Skills = sequelize.define("Required_Skills", {
     skill: {

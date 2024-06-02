@@ -1,5 +1,4 @@
-const { Clients } = require("../../Models/Client");
-const { Client_SocialMediaLinks } = require("../../Models/Client");
+const { Clients } = require("../../../Models/Client");
 const getProfile = async (req, res) => {
     const userId = req.decoded.userId;
     try {

@@ -1,4 +1,4 @@
-const { Clients, Client_SocialMediaLinks } = require("../../Models/Client");
+const { Clients } = require("../../../Models/Client");
 
 const EditeProfile = async (req, res) => {
     const userId = req.decoded.userId;
