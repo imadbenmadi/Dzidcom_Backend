@@ -51,7 +51,7 @@ app.use("/Register", require("./Routes/Auth/Register"));
 app.use("/Logout", require("./Routes/Auth/Logout"));
 
 app.use("/Contact", require("./Routes/Contact"));
-
+app.use("/Privacy", require("./Routes/Privacy"));
 app.use("/Freelancers", require("./Routes/Freelancers"));
 app.use("/Clients", require("./Routes/Clients"));
 app.use("/upload", require("./Routes/Uploads/Upload"));
