@@ -170,8 +170,8 @@ router.get("/", async (req, res) => {
 
         // If no user found for both freelancer and client
         if (!user) {
-            res.clearCookie("accessToken");
-            res.clearCookie("refreshToken");
+            // res.clearCookie("accessToken");
+            // res.clearCookie("refreshToken");
             return res
                 .status(401)
                 .json({ message: "Unauthorized: Invalid access token" });

@@ -52,8 +52,8 @@ router.get("/", async (req, res) => {
                 refreshTokenSecret,
                 async (err, decoded) => {
                     if (err) {
-                        res.clearCookie("accessToken");
-                        res.clearCookie("refreshToken");
+                        // res.clearCookie("accessToken");
+                        // res.clearCookie("refreshToken");
                         return res
                             .status(401)
                             .json({
