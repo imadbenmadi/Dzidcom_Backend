@@ -35,8 +35,8 @@ router.get("/", async (req, res) => {
         accessTokenSecret
     ) => {
         if (!refreshToken) {
-            res.clearCookie("accessToken");
-            res.clearCookie("refreshToken");
+            // res.clearCookie("accessToken");
+            // res.clearCookie("refreshToken");
             return res
                 .status(401)
                 .json({ message: "Unauthorized: Refresh token is missing" });
@@ -46,8 +46,8 @@ router.get("/", async (req, res) => {
             where: { token: refreshToken },
         });
         if (!found_in_DB) {
-            res.clearCookie("accessToken");
-            res.clearCookie("refreshToken");
+            // res.clearCookie("accessToken");
+            // res.clearCookie("refreshToken");
             return res
                 .status(401)
                 .json({ message: "Unauthorized: Invalid refresh token" });
@@ -59,13 +59,11 @@ router.get("/", async (req, res) => {
                 refreshTokenSecret,
                 async (err, decoded) => {
                     if (err) {
-                        res.clearCookie("accessToken");
-                        res.clearCookie("refreshToken");
-                        return res
-                            .status(401)
-                            .json({
-                                message: "Unauthorized: Invalid refresh token",
-                            });
+                        // res.clearCookie("accessToken");
+                        // res.clearCookie("refreshToken");
+                        return res.status(401).json({
+                            message: "Unauthorized: Invalid refresh token",
+                        });
                     }
 
                     const newAccessToken = jwt.sign(
@@ -94,8 +92,8 @@ router.get("/", async (req, res) => {
                     }
 
                     if (!user) {
-                        res.clearCookie("accessToken");
-                        res.clearCookie("refreshToken");
+                        // res.clearCookie("accessToken");
+                        // res.clearCookie("refreshToken");
                         return res
                             .status(404)
                             .json({ message: "Unauthorized: User not found" });
@@ -114,6 +112,7 @@ router.get("/", async (req, res) => {
 
         // First check as a freelancer
         try {
+            if (!accessToken) throw new Error("No access token found");
             decoded = await verifyToken(
                 accessToken,
                 Freelancer_ACCESS_TOKEN_SECRET
@@ -128,11 +127,12 @@ router.get("/", async (req, res) => {
                         Freelancer_REFRESH_TOKEN_SECRET,
                         Freelancer_ACCESS_TOKEN_SECRET
                     );
-                    return res.status(200).json({
-                        message:
-                            "check auth true, Access token refreshed successfully",
-                        ...result,
-                    });
+                    return res.status(200)
+                    //     .json({
+                    //     message:
+                    //         "check auth true, Access token refreshed successfully",
+                    //     // ...result,
+                    // });
                 } catch (err) {
                     console.log("Error refreshing freelancer token:", err);
                 }
@@ -159,7 +159,7 @@ router.get("/", async (req, res) => {
                         return res.status(200).json({
                             message:
                                 "check auth true, Access token refreshed successfully",
-                            ...result,
+                            // ...result,
                         });
                     } catch (err) {
                         console.log("Error refreshing client token:", err);
@@ -186,7 +186,7 @@ router.get("/", async (req, res) => {
         console.log(err);
         // res.clearCookie("accessToken");
         // res.clearCookie("refreshToken");
-        return res.status(500).json({ message: err.message });
+        // return res.status(500).json({ message: err.message });
     }
 });
 
