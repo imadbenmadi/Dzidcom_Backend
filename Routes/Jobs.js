@@ -18,7 +18,7 @@ const { Op } = require("sequelize");
 //     }
 // });
 router.get("/", Freelancer_Middleware, async (req, res) => {
-    const { search, Content_creation, SEO_SIM, Graphic_Designer } = req.query;
+    const { search, Content_creation, SEO_SIM, Graphic_design } = req.query;
 
     const whereClause = { Status: "Pending" };
 
@@ -26,7 +26,7 @@ router.get("/", Freelancer_Middleware, async (req, res) => {
     if (search) {
         whereClause[Op.or] = [
             { Title: { [Op.like]: `%${search}%` } },
-            { Description: { [Op.like]: `%${search}%` } },
+            // { Description: { [Op.like]: `%${search}%` } },
         ];
     }
 
@@ -37,7 +37,7 @@ router.get("/", Freelancer_Middleware, async (req, res) => {
     if (SEO_SIM === "true") {
         whereClause.Field_is_SEO_SIM = "1";
     }
-    if (Graphic_Designer === "true") {
+    if (Graphic_design === "true") {
         whereClause.Field_is_Graphic_design = "1";
     }
 

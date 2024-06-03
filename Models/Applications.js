@@ -25,6 +25,14 @@ const Applications = sequelize.define("Applications", {
         allowNull: false,
         defaultValue: "Pending",
     },
+    Freelancer_Time_Needed: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    Freelancer_Budget: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
 });
 
 Freelancers.hasMany(Applications, {
