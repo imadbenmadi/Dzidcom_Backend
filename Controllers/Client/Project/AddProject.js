@@ -15,7 +15,7 @@ const AddProject = async (req, res) => {
             Description,
             Field_is_Graphic_design,
             Field_is_Content_creation,
-            Field_is_SEO_SMM,
+            Field_is_SEO_SIM,
             Expected_Time,
             Budget,
             Frelancer_Experiance,
@@ -25,15 +25,22 @@ const AddProject = async (req, res) => {
             return res
                 .status(400)
                 .json({ error: "Please provide all required fields." });
+        } else if (
+            (Field_is_Graphic_design &&
+                typeof Field_is_Graphic_design !== "boolean") ||
+            (Field_is_Content_creation &&
+                typeof Field_is_Content_creation !== "boolean") ||
+            (Field_is_SEO_SIM && typeof Field_is_SEO_SIM !== "boolean")
+        ) {
+            return res.status(400).json({ error: "invalide type " });
         }
-
         await Projects.create({
             ClientId: userId,
             Title,
             Description,
-            Field_is_Graphic_design,
-            Field_is_Content_creation,
-            Field_is_SEO_SMM,
+            Field_is_Graphic_design: !!Field_is_Graphic_design,
+            Field_is_Content_creation: !!Field_is_Content_creation,
+            Field_is_SEO_SIM: !!Field_is_SEO_SIM,
             Expected_Time,
             Budget,
             Frelancer_Experiance,

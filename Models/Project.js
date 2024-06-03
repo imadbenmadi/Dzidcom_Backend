@@ -29,17 +29,17 @@ const Projects = sequelize.define("Projects", {
     },
 
     Field_is_Graphic_design: {
-        type: DataTypes.STRING,
+        type: DataTypes.BOOLEAN,
         allowNull: true,
         default: false,
     },
     Field_is_Content_creation: {
-        type: DataTypes.STRING,
+        type: DataTypes.BOOLEAN,
         allowNull: true,
         default: false,
     },
-    Field_is_SEO_SMM: {
-        type: DataTypes.STRING,
+    Field_is_SEO_SIM: {
+        type: DataTypes.BOOLEAN,
         allowNull: true,
         default: false,
     },

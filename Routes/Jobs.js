@@ -35,7 +35,7 @@ router.get("/", Freelancer_Middleware, async (req, res) => {
         whereClause.Field_is_Content_creation = "1";
     }
     if (SEO_SIM === "true") {
-        whereClause.Field_is_SEO_SMM = "1";
+        whereClause.Field_is_SEO_SIM = "1";
     }
     if (Graphic_Designer === "true") {
         whereClause.Field_is_Graphic_design = "1";
@@ -44,6 +44,15 @@ router.get("/", Freelancer_Middleware, async (req, res) => {
     try {
         const requests = await Projects.findAll({
             where: whereClause,
+            // attributes: [
+            //     "Title",
+            //     "Description",
+            //     "Frelancer_Experiance",
+            //     "createdAt",
+            //     "Field_is_Graphic_design",
+            //     "Field_is_Content_creation",
+            //     "Field_is_SEO_SMM",
+            // ],
         });
         res.status(200).json({ Jobs: requests });
     } catch (err) {
