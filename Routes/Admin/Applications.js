@@ -9,6 +9,7 @@ router.get("/", Admin_midllware, async (req, res) => {
         const applications = await Applications.findAll({
             // where: { status: "Pending" },
             where: {},
+            order: [["createdAt", "DESC"]],
         });
         res.status(200).json({ Applications: applications });
     } catch (err) {
@@ -29,6 +30,7 @@ router.get("/:projectId", Admin_midllware, async (req, res) => {
                 // status: "Pending",
                 ProjectId: projectId,
             },
+            order: [["createdAt", "DESC"]],
         });
         res.status(200).json({ Applications: applications });
     } catch (err) {
@@ -63,57 +65,56 @@ router.get("/:projectId/:ApplicationId", Admin_midllware, async (req, res) => {
 });
 
 router.post(
-    "/:projectId/:ApplicationId/Accept",
+    "/:projectId/:applicationId/accept",
     Admin_midllware,
     async (req, res) => {
-        const projectId = req.params.projectId;
-        const ApplicationId = req.params.ApplicationId;
-        if (!projectId)
+        const { projectId, applicationId } = req.params;
+
+        if (!projectId) {
             return res
                 .status(409)
-                .json({ message: "Missing data ProjectId is required" });
-        else if (!ApplicationId)
+                .json({ message: "Missing data: ProjectId is required" });
+        }
+
+        if (!applicationId) {
             return res
                 .status(409)
-                .json({ message: "Missing data ApplicationId is required" });
+                .json({ message: "Missing data: ApplicationId is required" });
+        }
+
         try {
             const application = await Applications.findOne({
-                where: {
-                    // status: "Pending",
-                    ProjectId: projectId,
-                    id: ApplicationId,
-                },
+                where: { ProjectId: projectId, id: applicationId },
             });
-            if (!application)
+            console.log(application.FreelancerId);
+            if (!application) {
                 return res
                     .status(404)
                     .json({ message: "Application not found" });
+            }
 
-            await Applications.update(
-                {
-                    status: "Accepted",
-                },
-                {
-                    where: {
-                        id: ApplicationId,
-                    },
-                }
-            );
-            const Project = await Projects.findOne({
+            const project = await Projects.findOne({
                 where: { id: projectId },
             });
-            if (!Project)
-                res.status(400).json({ message: "project not found" });
-            await Project.update({
-                FreelancerId: application.FreelancerId,
-                // where: {
-                //     id: projectId,
-                // },
-            });
+
+            if (!project) {
+                return res.status(404).json({ message: "Project not found" });
+            }
+
+            await Applications.update(
+                { status: "Accepted" },
+                { where: { id: applicationId } }
+            );
+
+            await Projects.update(
+                { FreelacnerId: application.FreelancerId },
+                { where: { id: projectId } }
+            );
+
             res.status(200).json({ message: "Application Approved" });
         } catch (err) {
-            console.error("Error fetching Project Applications:", err);
-            res.status(500).json({ message: err });
+            console.error("Error processing application approval:", err);
+            res.status(500).json({ message: "Internal Server Error" });
         }
     }
 );

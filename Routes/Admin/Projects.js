@@ -7,6 +7,7 @@ router.get("/requests", Admin_midllware, async (req, res) => {
     try {
         const requests = await Projects.findAll({
             where: { status: "Pending" },
+            order: [["createdAt", "DESC"]],
         });
         res.status(200).json({ Projects: requests });
     } catch (err) {
@@ -35,7 +36,8 @@ router.post(
     Admin_midllware,
     async (req, res) => {
         const projectId = req.params.projectId;
-        if (!projectId) return res.status(409).json({ message: "Missing data" });
+        if (!projectId)
+            return res.status(409).json({ message: "Missing data" });
         try {
             const Project = await Projects.findOne({
                 where: { id: projectId },
@@ -57,7 +59,8 @@ router.post(
     Admin_midllware,
     async (req, res) => {
         const projectId = req.params.projectId;
-        if (!projectId) return res.status(409).json({ message: "Missing data" });
+        if (!projectId)
+            return res.status(409).json({ message: "Missing data" });
         try {
             const Project = await Projects.findOne({
                 where: { id: projectId },
