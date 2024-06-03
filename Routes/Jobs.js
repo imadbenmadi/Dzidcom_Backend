@@ -85,13 +85,19 @@ router.post("/:projectId/Apply", Freelancer_Middleware, async (req, res) => {
             .status(409)
             .json({ message: "Missing data, project ID is required" });
 
-    const freelancerId = req.body.freelancerId;
+    const freelancerId = req.decoded.userId;
     if (!freelancerId)
         return res
             .status(409)
             .json({ message: "Missing data, freelancer ID is required" });
 
     try {
+        const { Freelancer_Time_Needed, Freelancer_Budget } = req.body;
+        if (!Freelancer_Time_Needed || !Freelancer_Budget)
+            return res.status(409).json({
+                message:
+                    "Missing data, Freelancer_Time_Needed and Freelancer_Budget are required",
+            });
         const Project = await Projects.findOne({
             where: { id: projectId },
         });
@@ -107,12 +113,28 @@ router.post("/:projectId/Apply", Freelancer_Middleware, async (req, res) => {
             return res
                 .status(409)
                 .json({ message: "You have already applied for this project" });
-
+        const Applications_Lenght = await Applications.count({
+            where: {
+                FreelancerId: freelancerId,
+                status: "Pending",
+            },
+        });
+        if (Applications_Lenght > 5)
+            return res
+                .status(400)
+                .json({ message: "You have more than 5 Pending Applications , Please wait till the Platfom aprove your request" });
+        // await Project.update({
+        //     Freelancer_Time_Needed,
+        //     Freelancer_Budget,
+        //     where: { id: projectId },
+        // });
         await Applications.create({
             ProjectId: projectId,
             FreelancerId: freelancerId,
             ProjectTitle: Project.Title,
             ProjectDescription: Project.Description,
+            Freelancer_Time_Needed: Freelancer_Time_Needed,
+            Freelancer_Budget: Freelancer_Budget,
         });
 
         res.status(200).json({ message: "Application submitted successfully" });
