@@ -107,7 +107,7 @@ router.post(
             );
 
             await Projects.update(
-                { FreelacnerId: application.FreelancerId },
+                { FreelancerId: application.FreelancerId },
                 { where: { id: projectId } }
             );
 

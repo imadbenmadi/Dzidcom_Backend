@@ -6,7 +6,7 @@ const Projects = sequelize.define("Projects", {
         type: DataTypes.INTEGER,
         allowNull: false,
     },
-    FreelacnerId: {
+    FreelancerId: {
         type: DataTypes.INTEGER,
         allowNull: true,
     },
