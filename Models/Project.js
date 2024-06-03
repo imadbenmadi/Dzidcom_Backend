@@ -18,10 +18,7 @@ const Projects = sequelize.define("Projects", {
         type: DataTypes.TEXT,
         allowNull: false,
     },
-    Pyament_ScreenShot_Link: {
-        type: DataTypes.STRING,
-        allowNull: true,
-    },
+
     status: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -53,6 +50,25 @@ const Projects = sequelize.define("Projects", {
         allowNull: true,
     },
     Frelancer_Experiance: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    isProjectDone: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true,
+        default: false,
+    },
+    isWorkRejected: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true,
+        default: false,
+    },
+    isPayment_ScreenShot_Rajacted: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true,
+        default: false,
+    },
+    Pyament_ScreenShot_Link: {
         type: DataTypes.STRING,
         allowNull: true,
     },

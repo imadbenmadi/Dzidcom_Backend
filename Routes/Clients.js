@@ -18,4 +18,6 @@ router.delete(
     Client_Middlware,
     ClientController.DeleteProject
 );
+
+router.get("/:userId/Payment/:projectId/status", Client_Middlware, ClientController.PaymentStatus);
 module.exports = router;

@@ -4,7 +4,7 @@ const { AddProject } = require("./Client/Project/AddProject");
 const { DeleteProject } = require("./Client/Project/DeleteProject");
 const { GetProjcts } = require("./Client/Project/GetProjects");
 const { GetProject } = require("./Client/Project/GetProject");
-
+const { PaymentStatus } = require("./Client/Project/PaymentStatus");
 const ClientController = {
     getProfile,
     EditeProfile,
@@ -12,6 +12,7 @@ const ClientController = {
     DeleteProject,
     GetProjcts,
     GetProject,
+    PaymentStatus,
 };
 
 module.exports = ClientController;
