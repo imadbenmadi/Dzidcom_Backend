@@ -45,7 +45,7 @@ router.post(
             if (!Project)
                 return res.status(404).json({ message: "Project not found" });
 
-            await Project.update({ Status: "Approved" });
+            await Project.update({ Status: "Accepted" });
 
             res.status(200).json({ message: "Project Approved" });
         } catch (err) {

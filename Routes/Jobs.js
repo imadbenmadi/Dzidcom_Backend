@@ -20,12 +20,15 @@ const { Op } = require("sequelize");
 router.get("/", Freelancer_Middleware, async (req, res) => {
     const { search, Content_creation, SEO_SIM, Graphic_design } = req.query;
 
-    const whereClause = { Status: "Pending" };
+    const whereClause = {
+        Status: "Accepted",
+    };
 
     // Handle search by title and description
     if (search) {
         whereClause[Op.or] = [
             { Title: { [Op.like]: `%${search}%` } },
+
             // { Description: { [Op.like]: `%${search}%` } },
         ];
     }
@@ -44,15 +47,7 @@ router.get("/", Freelancer_Middleware, async (req, res) => {
     try {
         const requests = await Projects.findAll({
             where: whereClause,
-            // attributes: [
-            //     "Title",
-            //     "Description",
-            //     "Frelancer_Experiance",
-            //     "createdAt",
-            //     "Field_is_Graphic_design",
-            //     "Field_is_Content_creation",
-            //     "Field_is_SEO_SMM",
-            // ],
+            order: [["createdAt", "DESC"]],
         });
         res.status(200).json({ Jobs: requests });
     } catch (err) {
@@ -122,7 +117,10 @@ router.post("/:projectId/Apply", Freelancer_Middleware, async (req, res) => {
         if (Applications_Lenght > 5)
             return res
                 .status(400)
-                .json({ message: "You have more than 5 Pending Applications , Please wait till the Platfom aprove your request" });
+                .json({
+                    message:
+                        "You have more than 5 Pending Applications , Please wait till the Platfom aprove your request",
+                });
         // await Project.update({
         //     Freelancer_Time_Needed,
         //     Freelancer_Budget,
