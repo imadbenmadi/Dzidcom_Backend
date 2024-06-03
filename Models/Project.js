@@ -49,7 +49,7 @@ const Projects = sequelize.define("Projects", {
         allowNull: true,
     },
     Budget: {
-        type: DataTypes.FLOAT,
+        type: DataTypes.STRING,
         allowNull: true,
     },
     Frelancer_Experiance: {

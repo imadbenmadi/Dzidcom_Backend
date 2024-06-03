@@ -1,4 +1,6 @@
 // const { Clients } = require("../../Models/Client");
+const { Clients } = require("../../../Models/Client");
+const { Freelancers } = require("../../../Models/Freelnacer");
 const { Projects } = require("../../../Models/Project");
 const GetProject = async (req, res) => {
     const projectId = req.params.projectId;
@@ -11,6 +13,17 @@ const GetProject = async (req, res) => {
                 id: projectId,
                 ClientId: userId,
             },
+            // include: [
+            //     {
+            //         model: Freelancers,
+            //         as: "freelancer",
+            //         required: false,
+            //     },
+            //     {
+            //         model: Clients,
+            //         as: "owner",
+            //     },
+            // ],
         });
         // console.log("got project : ", project);
         return res.status(200).json({ Project: project });
