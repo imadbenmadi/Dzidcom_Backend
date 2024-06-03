@@ -45,7 +45,7 @@ router.get("/", Freelancer_Middleware, async (req, res) => {
         const requests = await Projects.findAll({
             where: whereClause,
         });
-        res.status(200).json({ Projects: requests });
+        res.status(200).json({ Jobs: requests });
     } catch (err) {
         console.error("Error fetching Project Requests:", err);
         res.status(500).json({ message: err.message });
@@ -88,6 +88,16 @@ router.post("/:projectId/Apply", Freelancer_Middleware, async (req, res) => {
         });
         if (!Project)
             return res.status(404).json({ message: "Project not found" });
+        const Alredy_Apply = await Applications.findOne({
+            where: {
+                ProjectId: projectId,
+                FreelancerId: freelancerId,
+            },
+        });
+        if (Alredy_Apply)
+            return res
+                .status(409)
+                .json({ message: "You have already applied for this project" });
 
         await Applications.create({
             ProjectId: projectId,
