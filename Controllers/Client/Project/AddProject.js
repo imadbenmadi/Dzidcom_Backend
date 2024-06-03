@@ -10,7 +10,17 @@ const AddProject = async (req, res) => {
         // if (!Client) {
         //     return res.status(404).json({ error: "Client not found." });
         // }
-        const { Title, Description } = req.body;
+        const {
+            Title,
+            Description,
+            Field_is_Graphic_design,
+            Field_is_Content_creation,
+            Field_is_SEO_SMM,
+            Expected_Time,
+            Budget,
+            Frelancer_Experiance,
+        } = req.body;
+        console.log(req.body);
         if (!Title || !Description) {
             return res
                 .status(400)
@@ -21,6 +31,12 @@ const AddProject = async (req, res) => {
             ClientId: userId,
             Title,
             Description,
+            Field_is_Graphic_design,
+            Field_is_Content_creation,
+            Field_is_SEO_SMM,
+            Expected_Time,
+            Budget,
+            Frelancer_Experiance,
         });
         return res.status(200).json({ message: "Projcet added successfully." });
     } catch (error) {
