@@ -30,13 +30,13 @@ const handleRegister = async (req, res) => {
         if (!firstName || !lastName || !email || !password) {
             return res.status(409).json({ message: "Missing Data" });
         } else if (firstName.length < 3) {
-            return res
-                .status(409)
-                .json({ message: "First Name must be more that 3 chars" });
+            return res.status(409).json({
+                message: "First Name must be more that 3 chars",
+            });
         } else if (lastName.length < 3) {
-            return res
-                .status(409)
-                .json({ message: "Last Name must be more that 3 chars" });
+            return res.status(409).json({
+                message: "Last Name must be more that 3 chars",
+            });
         } else if (firstName.length > 14) {
             return res.status(409).json({
                 message: "First Name must be less than 14 chars",
@@ -46,9 +46,9 @@ const handleRegister = async (req, res) => {
                 message: "lastName must be less than 14 chars",
             });
         } else if (password.length < 8) {
-            return res
-                .status(409)
-                .json({ message: "password must be at least 8 characters" });
+            return res.status(409).json({
+                message: "password must be at least 8 characters",
+            });
         } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email)) {
             return res.status(409).json({ message: "Invalid email" });
         } else if (userType !== "client" && userType !== "freelancer") {

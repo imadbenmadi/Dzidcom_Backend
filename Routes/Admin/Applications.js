@@ -27,7 +27,7 @@ router.get("/:projectId", Admin_midllware, async (req, res) => {
         const applications = await Applications.findAll({
             where: {
                 // status: "Pending",
-                ProjectId: projectId
+                ProjectId: projectId,
             },
         });
         res.status(200).json({ Applications: applications });
@@ -102,8 +102,13 @@ router.post(
             const Project = await Projects.findOne({
                 where: { id: projectId },
             });
+            if (!Project)
+                res.status(400).json({ message: "project not found" });
             await Project.update({
-                status: "Accepted",
+                FreelancerId: application.FreelancerId,
+                // where: {
+                //     id: projectId,
+                // },
             });
             res.status(200).json({ message: "Application Approved" });
         } catch (err) {

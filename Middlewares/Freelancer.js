@@ -52,9 +52,9 @@ const verifyUser = async (req, res, next) => {
             return res.status(401).json({ message: "Invalid tokens" });
         } else if (err.name === "TokenExpiredError" || !accessToken) {
             if (!refreshToken) {
-                return res
-                    .status(401)
-                    .json({ message: "unauthorized : Refresh token required" });
+                return res.status(401).json({
+                    message: "unauthorized : Refresh token required",
+                });
             }
 
             try {

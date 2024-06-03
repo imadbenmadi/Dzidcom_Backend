@@ -6,7 +6,7 @@ const Admin_midllware = require("../../Middlewares/Admin");
 router.get("/requests", Admin_midllware, async (req, res) => {
     try {
         const requests = await Projects.findAll({
-            where: { Status: "Pending" },
+            where: { status: "Pending" },
         });
         res.status(200).json({ Projects: requests });
     } catch (err) {
@@ -16,8 +16,7 @@ router.get("/requests", Admin_midllware, async (req, res) => {
 });
 router.get("/requests/:projectId", Admin_midllware, async (req, res) => {
     const projectId = req.params.projectId;
-    if (!projectId)
-        return res.status(409).json({ message: "Missing data" });
+    if (!projectId) return res.status(409).json({ message: "Missing data" });
     try {
         const project = await Projects.findOne({
             where: { id: projectId },
@@ -36,8 +35,7 @@ router.post(
     Admin_midllware,
     async (req, res) => {
         const projectId = req.params.projectId;
-        if (!projectId)
-            return res.status(409).json({ message: "Missing data" });
+        if (!projectId) return res.status(409).json({ message: "Missing data" });
         try {
             const Project = await Projects.findOne({
                 where: { id: projectId },
@@ -45,7 +43,7 @@ router.post(
             if (!Project)
                 return res.status(404).json({ message: "Project not found" });
 
-            await Project.update({ Status: "Accepted" });
+            await Project.update({ status: "Accepted" });
 
             res.status(200).json({ message: "Project Approved" });
         } catch (err) {
@@ -59,8 +57,7 @@ router.post(
     Admin_midllware,
     async (req, res) => {
         const projectId = req.params.projectId;
-        if (!projectId)
-            return res.status(409).json({ message: "Missing data" });
+        if (!projectId) return res.status(409).json({ message: "Missing data" });
         try {
             const Project = await Projects.findOne({
                 where: { id: projectId },
@@ -68,7 +65,7 @@ router.post(
             if (!Project)
                 return res.status(404).json({ message: "Project not found" });
 
-            await Project.update({ Status: "Rejected" });
+            await Project.update({ status: "Rejected" });
 
             res.status(200).json({ message: "Project Rejected" });
         } catch (err) {

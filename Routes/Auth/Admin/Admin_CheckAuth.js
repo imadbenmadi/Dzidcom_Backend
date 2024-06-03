@@ -30,9 +30,9 @@ router.get("/", async (req, res) => {
         if (!refreshToken) {
             res.clearCookie("accessToken");
             res.clearCookie("refreshToken");
-            return res
-                .status(401)
-                .json({ message: "Unauthorized: Refresh token is missing" });
+            return res.status(401).json({
+                message: "Unauthorized: Refresh token is missing",
+            });
         }
 
         const found_in_DB = await Refresh_tokens.findOne({
@@ -41,9 +41,9 @@ router.get("/", async (req, res) => {
         if (!found_in_DB) {
             res.clearCookie("accessToken");
             res.clearCookie("refreshToken");
-            return res
-                .status(401)
-                .json({ message: "Unauthorized: Invalid refresh token" });
+            return res.status(401).json({
+                message: "Unauthorized: Invalid refresh token",
+            });
         }
 
         return new Promise((resolve, reject) => {
@@ -54,11 +54,9 @@ router.get("/", async (req, res) => {
                     if (err) {
                         // res.clearCookie("accessToken");
                         // res.clearCookie("refreshToken");
-                        return res
-                            .status(401)
-                            .json({
-                                message: "Unauthorized: Invalid refresh token",
-                            });
+                        return res.status(401).json({
+                            message: "Unauthorized: Invalid refresh token",
+                        });
                     }
 
                     const newAccessToken = jwt.sign(
@@ -85,9 +83,9 @@ router.get("/", async (req, res) => {
 
     try {
         const decoded = await verifyToken(accessToken, adminAccessTokenSecret);
-        return res
-            .status(200)
-            .json({ message: "check auth: true, Access token is valid" });
+        return res.status(200).json({
+            message: "check auth: true, Access token is valid",
+        });
     } catch (err) {
         if (err.name === "TokenExpiredError" || !accessToken) {
             return await handleTokenExpired(

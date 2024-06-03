@@ -9,7 +9,7 @@ const { Op } = require("sequelize");
 //     const { search, filter } = req.query;
 //     try {
 //         const requests = await Projects.findAll({
-//             where: { Status: "Pending" },
+//             where: { status: "Pending" },
 //         });
 //         res.status(200).json({ Projects: requests });
 //     } catch (err) {
@@ -21,7 +21,7 @@ router.get("/", Freelancer_Middleware, async (req, res) => {
     const { search, Content_creation, SEO_SIM, Graphic_design } = req.query;
 
     const whereClause = {
-        Status: "Accepted",
+        status: "Accepted",
     };
 
     // Handle search by title and description
@@ -75,16 +75,12 @@ router.get("/:projectId", Freelancer_Middleware, async (req, res) => {
 });
 router.post("/:projectId/Apply", Freelancer_Middleware, async (req, res) => {
     const projectId = req.params.projectId;
-    if (!projectId)
-        return res
-            .status(409)
-            .json({ message: "Missing data, project ID is required" });
+    if (!projectId) return res
+    .status(409).json({ message: "Missing data, project ID is required" });
 
     const freelancerId = req.decoded.userId;
-    if (!freelancerId)
-        return res
-            .status(409)
-            .json({ message: "Missing data, freelancer ID is required" });
+    if (!freelancerId) return res
+    .status(409).json({ message: "Missing data, freelancer ID is required" });
 
     try {
         const { Freelancer_Time_Needed, Freelancer_Budget } = req.body;
@@ -104,23 +100,21 @@ router.post("/:projectId/Apply", Freelancer_Middleware, async (req, res) => {
                 FreelancerId: freelancerId,
             },
         });
-        if (Alredy_Apply)
-            return res
-                .status(409)
-                .json({ message: "You have already applied for this project" });
+        if (Alredy_Apply) return res
+        .status(409).json({
+            message: "You have already applied for this project",
+        });
         const Applications_Lenght = await Applications.count({
             where: {
                 FreelancerId: freelancerId,
                 status: "Pending",
             },
         });
-        if (Applications_Lenght > 5)
-            return res
-                .status(400)
-                .json({
-                    message:
-                        "You have more than 5 Pending Applications , Please wait till the Platfom aprove your request",
-                });
+        if (Applications_Lenght > 5) return res
+        .status(400).json({
+            message:
+                "You have more than 5 Pending Applications , Please wait till the Platfom aprove your request",
+        });
         // await Project.update({
         //     Freelancer_Time_Needed,
         //     Freelancer_Budget,

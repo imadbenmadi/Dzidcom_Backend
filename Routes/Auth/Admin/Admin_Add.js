@@ -10,9 +10,9 @@ const handleRegister = async (req, res) => {
         } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email)) {
             return res.status(409).json({ message: "Invalid email" });
         } else if (password.length < 8) {
-            return res
-                .status(409)
-                .json({ message: "password must be at least 8 characters" });
+            return res.status(409).json({
+                message: "password must be at least 8 characters",
+            });
         }
 
         const exist_Admin = await Admins.findOne({

@@ -37,9 +37,9 @@ router.get("/", async (req, res) => {
         if (!refreshToken) {
             // res.clearCookie("accessToken");
             // res.clearCookie("refreshToken");
-            return res
-                .status(401)
-                .json({ message: "Unauthorized: Refresh token is missing" });
+            return res.status(401).json({
+                message: "Unauthorized: Refresh token is missing",
+            });
         }
 
         const found_in_DB = await Refresh_tokens.findOne({
@@ -48,9 +48,9 @@ router.get("/", async (req, res) => {
         if (!found_in_DB) {
             // res.clearCookie("accessToken");
             // res.clearCookie("refreshToken");
-            return res
-                .status(401)
-                .json({ message: "Unauthorized: Invalid refresh token" });
+            return res.status(401).json({
+                message: "Unauthorized: Invalid refresh token",
+            });
         }
 
         return new Promise((resolve, reject) => {
@@ -94,9 +94,9 @@ router.get("/", async (req, res) => {
                     if (!user) {
                         // res.clearCookie("accessToken");
                         // res.clearCookie("refreshToken");
-                        return res
-                            .status(404)
-                            .json({ message: "Unauthorized: User not found" });
+                        return res.status(404).json({
+                            message: "Unauthorized: User not found",
+                        });
                     }
 
                     resolve({ userType, userId: user.id });
@@ -127,11 +127,11 @@ router.get("/", async (req, res) => {
                         Freelancer_REFRESH_TOKEN_SECRET,
                         Freelancer_ACCESS_TOKEN_SECRET
                     );
-                    return res.status(200)
+                    return res.status(200);
                     //     .json({
                     //     message:
                     //         "check auth true, Access token refreshed successfully",
-                    //     // ...result,
+                    //     // ..result,
                     // });
                 } catch (err) {
                     console.log("Error refreshing freelancer token:", err);
@@ -159,7 +159,7 @@ router.get("/", async (req, res) => {
                         return res.status(200).json({
                             message:
                                 "check auth true, Access token refreshed successfully",
-                            // ...result,
+                            // ..result,
                         });
                     } catch (err) {
                         console.log("Error refreshing client token:", err);

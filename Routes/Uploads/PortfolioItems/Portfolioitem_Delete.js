@@ -15,7 +15,7 @@ const Delete_Freelancer_PortfolioItem = async (req, res) => {
     try {
         const userId = req.decoded.userId;
         const itemsId = req.body.itemId;
-        
+
         if (!userId || !itemsId) {
             return res.status(400).send({
                 message: "User ID and items ID are required",

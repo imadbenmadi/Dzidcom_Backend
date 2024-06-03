@@ -22,7 +22,7 @@ const Projects = sequelize.define("Projects", {
         type: DataTypes.STRING,
         allowNull: true,
     },
-    Status: {
+    status: {
         type: DataTypes.STRING,
         allowNull: false,
         defaultValue: "Pending",
