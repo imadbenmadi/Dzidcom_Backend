@@ -3,11 +3,47 @@ const router = express.Router();
 const { Projects } = require("../Models/Project");
 const { Applications } = require("../Models/Applications");
 const Freelancer_Middleware = require("../Middlewares/Freelancer");
+const { Op } = require("sequelize");
 
+// router.get("/", Freelancer_Middleware, async (req, res) => {
+//     const { search, filter } = req.query;
+//     try {
+//         const requests = await Projects.findAll({
+//             where: { Status: "Pending" },
+//         });
+//         res.status(200).json({ Projects: requests });
+//     } catch (err) {
+//         console.error("Error fetching Project Requests:", err);
+//         res.status(500).json({ message: err.message });
+//     }
+// });
 router.get("/", Freelancer_Middleware, async (req, res) => {
+    const { search, Content_creation, SEO_SIM, Graphic_Designer } = req.query;
+
+    const whereClause = { Status: "Pending" };
+
+    // Handle search by title and description
+    if (search) {
+        whereClause[Op.or] = [
+            { Title: { [Op.like]: `%${search}%` } },
+            { Description: { [Op.like]: `%${search}%` } },
+        ];
+    }
+
+    // Handle filters
+    if (Content_creation === "true") {
+        whereClause.Field_is_Content_creation = "1";
+    }
+    if (SEO_SIM === "true") {
+        whereClause.Field_is_SEO_SMM = "1";
+    }
+    if (Graphic_Designer === "true") {
+        whereClause.Field_is_Graphic_design = "1";
+    }
+
     try {
         const requests = await Projects.findAll({
-            where: { Status: "Pending" },
+            where: whereClause,
         });
         res.status(200).json({ Projects: requests });
     } catch (err) {
@@ -33,7 +69,6 @@ router.get("/:projectId", Freelancer_Middleware, async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 });
-
 router.post("/:projectId/Apply", Freelancer_Middleware, async (req, res) => {
     const projectId = req.params.projectId;
     if (!projectId)
