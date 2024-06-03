@@ -1,8 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const { Admins } = require("../../Models/Admin/Admin");
+const { Projects } = require("../../Models/Project");
 
-router.get("/Admins", async (req, res) => {
+const Admin_midllware = require("../../Middlewares/Admin");
+router.get("/Admins", Admin_midllware, async (req, res) => {
     try {
         const admins = await Admins.findAll().select([
             "id",
@@ -17,4 +19,5 @@ router.get("/Admins", async (req, res) => {
         res.status(500).json({ message: err });
     }
 });
+router.use("/Projects", require("./Projects"));
 module.exports = router;
