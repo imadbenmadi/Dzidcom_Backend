@@ -14,6 +14,23 @@ router.get("/requests", Admin_midllware, async (req, res) => {
         res.status(500).json({ message: err });
     }
 });
+router.get("/requests/:projectId", Admin_midllware, async (req, res) => {
+    const projectId = req.params.projectId;
+    if (!projectId)
+        return res.status(409).json({ message: "Missing data" });
+    try {
+        const project = await Projects.findOne({
+            where: { id: projectId },
+        });
+        if (!project)
+            return res.status(404).json({ message: "Project not found" });
+
+        res.status(200).json({ project });
+    } catch (err) {
+        console.error("Error fetching Project:", err);
+        res.status(500).json({ message: err.message });
+    }
+});
 router.post(
     "/requests/:projectId/Accept",
     Admin_midllware,

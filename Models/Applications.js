@@ -20,7 +20,6 @@ const Applications = sequelize.define("Applications", {
         type: DataTypes.STRING,
         allowNull: true,
     },
-
     status: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -39,3 +38,6 @@ Applications.belongsTo(Freelancers, {
 
 Projects.hasMany(Applications, { as: "Applications", foreignKey: "ProjectId" });
 Applications.belongsTo(Projects, { as: "Project", foreignKey: "ProjectId" });
+
+
+module.exports = { Applications };

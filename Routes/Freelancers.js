@@ -12,5 +12,5 @@ router.put(
     Freelancer_Middlware,
     FreelancerController.EditeProfile
 );
-
+router.use("/:userId/Jobs", require("./Jobs"));
 module.exports = router;
