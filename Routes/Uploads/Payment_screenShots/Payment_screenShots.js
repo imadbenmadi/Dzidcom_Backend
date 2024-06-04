@@ -20,10 +20,10 @@ const Upload_Payment_ScreenShot = async (req, res) => {
             });
         }
         const userId = req.decoded.userId;
-        const { projectId } = req.body;
-        if (!userId) {
+        const { projectId, CCP_number } = req.body;
+        if (!userId || !projectId || !CCP_number) {
             return res.status(400).send({
-                message: "User ID is required",
+                message: "Messing data ",
             });
         }
         const allowedTypes = [
@@ -57,7 +57,8 @@ const Upload_Payment_ScreenShot = async (req, res) => {
             });
         else if (project.status != "Accepted" || !project.FreelancerId)
             return res.status(401).send({
-                message: "Unauthorized: Project is not accepted yet or not assigned to any freelancer",
+                message:
+                    "Unauthorized: Project is not accepted yet or not assigned to any freelancer",
             });
         if (project.Pyament_ScreenShot_Link) {
             const previousFilename =
@@ -76,7 +77,10 @@ const Upload_Payment_ScreenShot = async (req, res) => {
 
         // Update database with file link
         await Projects.update(
-            { Pyament_ScreenShot_Link: fileLink },
+            {
+                Pyament_ScreenShot_Link: fileLink,
+                Client_CCP_number: CCP_number,
+            },
             { where: { id: projectId } }
         );
 

@@ -72,6 +72,10 @@ const Projects = sequelize.define("Projects", {
         type: DataTypes.STRING,
         allowNull: true,
     },
+    Client_CCP_number: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
 });
 // const Required_Skills = sequelize.define("Required_Skills", {
 //     skill: {
