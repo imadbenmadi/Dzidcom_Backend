@@ -53,6 +53,16 @@ const Projects = sequelize.define("Projects", {
         type: DataTypes.STRING,
         allowNull: true,
     },
+
+    Pyament_ScreenShot_Link: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+
+    Client_CCP_number: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
     isProjectDone: {
         type: DataTypes.BOOLEAN,
         allowNull: true,
@@ -63,18 +73,20 @@ const Projects = sequelize.define("Projects", {
         allowNull: true,
         default: false,
     },
-    isPayment_ScreenShot_Rajacted: {
+    isPayment_ScreenShot_Rejected: {
         type: DataTypes.BOOLEAN,
         allowNull: true,
         default: false,
     },
-    Pyament_ScreenShot_Link: {
-        type: DataTypes.STRING,
+    isPayment_ScreenShot_uploaded: {
+        type: DataTypes.BOOLEAN,
         allowNull: true,
+        default: false,
     },
-    Client_CCP_number: {
-        type: DataTypes.STRING,
+    isWorkUploaded: {
+        type: DataTypes.BOOLEAN,
         allowNull: true,
+        default: false,
     },
 });
 // const Required_Skills = sequelize.define("Required_Skills", {

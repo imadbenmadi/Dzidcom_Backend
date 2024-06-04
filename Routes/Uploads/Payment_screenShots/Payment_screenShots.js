@@ -21,6 +21,7 @@ const Upload_Payment_ScreenShot = async (req, res) => {
         }
         const userId = req.decoded.userId;
         const { projectId, CCP_number } = req.body;
+
         if (!userId || !projectId || !CCP_number) {
             return res.status(400).send({
                 message: "Messing data ",
@@ -80,6 +81,7 @@ const Upload_Payment_ScreenShot = async (req, res) => {
             {
                 Pyament_ScreenShot_Link: fileLink,
                 Client_CCP_number: CCP_number,
+                isPayment_ScreenShot_uploaded: true,
             },
             { where: { id: projectId } }
         );

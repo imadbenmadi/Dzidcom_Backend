@@ -7,7 +7,7 @@ const verifyAdmin = async (req, res, next) => {
     const accessToken = req.cookies.accessToken;
     const refreshToken = req.cookies.refreshToken;
 
-    console.log("data from admin middlware : ", req.cookies);
+    // console.log("data from admin middlware : ", req.cookies);
     // console.log("daata from admin : ", accessToken, refreshToken);
     // console.log("daata from admin : ", req);
     try {
