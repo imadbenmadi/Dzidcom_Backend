@@ -54,19 +54,19 @@ router.delete(
 
 router.post(
     "/Payment",
-    // (req, res, next) => {
-    //     req.body = req.fields;
-    //     next();
-    // },
+    (req, res, next) => {
+        req.body = req.fields;
+        next();
+    },
     Client_Middlware,
     Upload_Payment_ScreenShot
 );
 router.delete(
     "/Payment",
-    // (req, res, next) => {
-    //     req.body = req.fields;
-    //     next();
-    // },
+    (req, res, next) => {
+        req.body = req.fields;
+        next();
+    },
     Client_Middlware,
     Delete_Payment_ScreenShot
 );

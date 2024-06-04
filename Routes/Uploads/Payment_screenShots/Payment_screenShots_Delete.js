@@ -4,7 +4,7 @@ const { Projects } = require("../../../Models/Project");
 const formidableMiddleware = require("express-formidable");
 
 const uploadMiddleware = formidableMiddleware({
-    uploadDir: "public/ProfilePics/",
+    uploadDir: "public/Payment/",
     keepExtensions: true,
     multiples: false,
     maxFileSize: 10 * 1024 * 1024, // 10 MB
@@ -40,7 +40,7 @@ const deleteProjectProfilePic = async (req, res) => {
                 project.Pyament_ScreenShot_Link
             );
             const previousImagePath = path.join(
-                "public/ProfilePics/",
+                "public/Payment/",
                 previousFilename
             );
 

@@ -51,6 +51,14 @@ const Upload_Payment_ScreenShot = async (req, res) => {
                 message: "Project not found for the given userId",
             });
         }
+        if (project.ClientId != userId)
+            return res.status(401).send({
+                message: "Unauthorized: Project does not belong to the user",
+            });
+        else if (project.status != "Accepted" || !project.FreelancerId)
+            return res.status(401).send({
+                message: "Unauthorized: Project is not accepted yet or not assigned to any freelancer",
+            });
         if (project.Pyament_ScreenShot_Link) {
             const previousFilename =
                 project.Pyament_ScreenShot_Link.split("/").pop();
