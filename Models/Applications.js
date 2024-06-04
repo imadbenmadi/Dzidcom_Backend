@@ -17,7 +17,7 @@ const Applications = sequelize.define("Applications", {
         allowNull: true,
     },
     ProjectDescription: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: true,
     },
     status: {
