@@ -17,5 +17,5 @@ router.get("/Admins", Admin_midllware, async (req, res) => {
 });
 router.use("/Projects", require("./Projects"));
 router.use("/Applications", require("./Applications"));
-router.use("/Applications", require("./Applications"));
+router.use("/Payment", require("./Payment"));
 module.exports = router;
