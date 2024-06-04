@@ -19,5 +19,12 @@ router.delete(
     ClientController.DeleteProject
 );
 
-router.get("/:userId/Payment/:projectId/status", Client_Middlware, ClientController.PaymentStatus);
+router.get(
+    "/:userId/Payment/:projectId/status",
+    Client_Middlware,
+    ClientController.PaymentStatus
+);
+
+router.get("/:userId/Process", Client_Middlware, ClientController.GetProcess);
+
 module.exports = router;

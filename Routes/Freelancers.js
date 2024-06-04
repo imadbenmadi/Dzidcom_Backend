@@ -13,4 +13,10 @@ router.put(
     FreelancerController.EditeProfile
 );
 router.use("/Jobs", require("./Jobs"));
+
+router.get(
+    "/:userId/Process",
+    Freelancer_Middlware,
+    FreelancerController.GetProcess
+);
 module.exports = router;
