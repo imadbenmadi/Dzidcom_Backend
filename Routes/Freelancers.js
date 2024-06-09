@@ -19,4 +19,9 @@ router.get(
     Freelancer_Middlware,
     FreelancerController.GetProcess
 );
+router.get(
+    "/:userId/Process/:projectId",
+    Freelancer_Middlware,
+    FreelancerController.GetProcess_item
+);
 module.exports = router;

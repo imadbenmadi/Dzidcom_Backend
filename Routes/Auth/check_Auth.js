@@ -112,7 +112,7 @@ router.get("/", async (req, res) => {
 
         // First check as a freelancer
         try {
-            if (!accessToken) throw new Error("No access token found");
+            // if (!accessToken) throw new Error("No access token found");
             decoded = await verifyToken(
                 accessToken,
                 Freelancer_ACCESS_TOKEN_SECRET
