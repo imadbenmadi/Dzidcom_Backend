@@ -1,6 +1,7 @@
 // const { Clients } = require("../../Models/Client");
 
 const { Projects } = require("../../Models/Project");
+const { Op } = require("sequelize");
 const GetProcess = async (req, res) => {
     const userId = req.decoded.userId;
     if (!userId)
@@ -9,7 +10,9 @@ const GetProcess = async (req, res) => {
         const projects = await Projects.findAll({
             where: {
                 FreelancerId: userId,
-                status: "Payed" || "Completed" || "Accepted" ,
+                status: {
+                    [Op.in]: ["Payed", "Completed", "Accepted"],
+                },
             },
         });
         // console.log("got project : ", project);

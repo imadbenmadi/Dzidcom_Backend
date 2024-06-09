@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const { Projects } = require("../../Models/Project");
 const Admin_midllware = require("../../Middlewares/Admin");
-const { Op } = require("sequelize");
 router.get("/", Admin_midllware, async (req, res) => {
     try {
         const projects = await Projects.findAll({

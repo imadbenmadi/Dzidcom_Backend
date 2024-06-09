@@ -1,4 +1,5 @@
 // const { Clients } = require("../../Models/Client");
+const { Op } = require("sequelize");
 
 const { Projects } = require("../../Models/Project");
 const GetProcess_item = async (req, res) => {
@@ -11,7 +12,9 @@ const GetProcess_item = async (req, res) => {
             where: {
                 id: projectId,
                 FreelancerId: userId,
-                status: "Payed" || "Completed" || "Accepted",
+                status: {
+                    [Op.in]: ["Payed", "Completed", "Accepted"],
+                },
             },
         });
         if (!project)

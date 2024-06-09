@@ -16,7 +16,11 @@ router.get("/", Admin_midllware, async (req, res) => {
             where: {},
         });
         let projects_nbr = await Projects.count({
-            where: { status: "Accepted" },
+            where: {
+                status: {
+                    [Op.in]: ["Accepted", "Payed", "Completed"],
+                },
+            },
         });
         // let payments = await Projects.count({
         //     where: { status: "Payed" },
@@ -31,7 +35,11 @@ router.get("/", Admin_midllware, async (req, res) => {
             where: {},
         });
         let projects = await Projects.findAll({
-            where: { status: "Accepted" },
+            where: {
+                status: {
+                    [Op.in]: ["Accepted", "Payed", "Completed"],
+                },
+            },
         });
         if (!freelancers_nbr) freelancers_nbr = 0;
         if (!clients_nbr) clients_nbr = 0;
