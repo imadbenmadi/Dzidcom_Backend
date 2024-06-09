@@ -9,28 +9,28 @@ const { Projects } = require("../../Models/Project");
 const { Applications } = require("../../Models/Applications");
 router.get("/", Admin_midllware, async (req, res) => {
     try {
-        const freelancers_nbr = await Freelancers.count({
+        let freelancers_nbr = await Freelancers.count({
             where: {},
         });
-        const clients_nbr = await Clients.count({
+        let clients_nbr = await Clients.count({
             where: {},
         });
-        const projects_nbr = await Projects.count({
+        let projects_nbr = await Projects.count({
             where: { status: "Accepted" },
         });
-        // const payments = await Projects.count({
+        // let payments = await Projects.count({
         //     where: { status: "Payed" },
         // });
-        // const applications = await Applications.count({
+        // let applications = await Applications.count({
         //     where: {},
         // });
-        const freelancers = await Freelancers.findAll({
+        let freelancers = await Freelancers.findAll({
             where: {},
         });
-        const clients = await Clients.findAll({
+        let clients = await Clients.findAll({
             where: {},
         });
-        const projects = await Projects.findAll({
+        let projects = await Projects.findAll({
             where: { status: "Accepted" },
         });
         if (!freelancers_nbr) freelancers_nbr = 0;
