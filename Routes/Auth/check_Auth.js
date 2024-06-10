@@ -98,7 +98,6 @@ router.get("/", async (req, res) => {
                             message: "Unauthorized: User not found",
                         });
                     }
-                    console.log("Access token refreshed successfully");
                     resolve({ userType, userId: user.id });
                 }
             );
