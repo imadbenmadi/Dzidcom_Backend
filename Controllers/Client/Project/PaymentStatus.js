@@ -26,12 +26,28 @@ const PaymentStatus = async (req, res) => {
             // ],
         });
         let Payment_Authorization = false;
-        if (project.status === "Accepted" && project.FreelancerId) {
+        let only_see = false;
+        if (
+            project.status === "Accepted" &&
+            project.FreelancerId &&
+            ((project.isPayment_ScreenShot_Rejected &&
+                project.isPayment_ScreenShot_uploaded) ||
+                (!project.isPayment_ScreenShot_Rejected &&
+                    !project.isPayment_ScreenShot_uploaded))
+        ) {
             Payment_Authorization = true;
         } else Payment_Authorization = false;
+
+        if (
+            project.isPayment_ScreenShot_uploaded &&
+            !project.isPayment_ScreenShot_Rejected
+        ) {
+            only_see = true;
+        } else only_see = false;
+
         return res
             .status(200)
-            .json({ Project: project, Payment_Authorization });
+            .json({ Project: project, Payment_Authorization, only_see });
     } catch (error) {
         console.error(error);
         return res.status(500).json({ error: "Internal server error." });
