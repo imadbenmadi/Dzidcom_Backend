@@ -70,7 +70,15 @@ router.delete(
     Client_Middlware,
     Delete_Payment_ScreenShot
 );
-
+router.post(
+    "/Wrok",
+    (req, res, next) => {
+        req.body = req.fields;
+        next();
+    },
+    Freelancer_Middlware,
+    
+);
 router.post(
     "/Freelancer/PortfolioItem",
     // (req, res, next) => {
@@ -89,4 +97,5 @@ router.delete(
     Freelancer_Middlware,
     Delete_Freelancer_PortfolioItem
 );
+
 module.exports = router;

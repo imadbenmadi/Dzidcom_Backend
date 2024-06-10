@@ -10,6 +10,14 @@ const Projects = sequelize.define("Projects", {
         type: DataTypes.INTEGER,
         allowNull: true,
     },
+    Pyament_ScreenShot_Link: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    work_Link: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
     Money: {
         type: DataTypes.STRING,
         allowNull: true,
@@ -58,11 +66,6 @@ const Projects = sequelize.define("Projects", {
         allowNull: true,
     },
     Frelancer_Experiance: {
-        type: DataTypes.STRING,
-        allowNull: true,
-    },
-
-    Pyament_ScreenShot_Link: {
         type: DataTypes.STRING,
         allowNull: true,
     },
