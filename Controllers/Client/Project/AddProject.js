@@ -17,10 +17,10 @@ const AddProject = async (req, res) => {
             Field_is_Content_creation,
             Field_is_SEO_SIM,
             Expected_Time,
-            Budget,
+            Client_Budget,
             Frelancer_Experiance,
         } = req.body;
-        
+
         if (!Title || !Description) {
             return res
                 .status(400)
@@ -42,7 +42,7 @@ const AddProject = async (req, res) => {
             Field_is_Content_creation: !!Field_is_Content_creation,
             Field_is_SEO_SIM: !!Field_is_SEO_SIM,
             Expected_Time,
-            Budget,
+            Client_Budget,
             Frelancer_Experiance,
         });
         return res.status(200).json({ message: "Projcet added successfully." });

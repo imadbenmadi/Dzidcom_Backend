@@ -68,7 +68,11 @@ router.post(
     Admin_midllware,
     async (req, res) => {
         const { projectId, applicationId } = req.params;
-
+        const Money = req.body.Money;
+        if (!Money)
+            return res
+                .status(409)
+                .json({ message: "Missing data Money is required" });
         if (!projectId) {
             return res
                 .status(409)
@@ -105,7 +109,7 @@ router.post(
             );
 
             await Projects.update(
-                { FreelancerId: application.FreelancerId },
+                { FreelancerId: application.FreelancerId, Money: Money },
                 { where: { id: projectId } }
             );
 

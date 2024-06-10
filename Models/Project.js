@@ -10,6 +10,11 @@ const Projects = sequelize.define("Projects", {
         type: DataTypes.INTEGER,
         allowNull: true,
     },
+    Money: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+
     Title: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -45,7 +50,7 @@ const Projects = sequelize.define("Projects", {
         type: DataTypes.STRING,
         allowNull: true,
     },
-    Budget: {
+    Client_Budget: {
         type: DataTypes.STRING,
         allowNull: true,
     },
