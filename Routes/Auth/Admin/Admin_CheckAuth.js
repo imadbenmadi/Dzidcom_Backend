@@ -9,7 +9,11 @@ router.get("/", async (req, res) => {
     const adminRefreshTokenSecret = process.env.ADMIN_REFRESH_TOKEN_SECRET;
     const accessToken = req.cookies.accessToken;
     const refreshToken = req.cookies.refreshToken;
-
+    if (!accessToken || !refreshToken) {
+        return res.status(401).json({
+            message: "Unauthorized : No tokens found",
+        });
+    }
     const verifyToken = (token, secret) => {
         return new Promise((resolve, reject) => {
             jwt.verify(token, secret, (err, decoded) => {

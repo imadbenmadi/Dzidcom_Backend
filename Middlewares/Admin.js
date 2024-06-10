@@ -6,9 +6,9 @@ const { Admins } = require("../Models/Admin/Admin");
 const verifyAdmin = async (req, res, next) => {
     const accessToken = req.cookies.accessToken;
     const refreshToken = req.cookies.refreshToken;
-    if (!accessToken)
+    if (!accessToken || !refreshToken)
         return res.status(401).json({
-            message: "unauthorized : Access token required",
+            message: "unauthorized : tokens Not found",
         });
     try {
         let decoded = null;
