@@ -14,7 +14,10 @@ const Projects = sequelize.define("Projects", {
         type: DataTypes.STRING,
         allowNull: true,
     },
-
+    DeadLine: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
     Title: {
         type: DataTypes.STRING,
         allowNull: false,

@@ -69,10 +69,15 @@ router.post(
     async (req, res) => {
         const { projectId, applicationId } = req.params;
         const Money = req.body.Money;
+        const DeadLine = req.body.DeadLine;
         if (!Money)
             return res
                 .status(409)
                 .json({ message: "Missing data Money is required" });
+        if (!DeadLine)
+            return res
+                .status(409)
+                .json({ message: "Missing data DeadLine is required" });
         if (!projectId) {
             return res
                 .status(409)
@@ -109,7 +114,11 @@ router.post(
             );
 
             await Projects.update(
-                { FreelancerId: application.FreelancerId, Money: Money },
+                {
+                    FreelancerId: application.FreelancerId,
+                    Money: Money,
+                    DeadLine: DeadLine,
+                },
                 { where: { id: projectId } }
             );
 
