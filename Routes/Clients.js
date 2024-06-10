@@ -27,4 +27,14 @@ router.get(
 
 router.get("/:userId/Process", Client_Middlware, ClientController.GetProcess);
 
+router.post(
+    "/:userId/Projects/:projectId/Accept_work",
+    Client_Middlware,
+    ClientController.Accept_work
+);
+router.post(
+    "/:userId/Projects/:projectId/Reject_work",
+    Client_Middlware,
+    ClientController.Reject_work
+);
 module.exports = router;
