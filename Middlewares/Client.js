@@ -8,8 +8,11 @@ const verifyUser = async (req, res, next) => {
     const refreshToken = req.cookies.refreshToken;
 
     try {
+        if (!accessToken)
+            return res.status(401).json({
+                message: "unauthorized : Access token required",
+            });
         let decoded = null;
-
         decoded = jwt.verify(
             accessToken,
             process.env.Client_ACCESS_TOKEN_SECRET
@@ -37,6 +40,7 @@ const verifyUser = async (req, res, next) => {
             return res.status(401).json({
                 message: "unauthorized : Invalid tokens ",
             });
+        console.log("Access token refreshed successfully");
 
         req.decoded = decoded;
         return next();
@@ -89,6 +93,7 @@ const verifyUser = async (req, res, next) => {
                                 secure: true,
                                 maxAge: 60 * 60 * 1000,
                             });
+                            console.log("Access token refreshed successfully");
 
                             req.decoded = decoded;
                         } else

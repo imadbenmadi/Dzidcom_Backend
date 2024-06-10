@@ -8,6 +8,10 @@ const verifyUser = async (req, res, next) => {
     const refreshToken = req.cookies.refreshToken;
 
     try {
+        if (!accessToken)
+            return res.status(401).json({
+                message: "unauthorized : Access token required",
+            });
         let decoded = null;
 
         decoded = jwt.verify(
