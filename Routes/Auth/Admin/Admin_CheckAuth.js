@@ -10,6 +10,19 @@ router.get("/", async (req, res) => {
     const accessToken = req.cookies.accessToken;
     const refreshToken = req.cookies.refreshToken;
     if (!accessToken || !refreshToken) {
+        if (accessToken)
+            res.clearCookie("accessToken", {
+                httpOnly: true,
+                sameSite: "None",
+                secure: true,
+            });
+        if (refreshToken)
+            res.clearCookie("refreshToken", {
+                httpOnly: true,
+                sameSite: "None",
+                secure: true,
+            });
+
         return res.status(401).json({
             message: "Unauthorized : No tokens found",
         });
