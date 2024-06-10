@@ -31,7 +31,7 @@ const verifyUser = async (req, res, next) => {
                     message: "unauthorized : Invalid tokens ",
                 });
             }
-            req.user = freelancer;
+            // req.user = freelancer;
         } else if (decoded.userType != "freelancer") {
             return res.status(401).json({
                 message: "unauthorized : Invalid tokens ",

@@ -32,7 +32,7 @@ const verifyUser = async (req, res, next) => {
                     message: "unauthorized : Invalid tokens ",
                 });
             }
-            req.user = client;
+            // req.user = client;
         } else
             return res.status(401).json({
                 message: "unauthorized : Invalid tokens ",
