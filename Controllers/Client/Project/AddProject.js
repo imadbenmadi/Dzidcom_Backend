@@ -20,7 +20,7 @@ const AddProject = async (req, res) => {
             Budget,
             Frelancer_Experiance,
         } = req.body;
-        console.log(req.body);
+        
         if (!Title || !Description) {
             return res
                 .status(400)

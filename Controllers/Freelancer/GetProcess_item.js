@@ -20,7 +20,6 @@ const GetProcess_item = async (req, res) => {
         if (!project)
             return res.status(404).json({ error: "Project not found." });
 
-        // console.log("got project : ", project);
         return res.status(200).json({ Project: project });
     } catch (error) {
         console.error(error);

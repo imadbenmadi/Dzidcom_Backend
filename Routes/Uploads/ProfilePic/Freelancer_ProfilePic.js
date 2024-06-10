@@ -20,7 +20,6 @@ const uploadFreelancerProfilePic = async (req, res) => {
             });
         }
         const userId = req.decoded.userId;
-        console.log("User ID:", userId);
         if (!userId) {
             return res.status(400).send({
                 message: "User ID is required",

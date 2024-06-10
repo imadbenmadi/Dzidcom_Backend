@@ -29,7 +29,6 @@ const PaymentStatus = async (req, res) => {
         if (project.status === "Accepted" && project.FreelancerId) {
             Payment_Authorization = true;
         } else Payment_Authorization = false;
-        // console.log("got project : ", project);
         return res
             .status(200)
             .json({ Project: project, Payment_Authorization });

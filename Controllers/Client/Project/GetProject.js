@@ -25,7 +25,6 @@ const GetProject = async (req, res) => {
             //     },
             // ],
         });
-        // console.log("got project : ", project);
         return res.status(200).json({ Project: project });
     } catch (error) {
         console.error(error);

@@ -7,9 +7,6 @@ const verifyUser = async (req, res, next) => {
     const accessToken = req.cookies.accessToken;
     const refreshToken = req.cookies.refreshToken;
 
-    // console.log("daata from freelancer : ", req.cookies);
-    // console.log("daata from freelancer : ", accessToken, refreshToken);
-    // console.log("daata from freelancer : ", req);
     try {
         let decoded = null;
 

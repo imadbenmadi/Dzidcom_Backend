@@ -6,7 +6,6 @@ const { Refresh_tokens } = require("../Models/RefreshTokens");
 const verifyUser = async (req, res, next) => {
     const accessToken = req.cookies.accessToken;
     const refreshToken = req.cookies.refreshToken;
-    // console.log("daata from client : ", req.cookies);
 
     try {
         let decoded = null;

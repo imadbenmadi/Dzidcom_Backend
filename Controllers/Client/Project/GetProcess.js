@@ -13,7 +13,6 @@ const GetProcess = async (req, res) => {
                 status: "Payed",
             },
         });
-        // console.log("got project : ", project);
         return res.status(200).json({ Projects: projects });
     } catch (error) {
         console.error(error);

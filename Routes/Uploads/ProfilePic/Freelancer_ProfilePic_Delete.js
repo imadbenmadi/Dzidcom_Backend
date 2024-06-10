@@ -12,7 +12,6 @@ const uploadMiddleware = formidableMiddleware({
 
 // Upload handler
 const uploadFreelancerProfilePic = async (req, res) => {
-    console.log("Upload Freelancer Profile Pic");
     try {
         const userId = req.decoded.userId;
         const Freelancer = await Freelancers.findOne({ where: { id: userId } });

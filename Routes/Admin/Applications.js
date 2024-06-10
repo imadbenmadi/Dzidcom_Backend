@@ -85,7 +85,6 @@ router.post(
             const application = await Applications.findOne({
                 where: { ProjectId: projectId, id: applicationId },
             });
-            console.log(application.FreelancerId);
             if (!application) {
                 return res
                     .status(404)

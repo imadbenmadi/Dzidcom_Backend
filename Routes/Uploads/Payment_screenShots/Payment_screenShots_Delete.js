@@ -14,7 +14,6 @@ const uploadMiddleware = formidableMiddleware({
 const deleteProjectProfilePic = async (req, res) => {
     try {
         const userId = req.decoded.userId;
-        console.log("User ID:", userId);
         const { projectId } = req.body;
         if (!userId || !projectId) {
             return res.status(400).send({
