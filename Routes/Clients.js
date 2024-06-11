@@ -37,4 +37,9 @@ router.post(
     Client_Middlware,
     ClientController.Reject_work
 );
+router.get(
+    "/:userId/:projectId/Rejections",
+    Client_Middlware,
+    ClientController.GetRejections
+);
 module.exports = router;

@@ -6,6 +6,8 @@ const { GetProjcts } = require("./Client/Project/GetProjects");
 const { GetProject } = require("./Client/Project/GetProject");
 const { PaymentStatus } = require("./Client/Project/PaymentStatus");
 const { GetProcess } = require("./Client/Project/GetProcess");
+const { GetRejections } = require("./Client/Project/GetRejection");
+
 const {
     Accept_work,
     Reject_work,
@@ -21,6 +23,7 @@ const ClientController = {
     GetProcess,
     Accept_work,
     Reject_work,
+    GetRejections,
 };
 
 module.exports = ClientController;
