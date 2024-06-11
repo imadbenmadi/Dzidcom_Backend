@@ -80,4 +80,4 @@ Clients.hasMany(Client_Notifications, {
     as: "Client_Notifications",
     foreignKey: "ClientId",
 });
-module.exports = { Notifications };
+module.exports = { Freelancer_Notifications, Client_Notifications };

@@ -43,4 +43,9 @@ router.get(
     ClientController.GetRejections
 );
 
+router.get(
+    "/:userId/Notifications",
+    Client_Middlware,
+    ClientController.GetNotifications
+);
 module.exports = router;

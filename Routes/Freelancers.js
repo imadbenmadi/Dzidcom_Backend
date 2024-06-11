@@ -29,4 +29,9 @@ router.get(
     Freelancer_Middlware,
     FreelancerController.GetRejections
 );
+router.get(
+    "/:userId/Notifications",
+    Freelancer_Middlware,
+    FreelancerController.GetNotifications
+);
 module.exports = router;
