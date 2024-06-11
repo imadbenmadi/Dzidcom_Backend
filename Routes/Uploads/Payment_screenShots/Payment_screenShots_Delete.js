@@ -13,8 +13,9 @@ const uploadMiddleware = formidableMiddleware({
 // Delete handler
 const deleteProjectProfilePic = async (req, res) => {
     try {
+        console.log("start deleting ");
         const userId = req.decoded.userId;
-        const { projectId } = req.body;
+        const { projectId } = req.params;
         if (!userId || !projectId) {
             return res.status(400).send({
                 message: "User ID and Project ID are required",

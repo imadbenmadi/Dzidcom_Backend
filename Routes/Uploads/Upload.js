@@ -63,11 +63,11 @@ router.post(
     Upload_Payment_ScreenShot
 );
 router.delete(
-    "/Payment",
-    (req, res, next) => {
-        req.body = req.fields;
-        next();
-    },
+    "/Payment/:projectId",
+    // (req, res, next) => {
+    //     req.body = req.fields;
+    //     next();
+    // },
     Client_Middlware,
     Delete_Payment_ScreenShot
 );

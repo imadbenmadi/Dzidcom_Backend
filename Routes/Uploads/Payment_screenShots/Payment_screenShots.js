@@ -82,6 +82,7 @@ const Upload_Payment_ScreenShot = async (req, res) => {
                 Pyament_ScreenShot_Link: fileLink,
                 Client_CCP_number: CCP_number,
                 isPayment_ScreenShot_uploaded: true,
+                isPayment_ScreenShot_Rejected:false,
             },
             { where: { id: projectId } }
         );

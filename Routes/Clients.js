@@ -42,4 +42,5 @@ router.get(
     Client_Middlware,
     ClientController.GetRejections
 );
+
 module.exports = router;

@@ -56,7 +56,6 @@ router.get("/Accepted", Admin_midllware, async (req, res) => {
 
 router.post("/:projectId/Accept", Admin_midllware, async (req, res) => {
     const { projectId } = req.params;
-    const userId = req.decoded.userId;
 
     if (!projectId) {
         return res
