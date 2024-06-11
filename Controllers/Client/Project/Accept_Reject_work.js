@@ -68,14 +68,21 @@ const Reject_work = async (req, res) => {
                 error: "You are not authorized to reject this project.",
             });
         }
-        await Project.update({ isWorkRejected: true });
-        await Rejection_Resons.create({
+        await Project.update({
+            isWorkRejected: true,
+            status: "Payed",
+            isProjectDone: false,
+            isWorkUploaded: true,
+        });
+        const rejection = await Rejection_Resons.create({
             ClientId: userId,
             FreelancerId: Project.FreelancerId,
             ProjectId: projectId,
             Reason,
         });
-        return res.status(200).json({ message: "Work Rejected successfully." });
+        return res
+            .status(200)
+            .json({ message: "Work Rejected successfully.", rejection });
     } catch (error) {
         console.error(error);
         return res.status(500).json({ error: "Internal server error." });
