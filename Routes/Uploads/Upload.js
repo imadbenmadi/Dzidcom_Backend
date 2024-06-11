@@ -8,6 +8,7 @@ const Upload_Payment_ScreenShot = require("./Payment_screenShots/Payment_screenS
 const Delete_Payment_ScreenShot = require("./Payment_screenShots/Payment_screenShots_Delete");
 const Upload_Freelancer_PortfolioItem = require("./PortfolioItems/Portfolioitem");
 const Delete_Freelancer_PortfolioItem = require("./PortfolioItems/Portfolioitem_Delete");
+const Upload_Work = require("./Work/Work");
 const Freelancer_Middlware = require("../../Middlewares/Freelancer");
 const Client_Middlware = require("../../Middlewares/Client");
 const cookieParser = require("cookie-parser");
@@ -71,13 +72,13 @@ router.delete(
     Delete_Payment_ScreenShot
 );
 router.post(
-    "/Wrok",
+    "/Work",
     (req, res, next) => {
         req.body = req.fields;
         next();
     },
     Freelancer_Middlware,
-    
+    Upload_Work
 );
 router.post(
     "/Freelancer/PortfolioItem",

@@ -40,7 +40,7 @@ const Upload_Work = async (req, res) => {
                 message: "Project not found for the given userId",
             });
         }
-        if (project.ClientId != userId)
+        if (project.FreelancerId != userId)
             return res.status(401).send({
                 message: "Unauthorized: Project does not belong to the user",
             });
@@ -68,6 +68,7 @@ const Upload_Work = async (req, res) => {
             {
                 work_Link: fileLink,
                 isWorkUploaded: true,
+                isWorkRejected: false,
             },
             { where: { id: projectId } }
         );

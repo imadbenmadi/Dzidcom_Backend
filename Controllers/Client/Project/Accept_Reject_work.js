@@ -29,7 +29,12 @@ const Accept_work = async (req, res) => {
                 error: "You are not authorized to accept this project.",
             });
         }
-        await Project.update({ Status: "Completed", isProjectDone: true });
+        await Project.update({
+            Status: "Completed",
+            isProjectDone: true,
+            isWorkRejected: false,
+            isWorkUploaded: true,
+        });
         return res.status(200).json({ message: "Work Accepted successfully." });
     } catch (error) {
         console.error(error);
