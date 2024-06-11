@@ -5,15 +5,15 @@ const { Rejection_Resons } = require("../../../Models/Rejection_Resons");
 const Accept_work = async (req, res) => {
     const userId = req.decoded.userId;
     const projectId = req.params.projectId;
-    const Reason = req.body.Reason;
+    // const Reason = req.body.Reason;
     if (!userId)
         return res.status(401).json({ error: "Unauthorized , missing userId" });
     else if (!projectId)
         return res
             .status(400)
             .json({ error: "Please provide the project ID." });
-    else if (!Reason)
-        return res.status(400).json({ error: "Please provide the Reason." });
+    // else if (!Reason)
+    //     return res.status(400).json({ error: "Please provide the Reason." });
     try {
         // Find the Client by their ID
         const Client = await Clients.findByPk(userId);
@@ -30,7 +30,7 @@ const Accept_work = async (req, res) => {
             });
         }
         await Project.update({
-            Status: "Completed",
+            status: "Completed",
             isProjectDone: true,
             isWorkRejected: false,
             isWorkUploaded: true,
