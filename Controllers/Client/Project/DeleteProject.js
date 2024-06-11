@@ -26,8 +26,11 @@ const DeleteProject = async (req, res) => {
             return res.status(401).json({
                 error: "Unauthorized , you are not the owner of this project",
             });
-        else if (project_in_db.status !== "Pending")
-            return res.status(401).json({
+        else if (
+            project_in_db.status !== "Pending" &&
+            project_in_db.status !== "Rejected"
+        )
+            return res.status(409).json({
                 error: "You can't delete a project that has been accepted.",
             });
         else {
