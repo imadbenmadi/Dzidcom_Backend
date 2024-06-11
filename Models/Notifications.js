@@ -2,13 +2,54 @@ const { Sequelize, DataTypes } = require("sequelize");
 const sequelize = require("../config/db_connection");
 const { Freelancers } = require("./Freelnacer");
 const { Clients } = require("./Client");
-const Notifications = sequelize.define("Notifications", {
-    UserId: {
+const Client_Notifications = sequelize.define("Notifications", {
+    ClientId: {
         type: DataTypes.INTEGER,
         allowNull: false,
     },
-    UserType: {
+    title: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+    },
+    text: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+    },
+    type: {
+        type: DataTypes.ENUM(
+            "Project_Accepted",
+            "Projet_refused",
+            "Freelancer_found",
+            "payment_accepted",
+            "payment_rejected",
+            "Freelancer_uploaded_work"
+        ),
+        allowNull: false,
+    },
+    status: {
         type: DataTypes.STRING,
+        allowNull: false,
+        defaultValue: "Unread",
+    },
+});
+const Freelancer_Notifications = sequelize.define("Notifications", {
+    FreelancerId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    },
+    title: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+    },
+    type: {
+        type: DataTypes.ENUM(
+            "Project_Accepted",
+            "Projet_refused",
+            "Freelancer_found",
+            "payment_accepted",
+            "payment_rejected",
+            "Freelancer_uploaded_work"
+        ),
         allowNull: false,
     },
     text: {
@@ -22,15 +63,21 @@ const Notifications = sequelize.define("Notifications", {
     },
 });
 
-Notifications.belongsTo(Freelancers, {
+Freelancer_Notifications.belongsTo(Freelancers, {
     as: "Freelancer",
-    foreignKey: "UserId",
+    foreignKey: "FreelancerId",
 });
-Freelancers.hasMany(Notifications, {
-    as: "Notifications",
-    foreignKey: "UserId",
+Freelancers.hasMany(Freelancer_Notifications, {
+    as: "Freelancer_Notifications",
+    foreignKey: "FreelancerId",
 });
 
-Notifications.belongsTo(Clients, { as: "Client", foreignKey: "UserId" });
-Clients.hasMany(Notifications, { as: "Notifications", foreignKey: "UserId" });
+Client_Notifications.belongsTo(Clients, {
+    as: "Client",
+    foreignKey: "ClientId",
+});
+Clients.hasMany(Client_Notifications, {
+    as: "Client_Notifications",
+    foreignKey: "ClientId",
+});
 module.exports = { Notifications };
