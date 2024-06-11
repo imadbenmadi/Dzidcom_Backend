@@ -1,26 +1,25 @@
 // const { Clients } = require("../../Models/Client");
 
-const { Projects } = require("../../Models/Project");
+const { Rejection_Resons } = require("../../Models/Rejection_Resons");
 const { Op } = require("sequelize");
-const GetProcess = async (req, res) => {
+const GetRejections = async (req, res) => {
     const userId = req.decoded.userId;
+    const projectId = req.params.projectId;
     if (!userId)
         return res.status(401).json({ error: "Unauthorized , missing userId" });
     try {
-        const projects = await Projects.findAll({
+        const rejection = await Rejection_Resons.findAll({
             where: {
                 FreelancerId: userId,
-                status: {
-                    [Op.in]: ["Payed", "Completed", "Accepted"],
-                },
+                ProjectId: projectId,
             },
             order: [["createdAt", "DESC"]],
         });
-        return res.status(200).json({ Projects: projects });
+        return res.status(200).json({ Rejection_Resons: rejection });
     } catch (error) {
         console.error(error);
         return res.status(500).json({ error: "Internal server error." });
     }
 };
 
-module.exports = { GetProcess };
+module.exports = { GetRejections };

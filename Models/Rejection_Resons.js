@@ -7,10 +7,10 @@ const Rejection_Resons = sequelize.define("Rejection_Resons", {
         type: DataTypes.INTEGER,
         allowNull: false,
     },
-    // FreelancerId: {
-    //     type: DataTypes.INTEGER,
-    //     allowNull: false,
-    // },
+    FreelancerId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    },
     ProjectId: {
         type: DataTypes.INTEGER,
         allowNull: false,

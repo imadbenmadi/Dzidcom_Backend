@@ -24,4 +24,9 @@ router.get(
     Freelancer_Middlware,
     FreelancerController.GetProcess_item
 );
+router.get(
+    "/:userId/:projectId/Rejections",
+    Freelancer_Middlware,
+    FreelancerController.GetRejections
+);
 module.exports = router;
