@@ -3,6 +3,10 @@ const router = express.Router();
 const { Projects } = require("../../Models/Project");
 const Admin_midllware = require("../../Middlewares/Admin");
 const { Applications } = require("../../Models/Applications");
+const {
+    Freelancer_Notifications,
+    Client_Notifications,
+} = require("../../Models/Notifications");
 router.get("/", Admin_midllware, async (req, res) => {
     try {
         const applications = await Applications.findAll({
@@ -121,6 +125,25 @@ router.post(
                 },
                 { where: { id: projectId } }
             );
+            console.log("project.ClientId : ", project.ClientId);
+            try {
+                await Freelancer_Notifications.create({
+                    title: "Application accepted",
+                    text: "Your Application to the project have been accepted . we are waiting the Client Payment to start the project",
+                    type: "Project_Accepted",
+                    FreelancerId: application.FreelancerId,
+                    link: `/Freelancer/Process/${project.id}`,
+                });
+                await Client_Notifications.create({
+                    title: "Freelancer Found",
+                    text: "Pay the fees so the freelancer can start working",
+                    type: "Freelancer_found",
+                    ClientId: project.ClientId,
+                    link: `/Client/Projects/${project.id}`,
+                });
+            } catch (error) {
+                return res.status(500).json({ error: error.message });
+            }
 
             res.status(200).json({ message: "Application Approved" });
         } catch (err) {
@@ -166,7 +189,7 @@ router.post(
                     },
                 }
             );
-
+            
             res.status(200).json({ message: "Application Rejected" });
         } catch (err) {
             console.error("Error fetching Project Applications:", err);

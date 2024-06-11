@@ -34,4 +34,9 @@ router.get(
     Freelancer_Middlware,
     FreelancerController.GetNotifications
 );
+router.delete(
+    "/:userId/Notifications/:notificationId",
+    Freelancer_Middlware,
+    FreelancerController.DeleteNotification
+);
 module.exports = router;

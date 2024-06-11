@@ -2,7 +2,7 @@ const { Sequelize, DataTypes } = require("sequelize");
 const sequelize = require("../config/db_connection");
 const { Freelancers } = require("./Freelnacer");
 const { Clients } = require("./Client");
-const Client_Notifications = sequelize.define("Notifications", {
+const Client_Notifications = sequelize.define("Client_Notifications", {
     ClientId: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -31,8 +31,12 @@ const Client_Notifications = sequelize.define("Notifications", {
         allowNull: false,
         defaultValue: "Unread",
     },
+    link: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
 });
-const Freelancer_Notifications = sequelize.define("Notifications", {
+const Freelancer_Notifications = sequelize.define("Freelancer_Notifications", {
     FreelancerId: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -60,6 +64,10 @@ const Freelancer_Notifications = sequelize.define("Notifications", {
         type: DataTypes.STRING,
         allowNull: false,
         defaultValue: "Unread",
+    },
+    link: {
+        type: DataTypes.STRING,
+        allowNull: true,
     },
 });
 

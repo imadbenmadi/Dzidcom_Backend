@@ -8,6 +8,7 @@ const { PaymentStatus } = require("./Client/Project/PaymentStatus");
 const { GetProcess } = require("./Client/Project/GetProcess");
 const { GetRejections } = require("./Client/Project/GetRejection");
 const { GetNotifications } = require("./Client/Notifications");
+const { DeleteNotification } = require("./Client/Notifications");
 const {
     Accept_work,
     Reject_work,
@@ -25,6 +26,7 @@ const ClientController = {
     Reject_work,
     GetRejections,
     GetNotifications,
+    DeleteNotification,
 };
 
 module.exports = ClientController;

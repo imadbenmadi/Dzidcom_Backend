@@ -48,4 +48,9 @@ router.get(
     Client_Middlware,
     ClientController.GetNotifications
 );
+router.delete(
+    "/:userId/Notifications/:notificationId",
+    Client_Middlware,
+    ClientController.DeleteNotification
+);
 module.exports = router;

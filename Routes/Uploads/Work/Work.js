@@ -2,7 +2,10 @@ const fs = require("fs");
 const path = require("path");
 const { Projects } = require("../../../Models/Project");
 const formidableMiddleware = require("express-formidable");
-
+const {
+    Freelancer_Notifications,
+    Client_Notifications,
+} = require("../../../Models/Notifications");
 const uploadMiddleware = formidableMiddleware({
     uploadDir: "public/Work/",
     keepExtensions: true,
@@ -72,7 +75,13 @@ const Upload_Work = async (req, res) => {
             },
             { where: { id: projectId } }
         );
-
+        await Client_Notifications.create({
+            title: "Freelancer uploaded the work",
+            text: "the freelancer has successfully uploaded the completed work, and it is now available for your review.",
+            type: "Freelancer_uploaded_work",
+            ClientId: project.ClientId,
+            link: `/Client/Projects/${projectId}`,
+        });
         // Example response
         res.status(200).send({
             message: "Work uploaded successfully!",

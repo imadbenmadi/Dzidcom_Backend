@@ -62,7 +62,33 @@ app.use("/Admin_Login", require("./Routes/Auth/Admin/Admin_Login"));
 app.use("/Add_Admin", require("./Routes/Auth/Admin/Admin_Add"));
 // app.use("/Admin_Logout", require("./Routes/Auth/Admin/Admin_Logout"));
 app.use("/Admin_CheckAuth", require("./Routes/Auth/Admin/Admin_CheckAuth"));
+const {
+    Client_Notifications,
+    Freelancer_Notifications,
+} = require("./Models/Notifications");
+app.post("/notifications/Cleint", async (req, res) => {
+    const { title, text, type, ClientId } = req.body;
 
+    if (!title || !text || !type || !ClientId) {
+        return res.status(400).send("Missing required fields");
+    }
+
+    try {
+        const notification = await Client_Notifications.create({
+            title,
+            text,
+            type,
+            ClientId,
+        });
+
+        return res.status(200).json({
+            message: "Notification created successfully",
+            notification,
+        });
+    } catch (error) {
+        return res.status(500).json({ error: error.message });
+    }
+});
 const { Freelancers } = require("./Models/Freelnacer");
 const { Clients } = require("./Models/Client");
 const { Applications } = require("./Models/Applications");
@@ -70,10 +96,6 @@ const { Messages } = require("./Models/Messages");
 const { Skills } = require("./Models/Freelnacer");
 const { PortfolioItems } = require("./Models/Freelnacer");
 const { Contact_Messages } = require("./Models/Contact_Messages");
-const {
-    Client_Notifications,
-    Freelancer_Notifications,
-} = require("./Models/Notifications");
 const { Projects } = require("./Models/Project");
 // app.use("/Jobs", require("./Routes/Jobs"));
 

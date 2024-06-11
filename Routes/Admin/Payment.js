@@ -2,6 +2,10 @@ const express = require("express");
 const router = express.Router();
 const { Projects } = require("../../Models/Project");
 const Admin_midllware = require("../../Middlewares/Admin");
+const {
+    Freelancer_Notifications,
+    Client_Notifications,
+} = require("../../Models/Notifications");
 router.get("/", Admin_midllware, async (req, res) => {
     try {
         const projects = await Projects.findAll({
@@ -83,7 +87,24 @@ router.post("/:projectId/Accept", Admin_midllware, async (req, res) => {
             { status: "Payed", isPayment_ScreenShot_Rejected: false },
             { where: { id: projectId } }
         );
-
+        try {
+            await Client_Notifications.create({
+                title: "Payment Accepted",
+                text: "your payment has been successfully accepted and processed",
+                type: "payment_accepted",
+                ClientId: project.ClientId,
+                link: `/Client/Projects/${project.id}`,
+            });
+            await Freelancer_Notifications.create({
+                title: "Client payed the fees",
+                text: "We are pleased to inform you that the Client has paid the fees, and you may now begin working on the project.",
+                type: "payment_accepted",
+                FreelancerId: project.FreelancerId,
+                link: `/Freelancer/Process/${project.id}`,
+            });
+        } catch (error) {
+            return res.status(500).json({ error: error.message });
+        }
         res.status(200).json({ message: "project payment accepted" });
     } catch (err) {
         console.error("Error processing project payment approval:", err);
@@ -122,6 +143,17 @@ router.post("/:projectId/Reject", Admin_midllware, async (req, res) => {
             },
             { where: { id: projectId } }
         );
+        try {
+            await Client_Notifications.create({
+                title: "Payment Rejected",
+                text: "We regret to inform you that your payment has been rejected, and we kindly request you to review your payment details and try again.",
+                type: "payment_rejected",
+                ClientId: project.ClientId,
+                link: `/Client/Projects/${project.id}`,
+            });
+        } catch (error) {
+            return res.status(500).json({ error: error.message });
+        }
 
         res.status(200).json({ message: "project payment Rejected" });
     } catch (err) {

@@ -2,6 +2,10 @@
 const { Projects } = require("../../../Models/Project");
 const { Clients } = require("../../../Models/Client");
 const { Rejection_Resons } = require("../../../Models/Rejection_Resons");
+const {
+    Freelancer_Notifications,
+    Client_Notifications,
+} = require("../../../Models/Notifications");
 const Accept_work = async (req, res) => {
     const userId = req.decoded.userId;
     const projectId = req.params.projectId;
@@ -35,6 +39,18 @@ const Accept_work = async (req, res) => {
             isWorkRejected: false,
             isWorkUploaded: true,
         });
+        try {
+            await Freelancer_Notifications.create({
+                title: "Work Accepted",
+                text: "We are pleased to inform you that your work has been accepted. ower Team gonna contact you soon .",
+                type: "Project_Accepted",
+                FreelancerId: Project.FreelancerId,
+                link: `/Freelancer/Process/${projectId}`,
+            });
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({ error: "Internal server error." });
+        }
         return res.status(200).json({ message: "Work Accepted successfully." });
     } catch (error) {
         console.error(error);
@@ -80,6 +96,18 @@ const Reject_work = async (req, res) => {
             ProjectId: projectId,
             Reason,
         });
+        try {
+            await Freelancer_Notifications.create({
+                title: "Work Refused",
+                text: "We regret to inform you that your work has been refused by the Client.please check teh Rejection History for more details.",
+                type: "payment_rejected",
+                FreelancerId: Project.FreelancerId,
+                link: `/Freelancer/Process/${projectId}`,
+            });
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({ error: "Internal server error." });
+        }
         return res
             .status(200)
             .json({ message: "Work Rejected successfully.", rejection });

@@ -105,6 +105,16 @@ const Projects = sequelize.define("Projects", {
         allowNull: true,
         default: false,
     },
+    // isCleint_send_Feedback: {
+    //     type: DataTypes.BOOLEAN,
+    //     allowNull: true,
+    //     default: false,
+    // },
+    // isFreelancer_send_Feedback: {
+    //     type: DataTypes.BOOLEAN,
+    //     allowNull: true,
+    //     default: false,
+    // },
 });
 
 Projects.belongsTo(Clients, { as: "owner", foreignKey: "ClientId" });
