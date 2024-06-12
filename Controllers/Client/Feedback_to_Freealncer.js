@@ -16,12 +16,16 @@ const RateFreealncer = async (req, res) => {
         if (!project)
             return res.status(404).json({ error: "Project not found." });
         if (project.ClientId !== userId)
-            return res.status(401).json({
+            return res.status(409).json({
                 error: "Unauthorized , you are not the owner of this project",
             });
-        if (project.FreelancerId !== freelancerId)
-            return res.status(401).json({
+        if (project.FreelancerId != freelancerId)
+            return res.status(409).json({
                 error: "Unauthorized , this freelancer is not working on this project",
+            });
+        if (project.isCleint_send_Feedback)
+            return res.status(409).json({
+                error: "Unauthorized ,Client  alredy Rate this Freelancer",
             });
         const Feedback = await Client_Feedbacks.create({
             FreelancerId: freelancerId,
@@ -30,6 +34,20 @@ const RateFreealncer = async (req, res) => {
             Comment,
             ProjectId,
         });
+        await project.update(
+            {
+                isCleint_send_Feedback: true,
+                isWorkUploaded: true,
+                status: "Completed",
+            },
+            {
+                where: {
+                    id: ProjectId,
+                    ClientId: project.ClientId,
+                    FreelancerId: project.FreelancerId,
+                },
+            }
+        );
         return res
             .status(200)
             .json({ message: "Feedback Created successfully", Feedback });
