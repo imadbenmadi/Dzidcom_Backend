@@ -13,7 +13,6 @@ const uploadMiddleware = formidableMiddleware({
 // Delete handler
 const deleteProjectProfilePic = async (req, res) => {
     try {
-        console.log("start deleting ");
         const userId = req.decoded.userId;
         const { projectId } = req.params;
         if (!userId || !projectId) {
