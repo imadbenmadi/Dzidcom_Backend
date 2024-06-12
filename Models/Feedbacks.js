@@ -49,7 +49,45 @@ const Freelancer_Feedbacks = sequelize.define("Freelancer_Feedbacks", {
         default: 0.0,
     },
 });
-
+const Home_Feedbacks = sequelize.define("Home_Feedbacks", {
+    FeedbackId: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+    },
+    image_link: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    full_user_name: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    userType: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    FreelancerId: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+    },
+    ClientId: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+    },
+    ProjectId: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+    },
+    Comment: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    Rate: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        default: 0.0,
+    },
+});
 Freelancers.hasMany(Client_Feedbacks, {
     as: "Client_Feedbacks",
     foreignKey: "FreelancerId",
@@ -68,4 +106,4 @@ Freelancer_Feedbacks.belongsTo(Clients, {
     foreignKey: "ClientId",
 });
 
-module.exports = { Client_Feedbacks, Freelancer_Feedbacks };
+module.exports = { Client_Feedbacks, Freelancer_Feedbacks, Home_Feedbacks };
