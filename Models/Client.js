@@ -62,7 +62,7 @@ const Clients = sequelize.define("Clients", {
         type: DataTypes.STRING,
         allowNull: true,
     },
-    facebook_Link0: {
+    facebook_Link: {
         type: DataTypes.STRING,
         allowNull: true,
     },

@@ -23,9 +23,15 @@ const Client_Feedbacks = sequelize.define("Client_Feedbacks", {
     Rate: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        default: 0.0,
+        defaultValue: 0.0,
+    },
+    inHome: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true,
+        defaultValue: false,
     },
 });
+
 const Freelancer_Feedbacks = sequelize.define("Freelancer_Feedbacks", {
     FreelancerId: {
         type: DataTypes.INTEGER,
@@ -46,9 +52,15 @@ const Freelancer_Feedbacks = sequelize.define("Freelancer_Feedbacks", {
     Rate: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        default: 0.0,
+        defaultValue: 0.0,
+    },
+    inHome: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true,
+        defaultValue: false,
     },
 });
+
 const Home_Feedbacks = sequelize.define("Home_Feedbacks", {
     FeedbackId: {
         type: DataTypes.INTEGER,
@@ -66,18 +78,6 @@ const Home_Feedbacks = sequelize.define("Home_Feedbacks", {
         type: DataTypes.STRING,
         allowNull: true,
     },
-    FreelancerId: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-    },
-    ClientId: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-    },
-    ProjectId: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-    },
     Comment: {
         type: DataTypes.STRING,
         allowNull: true,
@@ -85,9 +85,10 @@ const Home_Feedbacks = sequelize.define("Home_Feedbacks", {
     Rate: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        default: 0.0,
+        defaultValue: 0.0,
     },
 });
+
 Freelancers.hasMany(Client_Feedbacks, {
     as: "Client_Feedbacks",
     foreignKey: "FreelancerId",
@@ -97,11 +98,29 @@ Client_Feedbacks.belongsTo(Freelancers, {
     foreignKey: "FreelancerId",
 });
 
+Freelancers.hasMany(Freelancer_Feedbacks, {
+    as: "Freelancer_Feedbacks",
+    foreignKey: "FreelancerId",
+});
+Freelancer_Feedbacks.belongsTo(Freelancers, {
+    as: "Freelancer",
+    foreignKey: "FreelancerId",
+});
+
 Clients.hasMany(Freelancer_Feedbacks, {
     as: "Freelancer_Feedbacks",
     foreignKey: "ClientId",
 });
 Freelancer_Feedbacks.belongsTo(Clients, {
+    as: "Client",
+    foreignKey: "ClientId",
+});
+
+Clients.hasMany(Client_Feedbacks, {
+    as: "Client_Feedbacks",
+    foreignKey: "ClientId",
+});
+Client_Feedbacks.belongsTo(Clients, {
     as: "Client",
     foreignKey: "ClientId",
 });

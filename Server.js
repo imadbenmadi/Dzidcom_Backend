@@ -62,57 +62,17 @@ app.use("/Admin_Login", require("./Routes/Auth/Admin/Admin_Login"));
 app.use("/Add_Admin", require("./Routes/Auth/Admin/Admin_Add"));
 // app.use("/Admin_Logout", require("./Routes/Auth/Admin/Admin_Logout"));
 app.use("/Admin_CheckAuth", require("./Routes/Auth/Admin/Admin_CheckAuth"));
-const {
-    Client_Notifications,
-    Freelancer_Notifications,
-} = require("./Models/Notifications");
-app.post("/notifications/Cleint", async (req, res) => {
-    const { title, text, type, ClientId } = req.body;
 
-    if (!title || !text || !type || !ClientId) {
-        return res.status(400).send("Missing required fields");
-    }
+const { Home_Feedbacks } = require("./Models/Feedbacks");
 
-    try {
-        const notification = await Client_Notifications.create({
-            title,
-            text,
-            type,
-            ClientId,
-        });
+app.get("/Home_Feedbacks", async (req, res) => {
+    const Feedbacks = await Home_Feedbacks.findAll({
+        where: {},
+        order: [["createdAt", "DESC"]],
+    });
 
-        return res.status(200).json({
-            message: "Notification created successfully",
-            notification,
-        });
-    } catch (error) {
-        return res.status(500).json({ error: error.message });
-    }
+    res.status(200).json(Feedbacks);
 });
-const { Freelancers } = require("./Models/Freelnacer");
-const { Clients } = require("./Models/Client");
-const { Applications } = require("./Models/Applications");
-const { Messages } = require("./Models/Messages");
-const { Skills } = require("./Models/Freelnacer");
-const { PortfolioItems } = require("./Models/Freelnacer");
-const { Contact_Messages } = require("./Models/Contact_Messages");
-const { Projects } = require("./Models/Project");
-// app.use("/Jobs", require("./Routes/Jobs"));
-
-// app.use("/Dashboard/Login", require("./Routes/Dashboard/Admin_Login"));
-// app.use(
-//     "/Dashboard/check_Auth",
-//     require("./Routes/Dashboard/check_Admin_Auth")
-// );
-// app.use("/Dashboard/Users", require("./Routes/Dashboard/Users"));
-// app.use("/Dashboard/Courses", require("./Routes/Dashboard/Courses"));
-// app.use("/Dashboard/Services", require("./Routes/Dashboard/Servicecs"));
-// app.use("/Dashboard/Blogs", require("./Routes/Dashboard/Blogs"));
-// app.use("/Dashboard/Events", require("./Routes/Dashboard/Events"));
-// app.use("/Dashboard/AddAdmin", require("./Routes/Dashboard/Add_Admin"));
-
-// app.use("/Dashboard", require("./Routes/Dashboard/Dashboard"));
-// app.use(verifyJWT);
 
 app.listen(3000);
 

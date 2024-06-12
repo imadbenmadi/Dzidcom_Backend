@@ -8,7 +8,7 @@ router.get("/Admins", Admin_midllware, async (req, res) => {
     try {
         const admins = await Admins.findAll({
             order: [["createdAt", "DESC"]],
-        }).select(["id", "email", "firstName", "lastName", "telephone"]);
+        });
         res.status(200).json(admins);
     } catch (err) {
         console.error("Error fetching Admins:", err);
@@ -19,4 +19,5 @@ router.use("/Projects", require("./Projects"));
 router.use("/Applications", require("./Applications"));
 router.use("/Payment", require("./Payment"));
 router.use("/Home", require("./Home"));
+router.use("/Feedbacks", require("./Feedbacks"));
 module.exports = router;
