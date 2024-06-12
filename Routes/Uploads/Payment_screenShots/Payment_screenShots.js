@@ -53,11 +53,11 @@ const Upload_Payment_ScreenShot = async (req, res) => {
             });
         }
         if (project.ClientId != userId)
-            return res.status(401).send({
+            return res.status(409).send({
                 message: "Unauthorized: Project does not belong to the user",
             });
         else if (project.status != "Accepted" || !project.FreelancerId)
-            return res.status(401).send({
+            return res.status(409).send({
                 message:
                     "Unauthorized: Project is not accepted yet or not assigned to any freelancer",
             });

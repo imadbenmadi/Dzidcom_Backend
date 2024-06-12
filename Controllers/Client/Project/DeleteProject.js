@@ -23,7 +23,7 @@ const DeleteProject = async (req, res) => {
         if (!project_in_db) {
             return res.status(404).json({ error: "Project not found." });
         } else if (project_in_db.ClientId !== userId)
-            return res.status(401).json({
+            return res.status(409).json({
                 error: "Unauthorized , you are not the owner of this project",
             });
         else if (

@@ -24,7 +24,7 @@ const DeleteNotification = async (req, res) => {
     const notificationId = req.params.notificationId;
     if (!userId || !notificationId)
         return res
-            .status(401)
+            .status(409)
             .json({ error: "Unauthorized , missing userId or notificationId" });
     try {
         const notification = await Client_Notifications.findOne({

@@ -44,11 +44,11 @@ const Upload_Work = async (req, res) => {
             });
         }
         if (project.FreelancerId != userId)
-            return res.status(401).send({
+            return res.status(409).send({
                 message: "Unauthorized: Project does not belong to the user",
             });
         else if (project.status != "Payed" || !project.FreelancerId)
-            return res.status(401).send({
+            return res.status(409).send({
                 message:
                     "Unauthorized: Project is not Payed or Freelancer is not assigned",
             });

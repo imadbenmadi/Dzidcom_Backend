@@ -30,7 +30,7 @@ const deleteProjectProfilePic = async (req, res) => {
             });
         }
         if (project.ClientId != userId)
-            return res.status(401).send({
+            return res.status(409).send({
                 message: "Unauthorized: Project does not belong to the user",
             });
 

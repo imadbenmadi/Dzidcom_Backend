@@ -29,7 +29,7 @@ const Accept_work = async (req, res) => {
             return res.status(404).json({ error: "Project not found." });
         }
         if (Project.ClientId !== userId) {
-            return res.status(401).json({
+            return res.status(409).json({
                 error: "You are not authorized to accept this project.",
             });
         }
@@ -80,7 +80,7 @@ const Reject_work = async (req, res) => {
             return res.status(404).json({ error: "Project not found." });
         }
         if (Project.ClientId !== userId) {
-            return res.status(401).json({
+            return res.status(409).json({
                 error: "You are not authorized to reject this project.",
             });
         }
