@@ -61,11 +61,11 @@ Client_Feedbacks.belongsTo(Freelancers, {
 
 Clients.hasMany(Freelancer_Feedbacks, {
     as: "Freelancer_Feedbacks",
-    foreignKey: "ProjectId",
+    foreignKey: "ClientId",
 });
 Freelancer_Feedbacks.belongsTo(Clients, {
     as: "Client",
-    foreignKey: "ProjectId",
+    foreignKey: "ClientId",
 });
 
-module.exports = { Client_Feedbacks };
+module.exports = { Client_Feedbacks, Freelancer_Feedbacks };

@@ -53,4 +53,9 @@ router.delete(
     Client_Middlware,
     ClientController.DeleteNotification
 );
+router.post(
+    ":/userId/Rate/:freelancerId",
+    Client_Middlware,
+    ClientController.RateFreealncer
+);
 module.exports = router;

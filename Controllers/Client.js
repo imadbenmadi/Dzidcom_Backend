@@ -13,6 +13,8 @@ const {
     Accept_work,
     Reject_work,
 } = require("./Client/Project/Accept_Reject_work");
+
+const { RateFreealncer } = require("./Client/Feedback_to_Freealncer");
 const ClientController = {
     getProfile,
     EditeProfile,
@@ -27,6 +29,7 @@ const ClientController = {
     GetRejections,
     GetNotifications,
     DeleteNotification,
+    RateFreealncer,
 };
 
 module.exports = ClientController;

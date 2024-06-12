@@ -7,6 +7,8 @@ const {
     GetNotifications,
     DeleteNotification,
 } = require("./Freelancer/Notifications");
+const { RateClient } = require("./Client/Feedback_to_Client");
+
 const FreelancerController = {
     getProfile,
     EditeProfile,
@@ -15,6 +17,7 @@ const FreelancerController = {
     GetRejections,
     GetNotifications,
     DeleteNotification,
+    RateClient,
 };
 
 module.exports = FreelancerController;

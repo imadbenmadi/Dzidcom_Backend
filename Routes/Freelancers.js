@@ -39,4 +39,9 @@ router.delete(
     Freelancer_Middlware,
     FreelancerController.DeleteNotification
 );
+router.post(
+    ":/userId/Rate/:clientId",
+    Freelancer_Middlware,
+    FreelancerController.RateClient
+);
 module.exports = router;
