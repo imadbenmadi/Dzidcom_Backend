@@ -17,7 +17,7 @@ const Client_Feedbacks = sequelize.define("Client_Feedbacks", {
         allowNull: false,
     },
     Comment: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: true,
     },
     Rate: {
@@ -46,7 +46,7 @@ const Freelancer_Feedbacks = sequelize.define("Freelancer_Feedbacks", {
         allowNull: false,
     },
     Comment: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: true,
     },
     Rate: {
@@ -79,7 +79,7 @@ const Home_Feedbacks = sequelize.define("Home_Feedbacks", {
         allowNull: true,
     },
     Comment: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: true,
     },
     Rate: {

@@ -1,6 +1,7 @@
 // const { Clients } = require("../../Models/Client");
 const { Projects } = require("../../Models/Project");
 const { Client_Feedbacks } = require("../../Models/Feedbacks");
+const { Freelancers } = require("../../Models/Freelnacer");
 const RateFreealncer = async (req, res) => {
     const userId = req.decoded.userId;
     if (!userId)
@@ -27,6 +28,14 @@ const RateFreealncer = async (req, res) => {
             return res.status(409).json({
                 error: "Unauthorized ,Client  alredy Rate this Freelancer",
             });
+        const freelancer = await Freelancers.findByPk(project.FreelancerId);
+        if (!freelancer)
+            return res.status(404).json({ error: "freelancer not found." });
+        const newRate = (freelancer.Rate + Rate) / 2;
+        await Freelancers.update(
+            { Rate: newRate },
+            { where: { id: project.FreelancerId } }
+        );
         const Feedback = await Client_Feedbacks.create({
             FreelancerId: freelancerId,
             ClientId: userId,

@@ -44,4 +44,10 @@ router.post(
     Freelancer_Middlware,
     FreelancerController.RateClient
 );
+router.get(
+    "/:userId/Feedbacks",
+    Freelancer_Middlware,
+    FreelancerController.GetFeedbacks
+);
+
 module.exports = router;

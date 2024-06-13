@@ -1,6 +1,7 @@
 // const { Clients } = require("../../Models/Client");
 const { Projects } = require("../../Models/Project");
 const { Freelancer_Feedbacks } = require("../../Models/Feedbacks");
+const { Clients } = require("../../Models/Client");
 const RateClient = async (req, res) => {
     const userId = req.decoded.userId;
     if (!userId)
@@ -11,7 +12,7 @@ const RateClient = async (req, res) => {
         return res
             .status(400)
             .json({ error: "Please provide all required fields." });
-    
+
     try {
         const project = await Projects.findByPk(ProjectId);
         if (!project)
@@ -35,6 +36,14 @@ const RateClient = async (req, res) => {
             Comment,
             ProjectId,
         });
+        const Client = await Clients.findByPk(project.ClientId);
+        if (!Client)
+            return res.status(404).json({ error: "Client not found." });
+        const newRate = (Client.Rate + Rate) / 2;
+        await Clients.update(
+            { Rate: newRate },
+            { where: { id: project.ClientId } }
+        );
         await project.update(
             {
                 isFreelancer_send_Feedback: true,

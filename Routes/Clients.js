@@ -58,4 +58,10 @@ router.post(
     Client_Middlware,
     ClientController.RateFreealncer
 );
+
+router.get(
+    "/:userId/Feedbacks",
+    Client_Middlware,
+    ClientController.GetFeedbacks
+);
 module.exports = router;
