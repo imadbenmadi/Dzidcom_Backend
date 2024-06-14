@@ -64,10 +64,15 @@ app.use("/Add_Admin", require("./Routes/Auth/Admin/Admin_Add"));
 app.use("/Admin_CheckAuth", require("./Routes/Auth/Admin/Admin_CheckAuth"));
 
 const { Home_Feedbacks } = require("./Models/Feedbacks");
-
+const { Clients } = require("./Models/Client");
+const { Freelancers } = require("./Models/Freelnacer");
 app.get("/Home_Feedbacks", async (req, res) => {
     const Feedbacks = await Home_Feedbacks.findAll({
         where: {},
+        // include: [
+        //     { model: Freelancers, as: "Freelancer" },
+        //     { model: Clients, as: "Client" },
+        // ],
         order: [["createdAt", "DESC"]],
     });
 

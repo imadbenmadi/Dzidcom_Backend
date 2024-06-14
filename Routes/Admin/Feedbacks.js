@@ -118,7 +118,7 @@ router.post(
 
             const newFeedback = await Home_Feedbacks.create({
                 FeedbackId: feedbackId,
-                image_link: client.profilePicLink,
+                image_link: client.profile_pic_link,
                 full_user_name: `${client.firstName} ${client.lastName}`,
                 Rate: feedback.Rate,
                 Comment: feedback.Comment,
@@ -170,7 +170,7 @@ router.post(
 
             const newFeedback = await Home_Feedbacks.create({
                 FeedbackId: feedbackId,
-                image_link: freelancer.profilePicLink,
+                image_link: freelancer.profile_pic_link,
                 full_user_name: `${freelancer.firstName} ${freelancer.lastName}`,
                 Rate: feedback.Rate,
                 Comment: feedback.Comment,
@@ -204,20 +204,20 @@ router.delete(
             if (!feedback)
                 return res.status(404).json({ message: "Feedback not found" });
 
-            await Home_Feedbacks.destroy({ where: { id: feedbackId } });
             if (feedback.userType === "Client") {
                 await Client_Feedbacks.update(
                     { inHome: false },
-                    { where: { id: feedbackId } }
+                    { where: { id: feedback.FeedbackId } }
                 );
             } else if (feedback.userType === "Freelancer") {
                 await Freelancer_Feedbacks.update(
                     { inHome: false },
-                    { where: { id: feedbackId } }
+                    { where: { id: feedback.FeedbackId } }
                 );
             } else {
                 return res.status(404).json({ message: "Feedback not found" });
             }
+            await Home_Feedbacks.destroy({ where: { id: feedbackId } });
             res.status(200).json({ message: "Feedback deleted successfully" });
         } catch (err) {
             console.error("Error deleting homepage feedback:", err);

@@ -125,4 +125,6 @@ Client_Feedbacks.belongsTo(Clients, {
     foreignKey: "ClientId",
 });
 
+
+
 module.exports = { Client_Feedbacks, Freelancer_Feedbacks, Home_Feedbacks };
