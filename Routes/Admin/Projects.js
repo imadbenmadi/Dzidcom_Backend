@@ -4,7 +4,10 @@ const { Projects } = require("../../Models/Project");
 const Admin_midllware = require("../../Middlewares/Admin");
 const { Client_Notifications } = require("../../Models/Notifications");
 const { Clients } = require("../../Models/Client");
+const { Freelancers } = require("../../Models/Freelnacer");
 const { Rejection_Resons } = require("../../Models/Rejection_Resons");
+const { Applications } = require("../../Models/Applications");
+const { Op } = require("sequelize");
 router.get("/requests", Admin_midllware, async (req, res) => {
     try {
         const requests = await Projects.findAll({
@@ -16,6 +19,72 @@ router.get("/requests", Admin_midllware, async (req, res) => {
     } catch (err) {
         console.error("Error fetching Project Requests:", err);
         res.status(500).json({ message: err });
+    }
+});
+router.get("/Applications", Admin_midllware, async (req, res) => {
+    try {
+        const applications = await Applications.findAll({
+            where: {
+                status: { [Op.not]: "Accepted" },
+            },
+            include: [
+                {
+                    model: Projects,
+                    as: "Project",
+                    include: [{ model: Clients, as: "owner" }],
+                },
+                { model: Freelancers, as: "Freelancer" },
+            ],
+            order: [["createdAt", "DESC"]],
+        });
+        res.status(200).json({ Projects: applications });
+    } catch (err) {
+        console.error("Error fetching Project applications:", err);
+        res.status(500).json({ message: err });
+    }
+});
+
+router.get("/Payments", Admin_midllware, async (req, res) => {
+    try {
+        const payment_requests = await Projects.findAll({
+            where: {
+                status: "Accepted",
+                FreelancerId: { [Op.not]: null },
+
+                // isPayment_ScreenShot_uploaded: false,
+            },
+            include: [
+                { model: Clients, as: "owner" },
+                { model: Freelancers, as: "Freelancer" },
+            ],
+            order: [["createdAt", "DESC"]],
+        });
+
+        res.status(200).json({ Projects: payment_requests });
+    } catch (err) {
+        console.error("Error fetching Project payment_requests:", err);
+        res.status(500).json({ message: err });
+    }
+});
+
+router.get("/Applications/:projectId", Admin_midllware, async (req, res) => {
+    const projectId = req.params.projectId;
+    if (!projectId) return res.status(409).json({ message: "Missing data" });
+    try {
+        const project = await Projects.findOne({
+            where: { id: projectId },
+            include: [
+                { model: Clients, as: "owner" },
+                { model: Freelancers, as: "Freelancer" },
+            ],
+        });
+        if (!project)
+            return res.status(404).json({ message: "Project not found" });
+
+        res.status(200).json({ project });
+    } catch (err) {
+        console.error("Error fetching Project:", err);
+        res.status(500).json({ message: err.message });
     }
 });
 router.get("/requests/:projectId", Admin_midllware, async (req, res) => {

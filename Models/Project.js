@@ -1,6 +1,7 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const sequelize = require("../config/db_connection");
 const { Clients } = require("./Client");
+const { Freelancers } = require("./Freelnacer");
 const Projects = sequelize.define("Projects", {
     ClientId: {
         type: DataTypes.INTEGER,
@@ -119,5 +120,13 @@ const Projects = sequelize.define("Projects", {
 
 Projects.belongsTo(Clients, { as: "owner", foreignKey: "ClientId" });
 Clients.hasMany(Projects, { as: "Projects", foreignKey: "ClientId" });
+
+Projects.belongsTo(Freelancers, {
+    as: "Freelancer",
+    foreignKey: "FreelancerId",
+});
+Freelancers.hasMany(Projects, { as: "Projects", foreignKey: "FreelancerId" });
+
+
 
 module.exports = { Projects };

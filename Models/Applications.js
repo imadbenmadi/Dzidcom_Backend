@@ -47,5 +47,4 @@ Applications.belongsTo(Freelancers, {
 Projects.hasMany(Applications, { as: "Applications", foreignKey: "ProjectId" });
 Applications.belongsTo(Projects, { as: "Project", foreignKey: "ProjectId" });
 
-
 module.exports = { Applications };
