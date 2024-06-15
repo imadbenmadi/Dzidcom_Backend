@@ -74,7 +74,7 @@ router.get("/Freelancers/:id/Feedbacks", adminMiddleware, async (req, res) => {
     if (!userId)
         return res.status(409).json({ error: "Unauthorized , missing userId" });
     try {
-        const Feedbacks = await Freelancer_Feedbacks.findAll({
+        const Feedbacks = await Client_Feedbacks.findAll({
             where: {
                 FreelancerId: userId,
             },
@@ -97,7 +97,7 @@ router.get("/Clients/:id/Feedbacks", adminMiddleware, async (req, res) => {
     if (!userId)
         return res.status(409).json({ error: "Unauthorized , missing userId" });
     try {
-        const Feedbacks = await Client_Feedbacks.findAll({
+        const Feedbacks = await Freelancer_Feedbacks.findAll({
             where: {
                 ClientId: userId,
             },

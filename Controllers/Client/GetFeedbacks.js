@@ -1,4 +1,4 @@
-const { Client_Feedbacks } = require("../../Models/Feedbacks");
+const { Freelancer_Feedbacks } = require("../../Models/Feedbacks");
 const { Freelancers } = require("../../Models/Freelnacer");
 const { Clients } = require("../../Models/Client");
 const GetFeedbacks = async (req, res) => {
@@ -6,7 +6,7 @@ const GetFeedbacks = async (req, res) => {
     if (!userId)
         return res.status(401).json({ error: "Unauthorized , missing userId" });
     try {
-        const Feedbacks = await Client_Feedbacks.findAll({
+        const Feedbacks = await Freelancer_Feedbacks.findAll({
             where: {
                 ClientId: userId,
             },

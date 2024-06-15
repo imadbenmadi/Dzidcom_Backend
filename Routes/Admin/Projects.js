@@ -3,10 +3,13 @@ const router = express.Router();
 const { Projects } = require("../../Models/Project");
 const Admin_midllware = require("../../Middlewares/Admin");
 const { Client_Notifications } = require("../../Models/Notifications");
+const { Clients } = require("../../Models/Client");
+const { Rejection_Resons } = require("../../Models/Rejection_Resons");
 router.get("/requests", Admin_midllware, async (req, res) => {
     try {
         const requests = await Projects.findAll({
             where: { status: "Pending" },
+            include: [{ model: Clients, as: "owner" }],
             order: [["createdAt", "DESC"]],
         });
         res.status(200).json({ Projects: requests });
@@ -31,6 +34,30 @@ router.get("/requests/:projectId", Admin_midllware, async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 });
+router.get(
+    "/requests/:projectId/Rejections",
+    Admin_midllware,
+    async (req, res) => {
+        const projectId = req.params.projectId;
+        if (!projectId)
+            return res.status(409).json({ message: "Missing data" });
+        try {
+            let Rejections = await Rejection_Resons.findOne({
+                where: { ProjectId: projectId },
+            });
+            if (!Rejections) Rejections = [];
+            // return res
+            //     .status(404)
+            //     .json({ message: "Rejections not found" });
+
+            res.status(200).json({ Rejections });
+        } catch (err) {
+            console.error("Error fetching Rejections:", err);
+            res.status(500).json({ message: err.message });
+        }
+    }
+);
+
 router.post(
     "/requests/:projectId/Accept",
     Admin_midllware,
@@ -97,5 +124,5 @@ router.post(
         }
     }
 );
-// router.use("/:projectId/Applications", require("./Applications"));
+
 module.exports = router;

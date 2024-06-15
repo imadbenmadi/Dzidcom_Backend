@@ -27,7 +27,7 @@ const Projects = sequelize.define("Projects", {
         allowNull: true,
     },
     Title: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: false,
     },
     Description: {
