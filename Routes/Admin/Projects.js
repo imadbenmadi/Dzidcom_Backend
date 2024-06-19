@@ -8,6 +8,19 @@ const { Freelancers } = require("../../Models/Freelnacer");
 const { Rejection_Resons } = require("../../Models/Rejection_Resons");
 const { Applications } = require("../../Models/Applications");
 const { Op } = require("sequelize");
+router.get("/", Admin_midllware, async (req, res) => {
+    try {
+        const projects = await Projects.findAll({
+            include: [{ model: Clients, as: "owner" }],
+            include: [{ model: Freelancers, as: "Freelancer" }],
+            order: [["createdAt", "DESC"]],
+        });
+        res.status(200).json({ Projects: projects });
+    } catch (err) {
+        console.error("Error fetching Project projects:", err);
+        res.status(500).json({ message: err });
+    }
+});
 router.get("/requests", Admin_midllware, async (req, res) => {
     try {
         const requests = await Projects.findAll({
