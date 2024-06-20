@@ -1,7 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const { Projects } = require("../../Models/Project");
+const { Freelancers } = require("../../Models/Freelnacer");
+const { Clients } = require("../../Models/Client");
 const Admin_midllware = require("../../Middlewares/Admin");
+const { Op } = require("sequelize");
+
 const {
     Freelancer_Notifications,
     Client_Notifications,
@@ -10,10 +14,50 @@ router.get("/", Admin_midllware, async (req, res) => {
     try {
         const projects = await Projects.findAll({
             // where: { status: "Pending" },
-            where: { isPayment_ScreenShot_uploaded: true },
+            // where: { isPayment_ScreenShot_uploaded: true },
+            where: {
+                status: {
+                    [Op.notIn]: ["Rejected", "Completed", "Pending", "Payed"],
+                },
+                FreelancerId: { [Op.not]: null },
+            },
+            include: [
+                { model: Clients, as: "owner" },
+                { model: Freelancers, as: "Freelancer" },
+            ],
             order: [["createdAt", "DESC"]],
         });
         res.status(200).json({ projects: projects });
+    } catch (err) {
+        console.error("Error fetching Project projects:", err);
+        res.status(500).json({ message: err });
+    }
+});
+router.get("/:projectId", Admin_midllware, async (req, res) => {
+    const projectId = req.params.projectId;
+    if (!projectId)
+        return res
+            .status(409)
+            .json({ message: "Missing data ProjectId is required" });
+
+    try {
+        const project = await Projects.findOne({
+            // where: { status: "Pending" },
+            // where: { isPayment_ScreenShot_uploaded: true },
+            where: {
+                id: projectId,
+                status: {
+                    [Op.notIn]: ["Rejected", "Completed", "Pending", "Payed"],
+                },
+                FreelancerId: { [Op.not]: null },
+            },
+            include: [
+                { model: Clients, as: "owner" },
+                { model: Freelancers, as: "Freelancer" },
+            ],
+            order: [["createdAt", "DESC"]],
+        });
+        res.status(200).json({ project: project });
     } catch (err) {
         console.error("Error fetching Project projects:", err);
         res.status(500).json({ message: err });
