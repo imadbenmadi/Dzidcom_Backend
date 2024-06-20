@@ -1,7 +1,6 @@
 // const { Clients } = require("../../Models/Client");
 
 const { Rejection_Resons } = require("../../../Models/Rejection_Resons");
-const { Op } = require("sequelize");
 const GetRejections = async (req, res) => {
     const userId = req.decoded.userId;
     const projectId = req.params.projectId;

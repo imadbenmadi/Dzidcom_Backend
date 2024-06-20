@@ -3,24 +3,62 @@ const router = express.Router();
 const { Projects } = require("../../Models/Project");
 const Admin_midllware = require("../../Middlewares/Admin");
 const { Applications } = require("../../Models/Applications");
+const { Clients } = require("../../Models/Client");
+const { Freelancers } = require("../../Models/Freelnacer");
+const { Op } = require("sequelize");
+const { Sequelize, DataTypes } = require("sequelize");
+
 const {
     Freelancer_Notifications,
     Client_Notifications,
 } = require("../../Models/Notifications");
 router.get("/", Admin_midllware, async (req, res) => {
     try {
-        const applications = await Applications.findAll({
-            // where: { status: "Pending" },
-            where: {},
+        // Fetch projects with their associated applications and client (company name)
+        const projects = await Projects.findAll({
+            where: {
+                status: "accepted",
+                FreelancerId: null,
+            },
+            include: [
+                {
+                    model: Applications,
+                    as: "Applications",
+                    attributes: [],
+                },
+                {
+                    model: Clients,
+                    as: "owner",
+                    attributes: ["company_Name"], // Assuming "name" is the client's company name
+                },
+            ],
+            attributes: {
+                include: [
+                    [
+                        Sequelize.fn("COUNT", Sequelize.col("Applications.id")),
+                        "applicationsCount",
+                    ],
+                ],
+            },
+            group: ["Projects.id", "owner.id"],
             order: [["createdAt", "DESC"]],
         });
-        res.status(200).json({ Applications: applications });
+
+        // Prepare the data to send
+        const data_to_send = projects.map((project) => ({
+            id: project.id,
+            title: project.Title,
+            createdAt: project.createdAt,
+            companyName: project.owner.company_Name,
+            applicationsCount: project.dataValues.applicationsCount,
+        }));
+
+        res.status(200).json({ projects: data_to_send });
     } catch (err) {
         console.error("Error fetching Project Applications:", err);
         res.status(500).json({ message: err });
     }
 });
-
 router.get("/:projectId", Admin_midllware, async (req, res) => {
     const projectId = req.params.projectId;
     if (!projectId)
@@ -30,17 +68,26 @@ router.get("/:projectId", Admin_midllware, async (req, res) => {
     try {
         const applications = await Applications.findAll({
             where: {
-                // status: "Pending",
                 ProjectId: projectId,
             },
+            include: [
+                {
+                    model: Projects,
+                    as: "Project",
+                    include: [{ model: Clients, as: "owner" }],
+                },
+                { model: Freelancers, as: "Freelancer" },
+            ],
             order: [["createdAt", "DESC"]],
         });
+        // console.log("applications : ", applications);
         res.status(200).json({ Applications: applications });
     } catch (err) {
         console.error("Error fetching Project Applications:", err);
         res.status(500).json({ message: err });
     }
 });
+
 router.get("/:projectId/:ApplicationId", Admin_midllware, async (req, res) => {
     const projectId = req.params.projectId;
     const ApplicationId = req.params.ApplicationId;
@@ -68,10 +115,10 @@ router.get("/:projectId/:ApplicationId", Admin_midllware, async (req, res) => {
 });
 
 router.post(
-    "/:projectId/:applicationId/accept",
+    "/:projectId/:freelancerId/accept",
     Admin_midllware,
     async (req, res) => {
-        const { projectId, applicationId } = req.params;
+        const { projectId, freelancerId } = req.params;
         const Money = req.body.Money;
         const DeadLine = req.body.DeadLine;
         if (!Money)
@@ -88,15 +135,15 @@ router.post(
                 .json({ message: "Missing data: ProjectId is required" });
         }
 
-        if (!applicationId) {
+        if (!freelancerId) {
             return res
                 .status(409)
-                .json({ message: "Missing data: ApplicationId is required" });
+                .json({ message: "Missing data: freelancerId is required" });
         }
 
         try {
             const application = await Applications.findOne({
-                where: { ProjectId: projectId, id: applicationId },
+                where: { ProjectId: projectId, FreelancerId: freelancerId },
             });
             if (!application) {
                 return res
@@ -114,7 +161,7 @@ router.post(
 
             await Applications.update(
                 { status: "Accepted" },
-                { where: { id: applicationId } }
+                { where: { FreelancerId: freelancerId, ProjectId: projectId } }
             );
 
             await Projects.update(
@@ -125,7 +172,6 @@ router.post(
                 },
                 { where: { id: projectId } }
             );
-            console.log("project.ClientId : ", project.ClientId);
             try {
                 await Freelancer_Notifications.create({
                     title: "Application accepted",
@@ -153,25 +199,25 @@ router.post(
     }
 );
 router.post(
-    "/:projectId/:ApplicationId/Reject",
+    "/:projectId/:freelancerId/Reject",
     Admin_midllware,
     async (req, res) => {
         const projectId = req.params.projectId;
-        const ApplicationId = req.params.ApplicationId;
+        const freelancerId = req.params.freelancerId;
         if (!projectId)
             return res
                 .status(409)
                 .json({ message: "Missing data ProjectId is required" });
-        else if (!ApplicationId)
+        else if (!freelancerId)
             return res
                 .status(409)
-                .json({ message: "Missing data ApplicationId is required" });
+                .json({ message: "Missing data freelancerId is required" });
         try {
             const application = await Applications.findOne({
                 where: {
                     // status: "Pending",
                     ProjectId: projectId,
-                    id: ApplicationId,
+                    FreelancerId: freelancerId,
                 },
             });
             if (!application)
@@ -183,13 +229,9 @@ router.post(
                 {
                     status: "Rejected",
                 },
-                {
-                    where: {
-                        id: ApplicationId,
-                    },
-                }
+                { where: { FreelancerId: freelancerId, ProjectId: projectId } }
             );
-            
+
             res.status(200).json({ message: "Application Rejected" });
         } catch (err) {
             console.error("Error fetching Project Applications:", err);
