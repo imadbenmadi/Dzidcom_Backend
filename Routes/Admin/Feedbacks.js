@@ -102,13 +102,13 @@ router.post(
             if (!feedback)
                 return res.status(404).json({ message: "Feedback not found" });
 
-            const alreadyExistInHomepage = await Home_Feedbacks.findOne({
-                where: { FeedbackId: feedbackId },
-            });
-            if (alreadyExistInHomepage)
-                return res
-                    .status(409)
-                    .json({ message: "Feedback already exists on homepage" });
+            // const alreadyExistInHomepage = await Home_Feedbacks.findOne({
+            //     where: { FeedbackId: feedbackId },
+            // });
+            // if (alreadyExistInHomepage)
+            //     return res
+            //         .status(409)
+            //         .json({ message: "Feedback already exists on homepage" });
 
             const client = await Clients.findOne({
                 where: { id: feedback.ClientId },
@@ -152,13 +152,13 @@ router.post(
             if (!feedback)
                 return res.status(404).json({ message: "Feedback not found" });
 
-            const alreadyExistInHomepage = await Home_Feedbacks.findOne({
-                where: { FeedbackId: feedbackId },
-            });
-            if (alreadyExistInHomepage)
-                return res
-                    .status(409)
-                    .json({ message: "Feedback already exists on homepage" });
+            // const alreadyExistInHomepage = await Home_Feedbacks.findOne({
+            //     where: { FeedbackId: feedbackId },
+            // });
+            // if (alreadyExistInHomepage)
+            //     return res
+            //         .status(409)
+            //         .json({ message: "Feedback already exists on homepage" });
 
             const freelancer = await Freelancers.findOne({
                 where: { id: feedback.FreelancerId },
