@@ -2,6 +2,9 @@ const express = require("express");
 const router = express.Router();
 const adminMiddleware = require("../../Middlewares/Admin");
 const { Freelancers } = require("../../Models/Freelnacer");
+const { PortfolioItems } = require("../../Models/Freelnacer");
+const { Skills } = require("../../Models/Freelnacer");
+
 const { Clients } = require("../../Models/Client");
 const {
     Freelancer_Feedbacks,
@@ -10,9 +13,11 @@ const {
 router.get("/", adminMiddleware, async (req, res) => {
     try {
         const freelancers = await Freelancers.findAll({
+            attributes: { exclude: ["password"] },
             order: [["createdAt", "DESC"]],
         });
         const clients = await Clients.findAll({
+            attributes: { exclude: ["password"] },
             order: [["createdAt", "DESC"]],
         });
 
@@ -42,7 +47,10 @@ router.get("/Clients/:id", adminMiddleware, async (req, res) => {
     if (!clientId)
         return res.status(409).json({ message: "Client ID is required" });
     try {
-        const client = await Clients.findOne({ where: { id: clientId } });
+        const client = await Clients.findOne({
+            where: { id: clientId },
+            attributes: { exclude: ["password"] },
+        });
         if (!client)
             return res.status(404).json({ message: "Client not found" });
         res.status(200).json({ user: client });
@@ -59,6 +67,11 @@ router.get("/Freelancers/:id", adminMiddleware, async (req, res) => {
     try {
         const freelancer = await Freelancers.findOne({
             where: { id: freelancerId },
+            include: [
+                { model: PortfolioItems, as: "PortfolioItems" },
+                { model: Skills, as: "Skills" },
+            ],
+            attributes: { exclude: ["password"] },
         });
         if (!freelancer)
             return res.status(404).json({ message: "Freelancer not found" });
