@@ -64,8 +64,10 @@ const Upload_Work = async (req, res) => {
             }
         }
         // Move the file to the desired location
-        fs.renameSync(files.path, path.join("public/Work/", uniqueSuffix));
-
+        // fs.renameSync(files.path, path.join("public/Work/", uniqueSuffix));
+        const targetPath = path.join("public/Work/", uniqueSuffix);
+        fs.copyFileSync(files.path, targetPath);
+        fs.unlinkSync(files.path);
         // Update database with file link
         await Projects.update(
             {

@@ -60,10 +60,15 @@ const uploadClientProfilePic = async (req, res) => {
             }
         }
         // Move the file to the desired location
-        fs.renameSync(
-            ProfilePic.path,
-            path.join("public/ProfilePics/", uniqueSuffix)
-        );
+        // fs.renameSync(
+        //     ProfilePic.path,
+        //     path.join("public/ProfilePics/", uniqueSuffix)
+        // );
+        
+        // Copy the file to the desired location and delete the original
+        const targetPath = path.join("public/ProfilePics/", uniqueSuffix);
+        fs.copyFileSync(ProfilePic.path, targetPath);
+        fs.unlinkSync(ProfilePic.path);
 
         // Update database with file link
         await Clients.update(

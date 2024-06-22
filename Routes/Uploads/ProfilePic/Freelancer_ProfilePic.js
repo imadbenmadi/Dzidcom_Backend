@@ -62,11 +62,13 @@ const uploadFreelancerProfilePic = async (req, res) => {
             }
         }
         // Move the file to the desired location
-        fs.renameSync(
-            ProfilePic.path,
-            path.join("public/ProfilePics/", uniqueSuffix)
-        );
-
+        // fs.renameSync(
+        //     ProfilePic.path,
+        //     path.join("public/ProfilePics/", uniqueSuffix)
+        // );
+        const targetPath = path.join("public/ProfilePics/", uniqueSuffix);
+        fs.copyFileSync(ProfilePic.path, targetPath);
+        fs.unlinkSync(ProfilePic.path);
         // Update database with file link
         await Freelancers.update(
             { profile_pic_link: fileLink },

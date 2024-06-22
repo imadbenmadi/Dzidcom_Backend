@@ -64,7 +64,11 @@ const Upload_Freelancer_PortfolioItem = async (req, res) => {
             }
         }
         // Move the file to the desired location
-        fs.renameSync(image.path, path.join("public/Portfolio/", uniqueSuffix));
+        // fs.renameSync(image.path, path.join("public/Portfolio/", uniqueSuffix));
+        
+        const targetPath = path.join("public/Portfolio/", uniqueSuffix);
+        fs.copyFileSync(image.path, targetPath);
+        fs.unlinkSync(image.path);
 
         // Update database with file link
         await PortfolioItems.update(

@@ -74,15 +74,17 @@ const Upload_Payment_ScreenShot = async (req, res) => {
             }
         }
         // Move the file to the desired location
-        fs.renameSync(image.path, path.join("public/Payment/", uniqueSuffix));
-
+        // fs.renameSync(image.path, path.join("public/Payment/", uniqueSuffix));
+        const targetPath = path.join("public/Payment/", uniqueSuffix);
+        fs.copyFileSync(image.path, targetPath);
+        fs.unlinkSync(image.path);
         // Update database with file link
         await Projects.update(
             {
                 Pyament_ScreenShot_Link: fileLink,
                 Client_CCP_number: CCP_number,
                 isPayment_ScreenShot_uploaded: true,
-                isPayment_ScreenShot_Rejected:false,
+                isPayment_ScreenShot_Rejected: false,
             },
             { where: { id: projectId } }
         );

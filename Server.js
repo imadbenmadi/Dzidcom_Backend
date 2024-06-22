@@ -4,8 +4,8 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const path = require("path");
 const allowedOrigins = [
-    // "http://localhost:5173",
-    // "http://localhost:5174",
+    "http://localhost:5173",
+    "http://localhost:5174",
     // "http://localhost:3500",
     "https://dzidcom-front.vercel.app",
     "https://dashboard.dzidcom.skate.dz",
