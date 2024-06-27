@@ -22,7 +22,6 @@ router.delete("/:id", adminMiddleware, async (req, res) => {
     try {
         const message = await Contact_Messages.findOne({
             where: { id: messageId },
-            order: [["createdAt", "DESC"]],
         });
         if (!message)
             return res
