@@ -5,7 +5,9 @@ const cookieParser = require("cookie-parser");
 const path = require("path");
 const allowedOrigins = [
     "http://localhost:5173",
+    "http://localhost:5173/",
     "http://localhost:5174",
+    "http://localhost:5174/",
     // "http://localhost:3500",
     "https://dzidcom-front.vercel.app",
     "https://dashboard.dzidcom.skate.dz",
@@ -64,7 +66,7 @@ app.use("/Admin_Login", require("./Routes/Auth/Admin/Admin_Login"));
 app.use("/Add_Admin", require("./Routes/Auth/Admin/Admin_Add"));
 // app.use("/Admin_Logout", require("./Routes/Auth/Admin/Admin_Logout"));
 app.use("/Admin_CheckAuth", require("./Routes/Auth/Admin/Admin_CheckAuth"));
-
+app.use("/Messages", require("./Routes/Messages"));
 const { Home_Feedbacks } = require("./Models/Feedbacks");
 const { Clients } = require("./Models/Client");
 const { Freelancers } = require("./Models/Freelnacer");
