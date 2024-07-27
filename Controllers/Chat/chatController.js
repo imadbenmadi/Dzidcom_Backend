@@ -125,7 +125,6 @@ const getClientChats = async (req, res) => {
     }
 };
 
-
 const getFreelancerChatRoom = async (req, res) => {
     try {
         const { freelancerId, clientId } = req.params;
@@ -233,11 +232,10 @@ const getClientChatRoom = async (req, res) => {
         res.status(500).json({ error: "Internal Server Error" });
     }
 };
-
 const postFreelancerMessage = async (req, res) => {
     try {
         const { freelancerId, clientId } = req.params;
-        const { message } = req.body;
+        const { message, roomId } = req.body;
 
         // Validate message
         if (!message) {
@@ -265,8 +263,18 @@ const postFreelancerMessage = async (req, res) => {
             receiverId: clientId,
             senderType: "freelancer",
             receiverType: "client",
-            roomId: req.body.roomId,
+            roomId,
         });
+
+        // Update unread messages count
+        await MessagesRoom.update(
+            {
+                clientUnreadMessages: Sequelize.literal(
+                    "clientUnreadMessages + 1"
+                ),
+            },
+            { where: { id: roomId } }
+        );
 
         res.status(201).json(newMessage);
     } catch (error) {
@@ -274,11 +282,10 @@ const postFreelancerMessage = async (req, res) => {
         res.status(500).json({ error: "Internal Server Error" });
     }
 };
-
 const postClientMessage = async (req, res) => {
     try {
         const { clientId, freelancerId } = req.params;
-        const { message } = req.body;
+        const { message, roomId } = req.body;
 
         // Validate message
         if (!message) {
@@ -306,8 +313,18 @@ const postClientMessage = async (req, res) => {
             receiverId: freelancerId,
             senderType: "client",
             receiverType: "freelancer",
-            roomId: req.body.roomId,
+            roomId,
         });
+
+        // Update unread messages count
+        await MessagesRoom.update(
+            {
+                freelancerUnreadMessages: Sequelize.literal(
+                    "freelancerUnreadMessages + 1"
+                ),
+            },
+            { where: { id: roomId } }
+        );
 
         res.status(201).json(newMessage);
     } catch (error) {

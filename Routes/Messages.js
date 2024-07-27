@@ -44,7 +44,7 @@ router.post(
     postClientMessage
 );
 
-router.post("/Room", openChatRoom);
-router.delete("/Room/:roomId", deleteChatRoom);
+router.post("/room", openChatRoom);
+router.delete("/room/:roomId", deleteChatRoom);
 
 module.exports = router;
