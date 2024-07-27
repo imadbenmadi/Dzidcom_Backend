@@ -171,7 +171,10 @@ const getFreelancerChatRoom = async (req, res) => {
                 },
             ],
         });
-
+        await MessagesRoom.update(
+            { freelancerUnreadMessages: 0 },
+            { where: { freelancerId, clientId } }
+        );
         res.status(200).json(messages);
     } catch (error) {
         console.error(error);
@@ -225,7 +228,10 @@ const getClientChatRoom = async (req, res) => {
                 },
             ],
         });
-
+        await MessagesRoom.update(
+            { clientUnreadMessages: 0 },
+            { where: { clientId, freelancerId } }
+        );
         res.status(200).json(messages);
     } catch (error) {
         console.error(error);

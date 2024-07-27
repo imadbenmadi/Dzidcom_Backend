@@ -8,10 +8,10 @@ const Messages = sequelize.define("Messages", {
         type: DataTypes.TEXT,
         allowNull: false,
     },
-    readed: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false,
-    },
+    // readed: {
+    //     type: DataTypes.BOOLEAN,
+    //     defaultValue: false,
+    // },
     senderId: {
         type: DataTypes.INTEGER,
         allowNull: false,
