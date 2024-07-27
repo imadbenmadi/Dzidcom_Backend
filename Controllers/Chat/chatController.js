@@ -3,26 +3,59 @@ const { Freelancers } = require("../../Models/Freelnacer");
 const { Clients } = require("../../Models/Client");
 const { Sequelize } = require("sequelize");
 const { Op } = require("sequelize");
-
 const getFreelancerChats = async (req, res) => {
     try {
         const freelancerId = req.params.freelancerId;
 
-        // Fetch the rooms that the freelancer is part of
+        // Fetch the rooms that the freelancer is part of, including the latest message for each room
         const rooms = await MessagesRoom.findAll({
             where: {
                 freelancerId: freelancerId,
             },
             include: [
-                { model: Clients, attributes: ["id", "firstName", "lastName"] },
+                {
+                    model: Clients,
+                    attributes: [
+                        "id",
+                        "firstName",
+                        "lastName",
+                        "profile_pic_link",
+                    ],
+                },
                 {
                     model: Freelancers,
-                    attributes: ["id", "firstName", "lastName"],
+                    attributes: [
+                        "id",
+                        "firstName",
+                        "lastName",
+                        "profile_pic_link",
+                    ],
+                },
+                {
+                    model: Messages,
+                    attributes: ["message"],
+                    where: {
+                        senderId: freelancerId,
+                        senderType: "freelancer",
+                        receiverType: "client",
+                    },
+                    order: [["createdAt", "DESC"]],
+                    limit: 1,
+                    required: false, // This allows rooms with no messages
                 },
             ],
         });
 
-        res.status(200).json(rooms);
+        // Format the data to include the latest message
+        const chatList = rooms.map((room) => {
+            const latestMessage = room.Messages[0] || {}; // Get the latest message or an empty object if no messages
+            return {
+                ...room.toJSON(),
+                lastMessage: latestMessage || "No messages yet",
+            };
+        });
+
+        res.status(200).json({ rooms: chatList });
     } catch (error) {
         console.error(error);
         res.status(500).json({
@@ -35,21 +68,55 @@ const getClientChats = async (req, res) => {
     try {
         const clientId = req.params.clientId;
 
-        // Fetch the rooms that the client is part of
+        // Fetch the rooms that the client is part of, including the latest message for each room
         const rooms = await MessagesRoom.findAll({
             where: {
                 clientId: clientId,
             },
             include: [
-                { model: Clients, attributes: ["id", "firstName", "lastName"] },
+                {
+                    model: Clients,
+                    attributes: [
+                        "id",
+                        "firstName",
+                        "lastName",
+                        "profile_pic_link",
+                    ],
+                },
                 {
                     model: Freelancers,
-                    attributes: ["id", "firstName", "lastName"],
+                    attributes: [
+                        "id",
+                        "firstName",
+                        "lastName",
+                        "profile_pic_link",
+                    ],
+                },
+                {
+                    model: Messages,
+                    attributes: ["message"],
+                    where: {
+                        receiverId: clientId,
+                        receiverType: "client",
+                        senderType: "freelancer",
+                    },
+                    order: [["createdAt", "DESC"]],
+                    limit: 1,
+                    required: false, // This allows rooms with no messages
                 },
             ],
         });
 
-        res.status(200).json(rooms);
+        // Format the data to include the latest message
+        const chatList = rooms.map((room) => {
+            const latestMessage = room.Messages[0] || {}; // Get the latest message or an empty object if no messages
+            return {
+                ...room.toJSON(),
+                lastMessage: latestMessage || "No messages yet",
+            };
+        });
+
+        res.status(200).json({ rooms: chatList });
     } catch (error) {
         console.error(error);
         res.status(500).json({
@@ -57,6 +124,7 @@ const getClientChats = async (req, res) => {
         });
     }
 };
+
 
 const getFreelancerChatRoom = async (req, res) => {
     try {
