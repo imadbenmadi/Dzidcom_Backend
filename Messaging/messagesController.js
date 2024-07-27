@@ -12,7 +12,7 @@ exports.sendMessage = async (req, res) => {
             message,
             senderType,
         });
-        res.status(201).json(newMessage);
+        res.status(200).json(newMessage);
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: "Failed to send message" });

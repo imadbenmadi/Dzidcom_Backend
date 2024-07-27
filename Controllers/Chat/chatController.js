@@ -172,7 +172,7 @@ const getFreelancerChatRoom = async (req, res) => {
             ],
         });
 
-        res.json(messages);
+        res.status(200).json(messages);
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: "Internal Server Error" });
@@ -226,7 +226,7 @@ const getClientChatRoom = async (req, res) => {
             ],
         });
 
-        res.json(messages);
+        res.status(200).json(messages);
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: "Internal Server Error" });
@@ -276,7 +276,7 @@ const postFreelancerMessage = async (req, res) => {
             { where: { id: roomId } }
         );
 
-        res.status(201).json(newMessage);
+        res.status(200).json(newMessage);
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: "Internal Server Error" });
@@ -326,7 +326,7 @@ const postClientMessage = async (req, res) => {
             { where: { id: roomId } }
         );
 
-        res.status(201).json(newMessage);
+        res.status(200).json(newMessage);
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: "Internal Server Error" });

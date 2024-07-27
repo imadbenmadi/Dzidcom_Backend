@@ -48,7 +48,7 @@ const openChatRoom = async (req, res) => {
             clientId: clientId,
         });
 
-        res.status(201).json(newRoom);
+        res.status(200).json(newRoom);
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: "Internal Server Error" });
