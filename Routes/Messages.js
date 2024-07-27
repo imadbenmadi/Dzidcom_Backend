@@ -8,16 +8,43 @@ const {
     postFreelancerMessage,
     postClientMessage,
 } = require("../Controllers/Chat/chatController");
-const { openChatRoom } = require("../Controllers/Chat/openChat");
+const {
+    openChatRoom,
+    deleteChatRoom,
+} = require("../Controllers/Chat/RoomController");
+const ClientMiddleware = require("../Middlewares/Client");
+const FreelancerMiddleware = require("../Middlewares/Freelancer");
 
-router.get("/freelancer/:freelancerId/chats", getFreelancerChats);
-router.get("/client/:clientId/chats", getClientChats);
+router.get(
+    "/freelancer/:freelancerId/chats",
+    FreelancerMiddleware,
+    getFreelancerChats
+);
+router.get("/client/:clientId/chats", ClientMiddleware, getClientChats);
 
-router.get("/freelancer/:freelancerId/chats/:clientId", getFreelancerChatRoom);
-router.get("/client/:clientId/chats/:freelancerId", getClientChatRoom);
+router.get(
+    "/freelancer/:freelancerId/chats/:clientId",
+    FreelancerMiddleware,
+    getFreelancerChatRoom
+);
+router.get(
+    "/client/:clientId/chats/:freelancerId",
+    ClientMiddleware,
+    getClientChatRoom
+);
 
-router.post("/freelancer/:freelancerId/chats/:clientId", postFreelancerMessage);
-router.post("/client/:clientId/chats/:freelancerId", postClientMessage);
+router.post(
+    "/freelancer/:freelancerId/chats/:clientId",
+    FreelancerMiddleware,
+    postFreelancerMessage
+);
+router.post(
+    "/client/:clientId/chats/:freelancerId",
+    ClientMiddleware,
+    postClientMessage
+);
 
-router.post("/openChat", openChatRoom);
+router.post("/Room", openChatRoom);
+router.delete("/Room/:roomId", deleteChatRoom);
+
 module.exports = router;

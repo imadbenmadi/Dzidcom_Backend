@@ -1,187 +1,71 @@
-const { Messages } = require("../../Models/Messages");
+const { Messages, MessagesRoom } = require("../../Models/Messages");
 const { Freelancers } = require("../../Models/Freelnacer");
 const { Clients } = require("../../Models/Client");
 const { Sequelize } = require("sequelize");
 const { Op } = require("sequelize");
+
 const getFreelancerChats = async (req, res) => {
     try {
-        const freelancerChats = await Messages.findAll({
-            include: [
-                {
-                    model: Freelancers,
-                    as: "freelancerSender",
-                    attributes: ["id", "firstName", "lastName"],
-                },
-                {
-                    model: Clients,
-                    as: "clientSender",
-                    attributes: ["id", "firstName", "lastName"],
-                },
-                {
-                    model: Freelancers,
-                    as: "freelancerReceiver",
-                    attributes: ["id", "firstName", "lastName"],
-                },
-                {
-                    model: Clients,
-                    as: "clientReceiver",
-                    attributes: ["id", "firstName", "lastName"],
-                },
-            ],
+        const freelancerId = req.params.freelancerId;
+
+        // Fetch the rooms that the freelancer is part of
+        const rooms = await MessagesRoom.findAll({
             where: {
-                [Op.or]: [
-                    { senderId: req.user.id, senderType: "freelancer" },
-                    { receiverId: req.user.id, receiverType: "freelancer" },
-                ],
+                freelancerId: freelancerId,
             },
-            group: [
-                "Messages.id",
-                "Messages.message",
-                "Messages.readed",
-                "Messages.senderId",
-                "Messages.receiverId",
-                "Messages.senderType",
-                "Messages.receiverType",
-                "Messages.createdAt",
-                "Messages.updatedAt",
-                "freelancerSender.id",
-                "freelancerSender.firstName",
-                "freelancerSender.lastName",
-                "clientSender.id",
-                "clientSender.firstName",
-                "clientSender.lastName",
-                "freelancerReceiver.id",
-                "freelancerReceiver.firstName",
-                "freelancerReceiver.lastName",
-                "clientReceiver.id",
-                "clientReceiver.firstName",
-                "clientReceiver.lastName",
+            include: [
+                { model: Clients, attributes: ["id", "firstName", "lastName"] },
+                {
+                    model: Freelancers,
+                    attributes: ["id", "firstName", "lastName"],
+                },
             ],
-            order: [["createdAt", "DESC"]],
         });
-        res.status(200).json(freelancerChats);
+
+        res.status(200).json(rooms);
     } catch (error) {
         console.error(error);
         res.status(500).json({
-            error: "An error occurred while retrieving chats.",
+            error: "An error occurred while retrieving chat rooms.",
         });
     }
 };
 
 const getClientChats = async (req, res) => {
     try {
-        const clientChats = await Messages.findAll({
-            include: [
-                {
-                    model: Freelancers,
-                    as: "freelancerSender",
-                    attributes: ["id", "firstName", "lastName"],
-                },
-                {
-                    model: Clients,
-                    as: "clientSender",
-                    attributes: ["id", "firstName", "lastName"],
-                },
-                {
-                    model: Freelancers,
-                    as: "freelancerReceiver",
-                    attributes: ["id", "firstName", "lastName"],
-                },
-                {
-                    model: Clients,
-                    as: "clientReceiver",
-                    attributes: ["id", "firstName", "lastName"],
-                },
-            ],
-            where: {
-                [Op.or]: [
-                    { senderId: req.user.id, senderType: "client" },
-                    { receiverId: req.user.id, receiverType: "client" },
-                ],
-            },
-            group: [
-                "Messages.id",
-                "Messages.message",
-                "Messages.readed",
-                "Messages.senderId",
-                "Messages.receiverId",
-                "Messages.senderType",
-                "Messages.receiverType",
-                "Messages.createdAt",
-                "Messages.updatedAt",
-                "freelancerSender.id",
-                "freelancerSender.firstName",
-                "freelancerSender.lastName",
-                "clientSender.id",
-                "clientSender.firstName",
-                "clientSender.lastName",
+        const clientId = req.params.clientId;
 
-                "freelancerReceiver.id",
-                "freelancerReceiver.firstName",
-                "freelancerReceiver.lastName",
-                "clientReceiver.id",
-                "clientReceiver.firstName",
-                "clientReceiver.lastName",
+        // Fetch the rooms that the client is part of
+        const rooms = await MessagesRoom.findAll({
+            where: {
+                clientId: clientId,
+            },
+            include: [
+                { model: Clients, attributes: ["id", "firstName", "lastName"] },
+                {
+                    model: Freelancers,
+                    attributes: ["id", "firstName", "lastName"],
+                },
             ],
-            order: [["createdAt", "DESC"]],
         });
-        res.status(200).json(clientChats);
+
+        res.status(200).json(rooms);
     } catch (error) {
         console.error(error);
         res.status(500).json({
-            error: "An error occurred while retrieving chats.",
+            error: "An error occurred while retrieving chat rooms.",
         });
     }
 };
 
-// const getClientChats = async (req, res) => {
-//     try {
-//         const { clientId } = req.params;
-//         const chats = await Messages.findAll({
-//             where: {
-//                 [Sequelize.Op.or]: [
-//                     { senderId: clientId, senderType: "client" },
-//                     { receiverId: clientId, receiverType: "client" },
-//                 ],
-//             },
-//             include: [
-//                 {
-//                     model: Freelancers,
-//                     as: "freelancerSender",
-//                     attributes: ["id", "firstName", "lastName"],
-//                 },
-//                 {
-//                     model: Clients,
-//                     as: "clientSender",
-//                     attributes: ["id", "firstName", "lastName"],
-//                 },
-//                 {
-//                     model: Freelancers,
-//                     as: "freelancerReceiver",
-//                     attributes: ["id", "firstName", "lastName"],
-//                 },
-//                 {
-//                     model: Clients,
-//                     as: "clientReceiver",
-//                     attributes: ["id", "firstName", "lastName"],
-//                 },
-//             ],
-//             order: [["createdAt", "DESC"]],
-//             group: ["senderId", "receiverId"],
-//         });
-
-//         res.json(chats);
-//     } catch (error) {
-//         console.error(error);
-//         res.status(500).json({ error: "Internal Server Error" });
-//     }
-// };
 const getFreelancerChatRoom = async (req, res) => {
     try {
         const { freelancerId, clientId } = req.params;
+
+        // Fetch the messages between the freelancer and the client
         const messages = await Messages.findAll({
             where: {
-                [Sequelize.Op.or]: [
+                [Op.or]: [
                     {
                         senderId: freelancerId,
                         receiverId: clientId,
@@ -231,9 +115,11 @@ const getFreelancerChatRoom = async (req, res) => {
 const getClientChatRoom = async (req, res) => {
     try {
         const { clientId, freelancerId } = req.params;
+
+        // Fetch the messages between the client and the freelancer
         const messages = await Messages.findAll({
             where: {
-                [Sequelize.Op.or]: [
+                [Op.or]: [
                     {
                         senderId: clientId,
                         receiverId: freelancerId,
@@ -311,6 +197,7 @@ const postFreelancerMessage = async (req, res) => {
             receiverId: clientId,
             senderType: "freelancer",
             receiverType: "client",
+            roomId: req.body.roomId,
         });
 
         res.status(201).json(newMessage);
@@ -351,6 +238,7 @@ const postClientMessage = async (req, res) => {
             receiverId: freelancerId,
             senderType: "client",
             receiverType: "freelancer",
+            roomId: req.body.roomId,
         });
 
         res.status(201).json(newMessage);
@@ -359,6 +247,7 @@ const postClientMessage = async (req, res) => {
         res.status(500).json({ error: "Internal Server Error" });
     }
 };
+
 module.exports = {
     getFreelancerChats,
     getClientChats,
