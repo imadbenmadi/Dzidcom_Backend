@@ -157,7 +157,7 @@ const fetchMessages = async (roomId) => {
 
 const get_Freelancer_ChatRoom = async (req, res) => {
     try {
-        const { userId: freelancerId, roomId } = req.params;
+        const { freelancerId, roomId } = req.params;
 
         // Fetch the messages in the room
         const messages = await fetchMessages(roomId);
@@ -166,8 +166,32 @@ const get_Freelancer_ChatRoom = async (req, res) => {
             { freelancerUnreadMessages: 0 },
             { where: { id: roomId, freelancerId } }
         );
-
-        res.status(200).json(messages);
+        const room = await MessagesRoom.findOne({
+            where: {
+                id: roomId,
+            },
+            include: [
+                {
+                    model: Clients,
+                    attributes: [
+                        "id",
+                        "firstName",
+                        "lastName",
+                        "profile_pic_link",
+                    ],
+                },
+                {
+                    model: Freelancers,
+                    attributes: [
+                        "id",
+                        "firstName",
+                        "lastName",
+                        "profile_pic_link",
+                    ],
+                },
+            ],
+        });
+        res.status(200).json({ messages, room });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: "Internal Server Error" });
@@ -176,7 +200,7 @@ const get_Freelancer_ChatRoom = async (req, res) => {
 
 const get_Client_ChatRoom = async (req, res) => {
     try {
-        const { userId: clientId, roomId } = req.params;
+        const { clientId, roomId } = req.params;
 
         // Fetch the messages in the room
         const messages = await fetchMessages(roomId);
@@ -185,8 +209,32 @@ const get_Client_ChatRoom = async (req, res) => {
             { clientUnreadMessages: 0 },
             { where: { id: roomId, clientId } }
         );
-
-        res.status(200).json(messages);
+        const room = await MessagesRoom.findOne({
+            where: {
+                id: roomId,
+            },
+            include: [
+                {
+                    model: Clients,
+                    attributes: [
+                        "id",
+                        "firstName",
+                        "lastName",
+                        "profile_pic_link",
+                    ],
+                },
+                {
+                    model: Freelancers,
+                    attributes: [
+                        "id",
+                        "firstName",
+                        "lastName",
+                        "profile_pic_link",
+                    ],
+                },
+            ],
+        });
+        res.status(200).json({ messages, room });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: "Internal Server Error" });
