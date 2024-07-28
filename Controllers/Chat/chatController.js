@@ -255,10 +255,10 @@ const post_Freelancer_Message = async (req, res) => {
         if (message.length === 0) {
             return res.status(400).json({ error: "Message cannot be empty" });
         }
-        message = message.replace(/<[^>]*>?/gm, "");
-        message = message.replace(/\s+/g, " ").trim();
+        message = message.replace(/<[^>]*>?/gm, ""); // Remove HTML tags
+        message = message.replace(/\n+/g, " "); // Replace multiple newline characters with a single space
+        message = message.replace(/\s+/g, " ").trim(); // Replace multiple spaces with a single space and trim again
 
-        // Check if the freelancer exists
         const freelancer = await Freelancers.findByPk(freelancerId);
         if (!freelancer) {
             return res.status(404).json({ error: "Freelancer not found" });
@@ -312,10 +312,10 @@ const post_Client_Message = async (req, res) => {
         if (message.length === 0) {
             return res.status(400).json({ error: "Message cannot be empty" });
         }
-        message = message.replace(/<[^>]*>?/gm, "");
-        message = message.replace(/\s+/g, " ").trim();
+        message = message.replace(/<[^>]*>?/gm, ""); // Remove HTML tags
+        message = message.replace(/\n+/g, " "); // Replace multiple newline characters with a single space
+        message = message.replace(/\s+/g, " ").trim(); // Replace multiple spaces with a single space and trim again
 
-        // Check if the client exists
         const client = await Clients.findByPk(clientId);
         if (!client) {
             return res.status(404).json({ error: "Client not found" });
