@@ -3,7 +3,7 @@ const { Freelancers } = require("../../Models/Freelnacer");
 const { Clients } = require("../../Models/Client");
 const { Sequelize } = require("sequelize");
 const { Op } = require("sequelize");
-const getFreelancerChats = async (req, res) => {
+const get_Freelancer_Rooms = async (req, res) => {
     try {
         const freelancerId = req.params.freelancerId;
 
@@ -64,7 +64,7 @@ const getFreelancerChats = async (req, res) => {
     }
 };
 
-const getClientChats = async (req, res) => {
+const get_Client_Rooms = async (req, res) => {
     try {
         const clientId = req.params.clientId;
 
@@ -124,57 +124,49 @@ const getClientChats = async (req, res) => {
         });
     }
 };
-
-const getFreelancerChatRoom = async (req, res) => {
-    try {
-        const { freelancerId, clientId } = req.params;
-
-        // Fetch the messages between the freelancer and the client
-        const messages = await Messages.findAll({
-            where: {
-                [Op.or]: [
-                    {
-                        senderId: freelancerId,
-                        receiverId: clientId,
-                        senderType: "freelancer",
-                        receiverType: "client",
-                    },
-                    {
-                        senderId: clientId,
-                        receiverId: freelancerId,
-                        senderType: "client",
-                        receiverType: "freelancer",
-                    },
-                ],
+const fetchMessages = async (roomId) => {
+    return await Messages.findAll({
+        where: {
+            roomId,
+        },
+        order: [["createdAt", "ASC"]],
+        include: [
+            {
+                model: Freelancers,
+                as: "freelancerSender",
+                attributes: ["id", "firstName", "lastName"],
             },
-            order: [["createdAt", "ASC"]],
-            include: [
-                {
-                    model: Freelancers,
-                    as: "freelancerSender",
-                    attributes: ["id", "firstName", "lastName"],
-                },
-                {
-                    model: Clients,
-                    as: "clientSender",
-                    attributes: ["id", "firstName", "lastName"],
-                },
-                {
-                    model: Freelancers,
-                    as: "freelancerReceiver",
-                    attributes: ["id", "firstName", "lastName"],
-                },
-                {
-                    model: Clients,
-                    as: "clientReceiver",
-                    attributes: ["id", "firstName", "lastName"],
-                },
-            ],
-        });
+            {
+                model: Clients,
+                as: "clientSender",
+                attributes: ["id", "firstName", "lastName"],
+            },
+            {
+                model: Freelancers,
+                as: "freelancerReceiver",
+                attributes: ["id", "firstName", "lastName"],
+            },
+            {
+                model: Clients,
+                as: "clientReceiver",
+                attributes: ["id", "firstName", "lastName"],
+            },
+        ],
+    });
+};
+
+const get_Freelancer_ChatRoom = async (req, res) => {
+    try {
+        const { userId: freelancerId, roomId } = req.params;
+
+        // Fetch the messages in the room
+        const messages = await fetchMessages(roomId);
+
         await MessagesRoom.update(
             { freelancerUnreadMessages: 0 },
-            { where: { freelancerId, clientId } }
+            { where: { id: roomId, freelancerId } }
         );
+
         res.status(200).json(messages);
     } catch (error) {
         console.error(error);
@@ -182,73 +174,41 @@ const getFreelancerChatRoom = async (req, res) => {
     }
 };
 
-const getClientChatRoom = async (req, res) => {
+const get_Client_ChatRoom = async (req, res) => {
     try {
-        const { clientId, freelancerId } = req.params;
+        const { userId: clientId, roomId } = req.params;
 
-        // Fetch the messages between the client and the freelancer
-        const messages = await Messages.findAll({
-            where: {
-                [Op.or]: [
-                    {
-                        senderId: clientId,
-                        receiverId: freelancerId,
-                        senderType: "client",
-                        receiverType: "freelancer",
-                    },
-                    {
-                        senderId: freelancerId,
-                        receiverId: clientId,
-                        senderType: "freelancer",
-                        receiverType: "client",
-                    },
-                ],
-            },
-            order: [["createdAt", "ASC"]],
-            include: [
-                {
-                    model: Freelancers,
-                    as: "freelancerSender",
-                    attributes: ["id", "firstName", "lastName"],
-                },
-                {
-                    model: Clients,
-                    as: "clientSender",
-                    attributes: ["id", "firstName", "lastName"],
-                },
-                {
-                    model: Freelancers,
-                    as: "freelancerReceiver",
-                    attributes: ["id", "firstName", "lastName"],
-                },
-                {
-                    model: Clients,
-                    as: "clientReceiver",
-                    attributes: ["id", "firstName", "lastName"],
-                },
-            ],
-        });
+        // Fetch the messages in the room
+        const messages = await fetchMessages(roomId);
+
         await MessagesRoom.update(
             { clientUnreadMessages: 0 },
-            { where: { clientId, freelancerId } }
+            { where: { id: roomId, clientId } }
         );
+
         res.status(200).json(messages);
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: "Internal Server Error" });
     }
 };
-const postFreelancerMessage = async (req, res) => {
+const post_Freelancer_Message = async (req, res) => {
     try {
-        const { freelancerId, clientId } = req.params;
-        const { message, roomId } = req.body;
-
+        const { freelancerId, roomId } = req.params;
+        let { message } = req.body;
+        const { clientId } = req.body;
         // Validate message
-        if (!message) {
-            return res
-                .status(400)
-                .json({ error: "Message content is required" });
+        if (!message || !clientId || !roomId || !freelancerId) {
+            return res.status(400).json({ error: "messing data" });
+        } else if (isNaN(freelancerId) || isNaN(clientId) || isNaN(roomId)) {
+            return res.status(400).json({ error: "Invalid ID" });
         }
+        message = message.trim();
+        if (message.length === 0) {
+            return res.status(400).json({ error: "Message cannot be empty" });
+        }
+        message = message.replace(/<[^>]*>?/gm, "");
+        message = message.replace(/\s+/g, " ").trim();
 
         // Check if the freelancer exists
         const freelancer = await Freelancers.findByPk(freelancerId);
@@ -288,17 +248,24 @@ const postFreelancerMessage = async (req, res) => {
         res.status(500).json({ error: "Internal Server Error" });
     }
 };
-const postClientMessage = async (req, res) => {
+
+const post_Client_Message = async (req, res) => {
     try {
-        const { clientId, freelancerId } = req.params;
-        const { message, roomId } = req.body;
+        const { clientId, roomId } = req.params;
+        const { message, freelancerId } = req.body;
 
         // Validate message
-        if (!message) {
-            return res
-                .status(400)
-                .json({ error: "Message content is required" });
+        if (!message || !freelancerId || !clientId || !roomId) {
+            return res.status(400).json({ error: "messing data" });
+        } else if (isNaN(freelancerId) || isNaN(clientId) || isNaN(roomId)) {
+            return res.status(400).json({ error: "Invalid ID" });
         }
+        message = message.trim();
+        if (message.length === 0) {
+            return res.status(400).json({ error: "Message cannot be empty" });
+        }
+        message = message.replace(/<[^>]*>?/gm, "");
+        message = message.replace(/\s+/g, " ").trim();
 
         // Check if the client exists
         const client = await Clients.findByPk(clientId);
@@ -340,10 +307,10 @@ const postClientMessage = async (req, res) => {
 };
 
 module.exports = {
-    getFreelancerChats,
-    getClientChats,
-    getFreelancerChatRoom,
-    getClientChatRoom,
-    postFreelancerMessage,
-    postClientMessage,
+    get_Freelancer_Rooms,
+    get_Client_Rooms,
+    get_Freelancer_ChatRoom,
+    get_Client_ChatRoom,
+    post_Freelancer_Message,
+    post_Client_Message,
 };
