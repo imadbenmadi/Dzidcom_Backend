@@ -300,8 +300,8 @@ const post_Freelancer_Message = async (req, res) => {
 const post_Client_Message = async (req, res) => {
     try {
         const { clientId, roomId } = req.params;
-        const { message, freelancerId } = req.body;
-
+        const { freelancerId } = req.body;
+        let message = req.body.message;
         // Validate message
         if (!message || !freelancerId || !clientId || !roomId) {
             return res.status(400).json({ error: "messing data" });
