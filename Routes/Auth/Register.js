@@ -37,13 +37,13 @@ const handleRegister = async (req, res) => {
             return res.status(409).json({
                 message: "Last Name must be more that 3 chars",
             });
-        } else if (firstName.length > 14) {
+        } else if (firstName.length > 30) {
             return res.status(409).json({
-                message: "First Name must be less than 14 chars",
+                message: "First Name must be less than 30 chars",
             });
-        } else if (lastName.length > 14) {
+        } else if (lastName.length > 30) {
             return res.status(409).json({
-                message: "lastName must be less than 14 chars",
+                message: "lastName must be less than 30 chars",
             });
         } else if (password.length < 8) {
             return res.status(409).json({
