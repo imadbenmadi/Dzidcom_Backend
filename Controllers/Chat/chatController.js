@@ -33,7 +33,7 @@ const get_Freelancer_Rooms = async (req, res) => {
                 },
                 {
                     model: Messages,
-                    attributes: ["message"],
+                    // attributes: ["message"],
                     where: {
                         senderId: freelancerId,
                         senderType: "freelancer",
@@ -94,7 +94,7 @@ const get_Client_Rooms = async (req, res) => {
                 },
                 {
                     model: Messages,
-                    attributes: ["message"],
+                    // attributes: ["message"],
                     where: {
                         receiverId: clientId,
                         receiverType: "client",
