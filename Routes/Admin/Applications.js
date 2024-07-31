@@ -7,6 +7,7 @@ const { Clients } = require("../../Models/Client");
 const { Freelancers } = require("../../Models/Freelnacer");
 const { Op } = require("sequelize");
 const { Sequelize, DataTypes } = require("sequelize");
+const { MessagesRoom } = require("../../Models/Messages");
 
 const {
     Freelancer_Notifications,
@@ -190,8 +191,28 @@ router.post(
             } catch (error) {
                 return res.status(500).json({ error: error.message });
             }
+            try {
+                const clientId = project.ClientId;
+                let newRoom;
+                if (clientId) {
+                    const existingRoom = await MessagesRoom.findOne({
+                        where: {
+                            freelancerId: freelancerId,
+                            clientId: clientId,
+                        },
+                    });
+                    if (!existingRoom) {
+                        newRoom = await MessagesRoom.create({
+                            freelancerId: freelancerId,
+                            clientId: clientId,
+                        });
+                    }
+                }
+            } catch (error) {
+                console.log(error);
+            }
 
-            res.status(200).json({ message: "Application Approved" });
+            res.status(200).json({ message: "Application Approved", newRoom });
         } catch (err) {
             console.error("Error processing application approval:", err);
             res.status(500).json({ message: "Internal Server Error" });

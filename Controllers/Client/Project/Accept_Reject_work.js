@@ -6,6 +6,9 @@ const {
     Freelancer_Notifications,
     Client_Notifications,
 } = require("../../../Models/Notifications");
+const { MessagesRoom } = require("../../../Models/Messages");
+const { Messages } = require("../../../Models/Messages");
+
 const Accept_work = async (req, res) => {
     const userId = req.decoded.userId;
     const projectId = req.params.projectId;
@@ -51,6 +54,23 @@ const Accept_work = async (req, res) => {
             console.log(error);
             return res.status(500).json({ error: "Internal server error." });
         }
+        try {
+            const room = await MessagesRoom.findOne({
+                where: {
+                    freelancerId: Project.FreelancerId,
+                    clientId: userId,
+                },
+            });
+            await Messages.destroy({
+                where: { roomId: room.id },
+            });
+            await MessagesRoom.destroy({
+                where: { id: room.id },
+            });
+        } catch (error) {
+            console.log(error);
+        }
+
         return res.status(200).json({ message: "Work Accepted successfully." });
     } catch (error) {
         console.error(error);
